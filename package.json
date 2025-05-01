@@ -1,33 +1,10 @@
 {
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.16.0",
-    "mongoose": "^8.14.0",
-    "nodeJS": "^1.0.0"
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon node.js"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  },
-  "name": "pii_maua_esports",
-  "version": "1.0.0",
-  "description": "Carolina Tartaroti Shishito – RA: 24.00599-0",
-  "main": "node.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CarolinaTartarotiShishito/PII_Maua_eSports.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/CarolinaTartarotiShishito/PII_Maua_eSports/issues"
-  },
-  "homepage": "https://github.com/CarolinaTartarotiShishito/PII_Maua_eSports#readme"
+    "start": "node node.js"
+  }
 }

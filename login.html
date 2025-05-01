@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>Login</title>
 </head>
 <body>
-    
+    <div id="msalLogin">
+        <button id="msLoginButton">Login com Microsoft</button>
+    </div>
+    <script src="https://alcdn.msauth.net/browser/2.31.0/js/msal-browser.min.js"></script>
+    <script>
+        const msalConfig = {
+            auth: {
+                clientId: "YOUR_CLIENT_ID", // Substitua pelo seu Client ID
+                authority: "https://login.microsoftonline.com/common",
+                redirectUri: "http://localhost" // Substitua pelo seu Redirect URI
+            }
+        };
+
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+        document.getElementById("msLoginButton").addEventListener("click", () => {
+            const loginRequest = {
+                scopes: ["user.read"]
+            };
+
+            msalInstance.loginPopup(loginRequest)
+                .then(response => {
+                    console.log("Login bem-sucedido:", response);
+                    alert(`Bem-vindo, ${response.account.username}`);
+                })
+                .catch(error => {
+                    console.error("Erro no login:", error);
+                });
+        });
+    </script>
 </body>
 </html>
