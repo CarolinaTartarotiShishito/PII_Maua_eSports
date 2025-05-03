@@ -1,0 +1,26 @@
+#twitch-popup {
+    display: none; /* Inicialmente escondido */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #1d06eb; /* Azul Twitch */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+}
+
+#twitch-popup img {
+    width: 30px;
+    height: 30px;
+}
+
+#twitch-popup a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
