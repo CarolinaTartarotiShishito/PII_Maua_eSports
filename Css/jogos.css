@@ -12,8 +12,12 @@ body {
 }
 
 .game-image {
-    max-width: 250px;
+    max-width: 100%;
+    height: auto;
+    width: 240px;
     border-radius: 10px;
+    /* Remover ou ajustar o object-fit */
+    object-fit: contain;
 }
 
 .highlight {
@@ -40,12 +44,12 @@ footer {
     font-size: 1.3rem;
 }
 
-.comeco{
+.comeco {
     font-size: 3rem;
     font-weight: bold;
 }
 
-.text-introducao{
+.text-introducao {
     font-size: 1.3rem;
 }
 
@@ -62,5 +66,20 @@ footer {
     .texto-de-explicatico {
         font-size: 16px;
     }
-    
+
+    .card-custom {
+        flex-direction: column !important; /* Faz imagem e texto ficarem um embaixo do outro */
+        align-items: center; /* Centraliza os itens */
+        text-align: center; /* Centraliza o texto */
+    }
+
+    .game-image {
+        width: 100% !important; /* Ocupa toda a largura disponível */
+        max-width: 240px; /* Limite para não ficar exagerado */
+        margin-bottom: 1rem;
+    }
+
+    .Card-de-jogos {
+        margin: 0 1rem;
+    }
 }
