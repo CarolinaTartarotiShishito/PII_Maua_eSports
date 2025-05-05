@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #222222;
+}
+
+footer {
+    background-color: #222222;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.social-media, .faq, .links {
+    flex: 1;
+    margin: 10px;
+}
+
+.social-media {
+    text-align: left;
+}
+
+.social-media p {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.social-media a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+}
+
+.logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.logo img {
+    max-width: 100px;
+}
+
+.faq {
+    text-align: right;
+    margin-left: 200px;
+    
+}
+
+.faq a {
+    display: inline-block;
+    background-color: #134EFF;
+    color: white;
+    padding: 10px 60px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    
+   
+   
+}
+
+.links {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.links div {
+    margin: 10px;
+}
+
+.links div span {
+    display: block;
+    background-color: #444444;
+    height: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .social-media, .faq {
+        text-align: center;
+    }
+
+    .faq {
+        margin-top: 20px;
+    }
+}
