@@ -1,0 +1,127 @@
+body {
+    background: linear-gradient(to bottom, #20242f, #1a1d27);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+.comeco {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.text-introducao {
+    font-size: 1.3rem;
+}
+
+.nome-jogo {
+    background-color: #161414;
+    border-radius: 15px;
+    text-align: center;
+}
+
+
+/* Wrapper que segura todos os cards */
+.cards-wrapper {
+    background-image: linear-gradient(to left, #272d52, #2D2C43);
+    border-radius: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    /* Permite que os cards quebrem para a próxima linha */
+    justify-content: center;
+    /* Centraliza horizontalmente */
+    gap: 16px;
+    /* Espaço entre os cards */
+    padding: 20px 0;
+}
+
+/* Estilo do card */
+.card {
+    width: 280px;
+    /* Largura fixa do card */
+    background-image: linear-gradient(to bottom, #474747, #121212);
+    border-radius: 12px;
+    border: 3px solid #2763F3; /* Tornamos a borda transparente para usar o degradê */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Efeito ao passar o mouse */
+.card:hover {
+    transform: scale(1.03);
+}
+
+/* Imagem no topo do card */
+.card img {
+    width: 20%;
+    /* Ocupa toda a largura do card */
+    height: auto;
+    object-fit: cover;
+}
+
+/* Conteúdo interno do card */
+.card-content {
+
+    padding: 16px;
+    align-items: center;
+}
+
+.Texto1 {
+    color: white;
+    text-align: right; width: 100%;
+}
+
+.Texto2 {
+    color: #1B9FE6;
+}
+
+/* Título do card */
+.card-content h3 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Texto do card */
+.card-content p {
+    color: #555;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+/* Link "saiba mais" */
+.card-content a {
+    text-decoration: none;
+    color: #0066cc;
+    font-weight: bold;
+}
+
+/* Responsividade opcional para ajustar imagem ou conteúdo */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        max-width: 90vw;
+    }
+
+    body {
+        font-size: 14px;
+    }
+    .card-content {
+        padding: 12px;
+      }
+      .Texto1, .Texto2 {
+        font-size: 0.9rem;
+      }
+
+    .nome-do-jogo {
+        font-size: 1.2rem;
+    }
+
+    .texto-de-explicatico {
+        font-size: 16px;
+    }
+}
