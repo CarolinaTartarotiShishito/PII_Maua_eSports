@@ -43,78 +43,46 @@
             </div>
 
             <div class="cards-wrapper">
-
-                <div class="card m-2">
-                    <img src="imagens/LogoEsports.png" alt="Imagem do card">
-                    <div class="card-content">
-                        <div class="p-1 d-flex flex-row justify-content-between">
-                            <div class="Texto1 mx-1">
-                                Nome:
-                            </div>
-                            <div class="Texto2 mx-1">
-                                fffffff
-                            </div>
+                <div class="card-container">
+                    <div class="titulo">
+                        Capitão
+                    </div>
+                    <div class="circle">
+                        DA
+                    </div>
+                    <div class="info-box">
+                        <div class="nome">
+                            Pudim
                         </div>
-                        <div class="p-1 d-flex flex-row justify-content-between">
-                            <div class="Texto1 mx-1">
-                                Nickname:
-                            </div>
-                            <div class="Texto2 mx-1">
-                                fffffff
-                            </div>
-                        </div>
-                        <div class="p-1 d-flex flex-row justify-content-between">
-                            <div class="Texto1 mx-1">
-                                Cargo:
-                            </div>
-                            <div class="Texto2 mx-1">
-                                fffffff
-                            </div>
-                        </div>
-                        <div class="p-1 d-flex flex-row justify-content-between">
-                            <div class="Texto1 mx-1">
-                                Função:
-                            </div>
-                            <div class="Texto2 mx-1">
-                                fffffff
-                            </div>
+                        <div class="funcao">
+                            IGL
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!--<% Object.keys(jogosAgrupados).forEach(nomeJogo => { %>
-  <div class="container">
-    <div class="nome-jogo mt-5 mb-4">
-      <h3 class="nome-do-jogo"><b><%= nomeJogo %></b></h3>
-    </div>
-
-    <div class="cards-wrapper">
-      <% jogosAgrupados[nomeJogo].forEach(jogador => { %>
-        <div class="card m-2">
-          <img src="/imagens/LogoEsports.png" alt="Imagem do card">
-          <div class="card-content">
-            <div class="p-1 d-flex flex-row justify-content-between">
-              <div class="Texto1 mx-1">Nome:</div>
-              <div class="Texto2 mx-1"><%= jogador.nome %></div>
+        <div class="container">
+            <div class="nome-jogo mt-5 mb-4">
+            <h3 class="nome-do-jogo"><b><%= nomeJogo %></b></h3>
             </div>
-            <div class="p-1 d-flex flex-row justify-content-between">
-              <div class="Texto1 mx-1">Nickname:</div>
-              <div class="Texto2 mx-1"><%= jogador.nickname %></div>
+            <div class="cards-wrapper">
+                <div class="card-container">
+                    <div class="titulo"><%= jogador.cargo %></div>
+                    <div class="circle">
+                        DA
+                    </div>
+                    <div class="info-box">
+                        <div class="nome"><%= jogador.nickname %></div>
+                        <div class="funcao"><%= jogador.funcao %></div>
+                    </div>
+                </div>
             </div>
-            <div class="p-1 d-flex flex-row justify-content-between">
-              <div class="Texto1 mx-1">Cargo:</div>
-              <div class="Texto2 mx-1"><%= jogador.cargo %></div>
-            </div>
-          </div>
         </div>
-      <% }) %>
-    </div>
-  </div>
-<% }) %>
--->
+        -->
+        
 
-<!--
+        <!--
 Uma informação explicando porque apaguei tudo e sobre esse programa aqui em cima, ele é um programa ".ejs"
 com ele vamos poder adicionar os jogos e os jogadores direto pelas informações do banco, o codigo comentado a cima é 
 esse ".ejs" que faz isso, mas ele deve ser colocado em um "index.ejs" e o ".ejs" é uma coisa do "Node.js", coloquei isso aqui só
