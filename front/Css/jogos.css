@@ -1,0 +1,85 @@
+body {
+    background: linear-gradient(to bottom, #20242f, #1a1d27);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
+.card-custom {
+    background-color: #2c2f38;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+}
+
+.game-image {
+    max-width: 100%;
+    height: auto;
+    width: 240px;
+    border-radius: 10px;
+    /* Remover ou ajustar o object-fit */
+    object-fit: contain;
+}
+
+.highlight {
+    border: 2px solid #0dcaf0;
+}
+
+footer {
+    background-color: #181b22;
+    padding: 2rem 0;
+}
+
+.Card-de-jogos {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.nome-do-jogo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    /* Para título em negrito */
+}
+
+.texto-explicativo {
+    font-size: 1.3rem;
+}
+
+.comeco {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.text-introducao {
+    font-size: 1.3rem;
+}
+
+/* Ajuste responsivo */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .nome-do-jogo {
+        font-size: 1.2rem;
+    }
+
+    .texto-de-explicatico {
+        font-size: 16px;
+    }
+
+    .card-custom {
+        flex-direction: column !important; /* Faz imagem e texto ficarem um embaixo do outro */
+        align-items: center; /* Centraliza os itens */
+        text-align: center; /* Centraliza o texto */
+    }
+
+    .game-image {
+        width: 100% !important; /* Ocupa toda a largura disponível */
+        max-width: 240px; /* Limite para não ficar exagerado */
+        margin-bottom: 1rem;
+    }
+
+    .Card-de-jogos {
+        margin: 0 1rem;
+    }
+}
