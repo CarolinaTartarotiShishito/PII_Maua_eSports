@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="Css/Footer.css">
     <link rel="stylesheet" href="Css/jogadores.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
@@ -27,6 +29,99 @@
             </ul>
         </div>
     </nav>
+
+    <!-- Conteudo -->
+    <div class="container my-5">
+        <h1 class="comeco mb-4">Conheça nossos jogadores!</h1>
+        <p class="text-introducao">Cada equipe possui um capitão representante e os jogadores, cada um com uma função
+            específica dentro do que é compreendido como ocupação dentro do jogo determinado. Todos se reúnem para
+            treinar semanalmente e eventualmente participam de <u><b>campeonatos.</b></u></p>
+
+        <div class="container">
+            <div class="nome-jogo mt-5 mb-4">
+                <h3 class="nome-do-jogo"><b>Counter Strike 2</b></h3>
+            </div>
+
+            <div class="cards-wrapper">
+
+                <div class="card m-2">
+                    <img src="imagens/LogoEsports.png" alt="Imagem do card">
+                    <div class="card-content">
+                        <div class="p-1 d-flex flex-row justify-content-between">
+                            <div class="Texto1 mx-1">
+                                Nome:
+                            </div>
+                            <div class="Texto2 mx-1">
+                                fffffff
+                            </div>
+                        </div>
+                        <div class="p-1 d-flex flex-row justify-content-between">
+                            <div class="Texto1 mx-1">
+                                Nickname:
+                            </div>
+                            <div class="Texto2 mx-1">
+                                fffffff
+                            </div>
+                        </div>
+                        <div class="p-1 d-flex flex-row justify-content-between">
+                            <div class="Texto1 mx-1">
+                                Cargo:
+                            </div>
+                            <div class="Texto2 mx-1">
+                                fffffff
+                            </div>
+                        </div>
+                        <div class="p-1 d-flex flex-row justify-content-between">
+                            <div class="Texto1 mx-1">
+                                Função:
+                            </div>
+                            <div class="Texto2 mx-1">
+                                fffffff
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<% Object.keys(jogosAgrupados).forEach(nomeJogo => { %>
+  <div class="container">
+    <div class="nome-jogo mt-5 mb-4">
+      <h3 class="nome-do-jogo"><b><%= nomeJogo %></b></h3>
+    </div>
+
+    <div class="cards-wrapper">
+      <% jogosAgrupados[nomeJogo].forEach(jogador => { %>
+        <div class="card m-2">
+          <img src="/imagens/LogoEsports.png" alt="Imagem do card">
+          <div class="card-content">
+            <div class="p-1 d-flex flex-row justify-content-between">
+              <div class="Texto1 mx-1">Nome:</div>
+              <div class="Texto2 mx-1"><%= jogador.nome %></div>
+            </div>
+            <div class="p-1 d-flex flex-row justify-content-between">
+              <div class="Texto1 mx-1">Nickname:</div>
+              <div class="Texto2 mx-1"><%= jogador.nickname %></div>
+            </div>
+            <div class="p-1 d-flex flex-row justify-content-between">
+              <div class="Texto1 mx-1">Cargo:</div>
+              <div class="Texto2 mx-1"><%= jogador.cargo %></div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+<% }) %>
+-->
+
+<!--
+Uma informação explicando porque apaguei tudo e sobre esse programa aqui em cima, ele é um programa ".ejs"
+com ele vamos poder adicionar os jogos e os jogadores direto pelas informações do banco, o codigo comentado a cima é 
+esse ".ejs" que faz isso, mas ele deve ser colocado em um "index.ejs" e o ".ejs" é uma coisa do "Node.js", coloquei isso aqui só
+para avisar, porque não sei mexer nessa parte do Node e não quero mexer para não avacalhar, então para quem for mexer no back, é só 
+usar o codigo a cima para fazer com que a pagina de jogadores se construa sozinha-->
+
+    </div>
 
     <!-- Rodapé -->
     <footer class="text-center">
@@ -86,4 +181,5 @@
 
     <script src="scripts/NavBar.js"></script>
 </body>
+
 </html>
