@@ -1,3 +1,7 @@
+.nav-item{
+    font-size: large;
+}
+
 .navbar-image{
     max-width: 80px;
 }
@@ -10,5 +14,19 @@
 }
 
 .active {
+    font-weight: bold;
+}
+
+.loginButton{
+    font-family: 'Poppins', sans-serif;
+    background-color: transparent;
+    border-color: gray;
+    border-width: 2px;
+    color: white;
+}
+
+#tituloSite{
+    font-family: Agency FB, 'Agency FB Bold';
+    font-size: 200%;
     font-weight: bold;
 }

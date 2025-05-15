@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eventos</title>
+    <title>index</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Css/NavBar.css">
     <link rel="stylesheet" href="Css/Footer.css">
-    <link rel="stylesheet" href="Css/eventos.css">
+    <link rel="stylesheet" href="Css/index.css">
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 align-items-center">
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 align-items-center">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
                     <img src="imagens/LogoEsports.png" class="navbar-image mx-2" alt="CS2">
@@ -25,10 +28,10 @@
                 </button>
                 <div class="collapse navbar-collapse nav-underline text-end" id="navBar">
                     <ul class="navbar-nav ms-auto me-4">
-                        <li class="nav-item m-4"><a class="nav-link" href="index.html">Início</a></li>
+                        <li class="nav-item m-4"><a class="nav-link active" aria-current="page" href="#">Início</a></li>
                         <li class="nav-item m-4"><a class="nav-link" href="jogos.html">Jogos</a></li>
                         <li class="nav-item m-4"><a class="nav-link" href="jogadores.html">Jogadores</a></li>
-                        <li class="nav-item m-4"><a class="nav-link active" aria-current="page" href="#">Eventos</a></li>
+                        <li class="nav-item m-4"><a class="nav-link" href="eventos.html">Eventos</a></li>
                         <li class="nav-item m-4 d-none"><a class="nav-link" href="gestao.html">Gestão</a></li>
                     </ul>
                 </div>
@@ -37,6 +40,69 @@
                 </form>
             </div>
         </nav>
+
+        <!-- <nav class="navbar navbar-expand-md align-items-center" id="menu-nav" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a>
+                    <img src="images/logo_matematica_no_metro.JPG" id="icon-menu"
+                        alt="">
+                </a>
+                <a class="navbar-brand mx-sm-3" id="tituloSite">MATEMÁTICA NO METRÔ</a>
+    
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNav"
+                    aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <div class="nav nav-underline collapse navbar-collapse text-end" id="myNav">
+                    <ul class="navbar-nav ms-auto me-4">
+                        <li class="nav-item">
+                            <a class="nav-link active me-2" aria-current="page" href="#">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="sobrenos.html">Sobre nós</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="forum.html">Fórum</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2" href="desafios.html">Desafios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link me-2 d-none" id="logoutButton" href="index.html"
+                                onclick="logout()">Logout</a>
+                        </li>
+                    </ul>
+                    <a class="nav-link me-2">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <img src="images/modo_icon.png" id="icon-menu" alt="">
+                            </button>
+                            <ul class="dropdown-menu" id="modoTela">
+                                <li><button class="dropdown-item" id="modoTelaClaro" type="button" onclick="modoDaTela('claro')">Modo Claro</button></li>
+                                <li><button class="dropdown-item" id="modoTelaEscuro" type="button" onclick="modoDaTela('escuro')">Modo Escuro</button></li>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+                <a class="nav-link login-link">
+                    <img src="images/login_icon.png" id="icon"
+                        alt="">
+                </a>
+            </div>
+        </nav> -->
+    </header>
+
+    <!-- Conteúdo da página -->
+    <main>
+        <div class="container my-5">
+            <h1>Jogue,
+                Experimente,
+                Viva a competição!
+            </h1>
+        </div>
+    </main>
 
     <!-- Rodapé -->
     <footer class="text-center">
@@ -62,7 +128,7 @@
             <div class="container justify-content-center">
                 <div class="row">
                     <div class="col-md-12">
-                        <a href="home.html"><img src="imagens/LogoEsports.png" class="logo-footer" alt="Logo"></a>
+                        <a href="index.html"><img src="imagens/LogoEsports.png" class="logo-footer" alt="Logo"></a>
                     </div>
                 </div>
             </div>
@@ -96,4 +162,5 @@
 
     <script src="scripts/NavBar.js"></script>
 </body>
+
 </html>
