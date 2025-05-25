@@ -11,42 +11,17 @@
     <link rel="stylesheet" href="Css/NavBar.css">
     <link rel="stylesheet" href="Css/Footer.css">
     <link rel="stylesheet" href="Css/jogadores.css">
+    <link rel="stylesheet" href="Css/variaveis.css">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 align-items-center">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="imagens/LogoEsports.png" class="navbar-image mx-2" alt="CS2">
-            </a>
-            <a class="navbar-brand mx-sm-3" id="tituloSite">MAUÁ E-SPORTS</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
-                aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse nav-underline text-end" id="navBar">
-                <ul class="navbar-nav ms-auto me-4">
-                    <li class="nav-item m-4"><a class="nav-link" href="index.html">Início</a></li>
-                    <li class="nav-item m-4"><a class="nav-link" href="jogos.html">Jogos</a></li>
-                    <li class="nav-item m-4"><a class="nav-link active" aria-current="page" href="#">Jogadores</a></li>
-                    <li class="nav-item m-4"><a class="nav-link" href="eventos.html">Eventos</a></li>
-                    <li class="nav-item m-4 d-none"><a class="nav-link" href="gestao.html">Gestão</a></li>
-                </ul>
-            </div>
-            <form action="login.html">
-                <button class="loginButton btn btn-secondary px-4" a>Entrar</button>
-            </form>
-        </div>
-    </nav>
+    <!-- Navbar (componente) -->
+    <div id="navbar-placeholder"></div>
 
     <!-- Conteudo -->
     <div class="container my-5">
         <h1 class="comeco mb-4">Conheça nossos jogadores!</h1>
-        <p class="text-introducao">Cada equipe possui um capitão representante e os jogadores, cada um com uma função
-            específica dentro do que é compreendido como ocupação dentro do jogo determinado. Todos se reúnem para
-            treinar semanalmente e eventualmente participam de <u><b>campeonatos.</b></u></p>
-
+        <p class="text-introducao">Cada equipe possui um capitão representante e os jogadores, cada um com uma função específica dentro do que é compreendido como ocupação dentro do jogo determinado. Todos se reúnem para treinar semanalmente e eventualmente participam de <u><b>campeonatos.</b></u></p>
         <div class="container">
             <div class="nome-jogo mt-5 mb-4">
                 <h3 class="nome-do-jogo"><b>Counter Strike 2</b></h3>
@@ -54,96 +29,21 @@
 
             <div class="cards-wrapper">
                 <div class="card-container">
-                    <div class="titulo">
-                        Capitão
-                    </div>
-                    <div class="circle">
-                        DA
-                    </div>
+                    <div class="titulo">Capitão</div>
+                    <div class="circle">DA</div>
                     <div class="info-box">
-                        <div class="nome">
-                            Pudim
-                        </div>
-                        <div class="funcao">
-                            IGL
-                        </div>
+                        <div class="nome">Pudim</div>
+                        <div class="funcao">IGL</div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--<% Object.keys(jogosAgrupados).forEach(nomeJogo => { %>
-        <div class="container">
-            <div class="nome-jogo mt-5 mb-4">
-            <h3 class="nome-do-jogo"><b><%= nomeJogo %></b></h3>
-            </div>
-            <div class="cards-wrapper">
-                <div class="card-container">
-                    <div class="titulo"><%= jogador.cargo %></div>
-                    <div class="circle">
-                        DA
-                    </div>
-                    <div class="info-box">
-                        <div class="nome"><%= jogador.nickname %></div>
-                        <div class="funcao"><%= jogador.funcao %></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-
-
-        <!--
-Uma informação explicando porque apaguei tudo e sobre esse programa aqui em cima, ele é um programa ".ejs"
-com ele vamos poder adicionar os jogos e os jogadores direto pelas informações do banco, o codigo comentado a cima é 
-esse ".ejs" que faz isso, mas ele deve ser colocado em um "index.ejs" e o ".ejs" é uma coisa do "Node.js", coloquei isso aqui só
-para avisar, porque não sei mexer nessa parte do Node e não quero mexer para não avacalhar, então para quem for mexer no back, é só 
-usar o codigo a cima para fazer com que a pagina de jogadores se construa sozinha-->
-
     </div>
 
-    <!-- Rodapé -->
-    <footer class="text-center">
-        <p>&copy; 2025 Sua Marca - Todos os direitos reservados.</p>
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <div class="container justify-content-left">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="social-media">
-                            <p>Nossas redes:</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en"><img src="imagens/InstaBlackIcon.png"
-                                    alt="Instagram"></a>
-                            <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png"
-                                    alt="Twitter"></a>
-                            <a href="https://www.youtube.com/@MauaeSports"><img src="imagens/YoutubeBlackIcon.png"
-                                    alt="YouTube"></a>
-                            <a href="https://www.twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png"
-                                    alt="Twitch"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-center">
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="home.html"><img src="imagens/LogoEsports.png" class="logo-footer" alt="Logo"></a>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-right">
-                <div class="row">
-                    <div class="col-md-12 justify-content-right align-items-right">
-                        <div class="faq">
-                            <p>Ficou com dúvida?</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en">FAQ</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Rodapé (componente) -->
+    <div id="footer-placeholder"></div>
 
-            </div>
-        </div>
-    </footer>
-
-    <!-- Incluindo intérprete de Libras com o VLibras Widget-->
+    <!-- VLibras -->
     <div vw class="enabled">
         <div vw-access-button class="active"></div>
         <div vw-plugin-wrapper>
@@ -156,8 +56,7 @@ usar o codigo a cima para fazer com que a pagina de jogadores se construa sozinh
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="scripts/NavBar.js"></script>
+    <script src="/scripts/layout.js"></script>
+    <script src="/scripts/NavBar.js"></script>
 </body>
-
 </html>

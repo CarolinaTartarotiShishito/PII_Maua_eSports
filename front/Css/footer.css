@@ -1,96 +1,162 @@
-body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background-color: #222222;
+.footer-novo {
+  background-color: var(--cor-cinza);
+  padding-top: 40px;
+  padding-bottom: 40px;
+  color: var(--cor-texto);
+  font-family: var(--fonte-principal);
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  margin-top: 80px
 }
 
-footer {
-    background-color: #222222;
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+.footer-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Linha superior: redes - logo - FAQ */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* Redes sociais */
+.footer-col.redes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-titulo {
+  font-size: var(--paragrafo);
+  font-weight: var(--peso-bold);
+  margin-bottom: 8px;
+}
+
+.footer-redes {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-redes img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* Logo centralizada */
+.footer-col.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.logo-footer-img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+/* FAQ */
+.footer-col.faq {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.faq-botao {
+  display: inline-block;
+  background-color: var(--cor-primaria);
+  color: white;
+  padding: 10px 50px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: var(--peso-bold);
+  font-size: var(--botao-texto);
+  margin-top: 10px;
+}
+
+/* Linha de links */
+.footer-links-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.footer-col.links {
+  min-width: 160px;
+  flex: 1;
+}
+
+.footer-col.links h2 a {
+  font-size: var(--paragrafo);
+  font-weight: var(--peso-bold);
+  text-decoration: none;
+  color: var(--cor-texto);
+}
+
+.footer-col.links p a {
+  display: block;
+  margin: 6px 0;
+  text-decoration: none;
+  font-size: var(--paragrafo);
+  font-weight: var(--peso-normal);
+  color: var(--cor-texto);
+}
+
+.footer-col.links a:hover {
+  text-decoration: underline;
+}
+
+/* Rodapé inferior */
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.footer-copy {
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0;
+}
+
+.footer-mini {
+  font-size: 0.75rem;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .footer-top,
+  .footer-links-row {
+    flex-direction: column;
     align-items: center;
     text-align: center;
-}
+  }
 
-.social-media, .faq, .links {
-    flex: 1;
-    margin: 10px;
-}
-
-.social-media {
-    text-align: left;
-}
-
-.social-media p {
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.social-media a {
-    margin-right: 10px;
-    text-decoration: none;
-    color: white;
-    font-size: 24px;
-}
-
-.logo {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+  .footer-col.faq {
     align-items: center;
-    
-}
+  }
 
-.logo img {
-    max-width: 100px;
-}
+  .footer-col.redes {
+    align-items: center;
+  }
 
-.faq {
-    text-align: right;
-    margin-left: 200px;
-    
-}
+  .footer-col.links {
+    align-items: center;
+  }
 
-.faq a {
-    display: inline-block;
-    background-color: #134EFF;
-    color: white;
-    padding: 10px 60px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    
-   
-   
-}
-
-.links {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.links div {
-    margin: 10px;
-}
-
-.links div span {
-    display: block;
-    background-color: #444444;
-    height: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-    .social-media, .faq {
-        text-align: center;
-    }
-
-    .faq {
-        margin-top: 20px;
-    }
+  .faq-botao {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
