@@ -28,9 +28,9 @@ app.get('/api/jogos', (req, res) => {
 });
 
 app.post('/api/jogos', (req, res) => {
-  const { titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim } = req.body;
+  const { titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim, tipo } = req.body;
   if (titulo && timeA && timeB && horario && dataInicio && dataFim) {
-    jogos.push({ titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim });
+    jogos.push({ titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim, tipo });
     res.status(201).json({ message: 'Jogo adicionado com sucesso' });
   } else {
     res.status(400).json({ message: 'Campos obrigatórios ausentes' });
@@ -58,4 +58,12 @@ app.get('/api/instagram-posts', async (req, res) => {
     console.error("Erro ao buscar posts:", error);
     res.status(500).json({ error: "Erro ao buscar posts do Instagram" });
   }
+});
+
+app.post('/api/set-token', (req, res) => {
+  const novoToken = req.body.token;
+  const conteudo = fs.readFileSync('.env', 'utf-8');
+  const atualizado = conteudo.replace(/INSTAGRAM_TOKEN=.*/, `INSTAGRAM_TOKEN=${novoToken}`);
+  fs.writeFileSync('.env', atualizado);
+  res.sendStatus(200);
 });

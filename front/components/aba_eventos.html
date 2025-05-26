@@ -1,0 +1,47 @@
+<section>
+  <h4 class="mb-3">Eventos</h4>
+
+  <h5>Posts no Instagram</h5>
+  <p class="text-muted">Para aparecer as publicações dentro do site, coloque o TOKEN abaixo:</p>
+  <input class="form-control bg-dark text-white" id="instagramTokenInput" placeholder="TOKEN do Instagram" />
+  <a class="text-info small d-block my-2" href="https://developers.facebook.com/tools/explorer/" target="_blank">
+    Clique aqui para ver como pegar o TOKEN de acesso
+  </a>
+  <button class="btn btn-outline-light btn-sm" onclick="salvarTokenInstagram()">Salvar Token</button>
+
+  <hr class="my-4" />
+
+  <h5 class="mb-3">Avisos</h5>
+  <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded">
+    <span>Numero de avisos abertos: <span id="contador-avisos">0</span></span>
+    <button class="btn btn-primary btn-sm">+</button>
+  </div>
+
+  <div id="painelPartidas" class="mt-5">
+    <h5 class="mb-3">Adicionar Jogo</h5>
+    <form id="formJogo">
+      <input type="text" name="titulo" placeholder="Torneio" class="form-control mb-2" required />
+      <div class="d-flex gap-2 mb-2">
+        <input type="text" name="timeA" placeholder="Time A" class="form-control" required />
+        <input type="text" name="timeB" placeholder="Time B" class="form-control" required />
+      </div>
+      <input type="text" name="horario" placeholder="Horário" class="form-control mb-2" required />
+      <select name="tipo" class="form-select mb-2" required>
+        <option value="BO1">BO1</option>
+        <option value="BO3" selected>BO3</option>
+        <option value="BO5">BO5</option>
+        <option value="BO7">BO7</option>
+        <option value="nenhum">Nenhum</option>
+      </select>
+      <div class="d-flex gap-2 mb-2">
+        <input type="date" name="dataInicio" class="form-control" required />
+        <input type="date" name="dataFim" class="form-control" required />
+      </div>
+      <div class="form-check mb-2">
+        <input type="checkbox" class="form-check-input" name="aoVivo" id="aoVivoCheck" />
+        <label class="form-check-label" for="aoVivoCheck">Está ao vivo?</label>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Adicionar Jogo</button>
+    </form>
+  </div>
+</section>

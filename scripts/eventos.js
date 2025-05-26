@@ -5,6 +5,8 @@ async function carregarAvisos() {
     const resposta = await fetch('http://localhost:3000/api/avisos');
     const avisos = await resposta.json();
 
+    console.log('Avisos recebidos:', avisos);
+
     container.innerHTML = '';
     avisos.forEach(a => {
       const card = document.createElement('div');
@@ -13,7 +15,7 @@ async function carregarAvisos() {
       card.innerHTML = `
         <div class="d-flex justify-content-between">
           <h6>${a.titulo}</h6>
-          <span class="text-muted">${formatarData(a.data)}</span>
+          <span>${formatarData(a.data)}</span>
         </div>
         <p class="mb-0">${a.descricao}</p>
       `;
@@ -21,6 +23,7 @@ async function carregarAvisos() {
       container.appendChild(card);
     });
   } catch (err) {
+    console.error('Erro ao carregar avisos:', err);
     container.innerHTML = '<p class="text-danger">Erro ao carregar avisos.</p>';
   }
 }
@@ -32,27 +35,36 @@ async function carregarJogos() {
     const resposta = await fetch('http://localhost:3000/api/jogos');
     const jogos = await resposta.json();
 
+    console.log('Jogos recebidos:', jogos);
+
     container.innerHTML = '';
     jogos.forEach(j => {
       const card = document.createElement('div');
       card.className = 'jogo-card mb-3 p-3 rounded bg-dark text-light shadow';
 
+      // Tipo de partida, se não for "nenhum"
+      const tipo = j.tipo && j.tipo.toLowerCase() !== 'nenhum' ? `<span class="badge bg-secondary">${j.tipo}</span>` : '';
       card.innerHTML = `
-        <h6>${j.titulo}</h6>
-        <div class="d-flex justify-content-between">
-          <span>BO3</span>
-          <span>${j.timeA}</span>
-          <span>X</span>
-          <span>${j.timeB}</span>
-          <span>${j.horario}</span>
-          ${j.aoVivo ? '<span class="text-danger fw-bold">AO VIVO 🔴</span>' : ''}
+        <h6 class="mb-2">${j.titulo}</h6>
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="d-flex align-items-center gap-2">
+            ${tipo}
+            <span>${j.timeA}</span>
+            <span>X</span>
+            <span>${j.timeB}</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span>${j.horario}</span>
+            ${j.aoVivo ? '<span class="text-danger fw-bold">AO VIVO 🔴</span>' : ''}
+          </div>
         </div>
-        <small class="text-muted">${formatarPeriodo(j.dataInicio, j.dataFim)}</small>
+        <small>${formatarPeriodo(j.dataInicio, j.dataFim)}</small>
       `;
 
       container.appendChild(card);
     });
   } catch (err) {
+    console.error('Erro ao carregar jogos:', err);
     container.innerHTML = '<p class="text-danger">Erro ao carregar jogos.</p>';
   }
 }
@@ -69,6 +81,7 @@ function formatarPeriodo(inicio, fim) {
   return `${d1} – ${d2}`;
 }
 
+// === Instagram ===
 async function carregarPostsInstagram() {
   const containers = document.querySelectorAll('.instagram-post');
 
@@ -76,9 +89,7 @@ async function carregarPostsInstagram() {
     const resposta = await fetch('http://localhost:3000/api/instagram-posts');
     const posts = await resposta.json();
 
-    if (!posts || posts.length === 0) {
-      throw new Error("Sem posts ou token");
-    }
+    if (!posts || posts.length === 0) throw new Error("Sem posts ou token");
 
     posts.forEach((post, i) => {
       const container = containers[i];
@@ -97,7 +108,9 @@ async function carregarPostsInstagram() {
         `;
       } else if (isVideo) {
         container.innerHTML = `
-          <a href="${post.permalink}" target="_blank" class="d-flex justify-content-center align-items-center bg-black text-white fs-1" style="height: 100%; text-decoration: none;">
+          <a href="${post.permalink}" target="_blank"
+             class="d-flex justify-content-center align-items-center bg-black text-white fs-1"
+             style="height: 100%; text-decoration: none;">
             ▶
           </a>
         `;
@@ -106,9 +119,7 @@ async function carregarPostsInstagram() {
       }
     });
   } catch (erro) {
-    console.warn("⚠️ Erro ao carregar feed do Instagram:", erro);
-
-    // Mostra "Feed indisponível" nos 3 cards
+    console.warn("Erro ao carregar feed do Instagram:", erro);
     containers.forEach(container => {
       container.classList.remove('skeleton');
       container.innerHTML = `<p>Feed indisponível</p>`;
@@ -116,8 +127,9 @@ async function carregarPostsInstagram() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", carregarPostsInstagram);
-
-// === Inicialização ===
-carregarAvisos();
-carregarJogos();
+// === Inicialização ao carregar a página ===
+document.addEventListener("DOMContentLoaded", () => {
+  carregarPostsInstagram();
+  carregarAvisos();
+  carregarJogos();
+});

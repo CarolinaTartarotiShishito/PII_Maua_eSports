@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Css/variaveis.css">
+  <link rel="stylesheet" href="Css/painel_adm.css">
+  <link rel="stylesheet" href="Css/NavBar.css">
+  <link rel="stylesheet" href="Css/Footer.css">
+</head>
+
+<body class="painel">
+  <div class="tela-completa">
+    <!-- Navbar (componente) -->
+    <div id="navbar-placeholder"></div>
+
+    <div class="d-flex painel-container container">
+      <!-- MENU LATERAL -->
+      <aside class="menu-lateral d-flex flex-column p-4 gap-4" id="menu-lateral">
+        <!-- Cabeçalho do menu com título e botão de retrair -->
+        <div class="d-flex justify-content-between align-items-center mb-2 cabecalho-menu">
+          <h2 class="titulo mb-0">Painel administrativo</h2>
+          <button class="btn-toggle-menu" id="toggle-menu" aria-label="Retrair menu">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </div>
+
+        <!-- Botão Início com indicador de seleção -->
+        <button class="botao-menu ativo">
+          <div class="icone-container">
+            <i class="bi bi-house-fill"></i>
+            <span class="indicador-selecao"></span>
+          </div>
+          <span class="texto-menu">Início</span>
+        </button>
+
+        <!-- Botão Jogos -->
+        <button class="botao-menu">
+          <div class="icone-container">
+            <i class="bi bi-controller"></i>
+            <span class="indicador-selecao"></span>
+          </div>
+          <span class="texto-menu">Jogos</span>
+        </button>
+
+        <!-- Botão Eventos -->
+        <button class="botao-menu">
+          <div class="icone-container">
+            <i class="bi bi-calendar-event"></i>
+            <span class="indicador-selecao"></span>
+          </div>
+          <span class="texto-menu">Eventos</span>
+        </button>
+
+        <!-- Botão Membros -->
+        <button class="botao-menu">
+          <div class="icone-container">
+            <i class="bi bi-people-fill"></i>
+            <span class="indicador-selecao"></span>
+          </div>
+          <span class="texto-menu">Membros</span>
+        </button>
+
+        <!-- Botão Voltar -->
+        <div class="mt-auto">
+          <a href="index.html" class="btn-voltar">
+            <div class="icone-container">
+              <i class="bi bi-arrow-left-circle"></i>
+              <span class="indicador-selecao"></span>
+            </div>
+            <span class="texto-menu">Voltar para o site</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- CONTEÚDO PRINCIPAL DINÂMICO -->
+      <main id="painel-conteudo" class="conteudo flex-grow-1 p-5"></main>
+    </div>
+
+    <!-- Rodapé (componente) -->
+    <div id="footer-placeholder"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/scripts/layout.js"></script>
+  <script src="/scripts/NavBar.js"></script>
+  <script src="/scripts/painel_adm.js"></script>
+</body>
+
+</html>
