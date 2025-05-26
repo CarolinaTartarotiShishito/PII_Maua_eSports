@@ -1,12 +1,17 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
+const path = require('path');
+const cors = require('cors');
 const PORT = 3000;
 const bodyParser = require('body-parser');
 const defaultTrains = require('./defaultTrains.json');
 const defaultModalities = require('./defaultModalities.json');
+
 app.use(cors());
 app.use(express.json());
+
+// arquivos estáticos da pasta 'front'
+app.use(express.static(path.join(__dirname, 'front')));
 
 let avisos = [];
 let jogos = [];
@@ -189,7 +194,3 @@ app.get('/teams', (req, res) => {
   ]);
 });
 
-// --- Start Server ---
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});

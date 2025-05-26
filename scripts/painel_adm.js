@@ -40,11 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (nomeAba === "inicio") inicializarInicio();
         // Adicione outras abas aqui se necessário
     }
-
-    function inicializarInicio() {
-        // ...seu código da aba início...
-    }
-
+    
     // Carrega o conteúdo inicial
     carregarAba('inicio');
 
@@ -59,14 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
             botao.classList.add('ativo');
         });
     });
-
-
-    // === FUNÇÕES DE INICIALIZAÇÃO POR ABA ===
-    function inicializarScriptEspecifico(aba) {
-        if (aba == 'inicio') inicializarInicio();
-        // Quando for colcoar outras abas:
-        // if (aba === 'jogos') inicializarJogos();
-    }
 
     // === CÓDIGO ORIGINAL DA ABA INÍCIO ADAPTADO ===
     function inicializarInicio() {
