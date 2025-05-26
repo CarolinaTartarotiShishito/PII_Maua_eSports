@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // === LÓGICA DE COMPONENTES ===
     const conteudo = document.querySelector('.conteudo');
 
     function carregarAba(nomeAba) {
@@ -13,6 +12,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 conteudo.innerHTML = `<p class="text-danger">Erro ao carregar a aba "${nomeAba}".</p>`;
                 console.error(err);
             });
+    }
+
+    function inicializarScriptEspecifico(nomeAba) {
+        if (nomeAba == "membros") {
+            const lista = document.getElementById("lista-membros-ul");
+            if (!lista) return;
+
+            fetch("http://localhost:3000/trains")
+                .then(res => res.json())
+                .then(trains => {
+                    lista.innerHTML = "";
+                    if (!trains.length) {
+                        lista.innerHTML = "<li>Nenhum membro encontrado.</li>";
+                        return;
+                    }
+                    trains.forEach(train => {
+                        const li = document.createElement("li");
+                        li.innerHTML = `<strong>ID:</strong> ${train.id} &mdash; <strong>Nome:</strong> ${train.Name || "Sem nome"}`;
+                        lista.appendChild(li);
+                    });
+                })
+                .catch(err => {
+                    lista.innerHTML = `<li>Erro ao carregar membros: ${err.message}</li>`;
+                });
+        }
+        if (nomeAba === "inicio") inicializarInicio();
+        // Adicione outras abas aqui se necessário
+    }
+
+    function inicializarInicio() {
+        // ...seu código da aba início...
     }
 
     // Carrega o conteúdo inicial
@@ -30,9 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+
     // === FUNÇÕES DE INICIALIZAÇÃO POR ABA ===
     function inicializarScriptEspecifico(aba) {
-        if (aba === 'inicio') inicializarInicio();
+        if (aba == 'inicio') inicializarInicio();
         // Quando for colcoar outras abas:
         // if (aba === 'jogos') inicializarJogos();
     }
@@ -115,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const menuLateral = document.getElementById('menu-lateral');
     const toggleMenu = document.getElementById('toggle-menu');
 
-    if (localStorage.getItem('menuRetraido') === 'true') {
+    if (localStorage.getItem('menuRetraido') == 'true') {
         menuLateral.classList.add('retraido');
         ajustarIconeToggle();
     }
@@ -140,3 +171,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', ajustarIconeToggle);
 });
+

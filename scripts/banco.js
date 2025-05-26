@@ -1,7 +1,7 @@
 // scripts/banco.js
 
 // URL da API (ajuste se necessário)
-const API_URL = "http://localhost:8080/teams";
+const API_URL = "http://localhost:3000/teams";
 
 document.addEventListener("DOMContentLoaded", () => {
   const lista = document.getElementById("lista-times");
