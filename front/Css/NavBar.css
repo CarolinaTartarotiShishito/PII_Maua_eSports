@@ -1,23 +1,35 @@
-.nav-item{
+.nav-item {
     font-size: large;
 }
 
-.navbar-image{
+.navbar-image {
     max-width: 80px;
 }
 
-.navbar{
+.navbar {
     background-image: linear-gradient(to right, #5963A8, #2D2C43);
     color: white;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
 }
 
+.custom-navbar {
+  background-image: linear-gradient(to right, #5963A8, #2D2C43);
+  padding: 12px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.navcontent {
+  max-width: 85%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
 .active {
     font-weight: bold;
 }
 
-.loginButton{
+.loginButton {
     font-family: 'Poppins', sans-serif;
     background-color: transparent;
     border-color: gray;
@@ -25,7 +37,7 @@
     color: white;
 }
 
-#tituloSite{
+#tituloSite {
     font-family: Agency FB, 'Agency FB Bold';
     font-size: 200%;
     font-weight: bold;

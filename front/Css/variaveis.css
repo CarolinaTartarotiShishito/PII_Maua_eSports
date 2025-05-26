@@ -1,0 +1,26 @@
+:root {
+  --cor-primaria: #134EFF;
+  --cor-fundo: #2B2B2B;
+  --cor-texto: #FFFFFF;
+  --cor-cinza: #222222;
+  --cor-aviso: #FF2E63;
+  --cor-suave: #1b1b2f;
+  --cor-adm: #00D312;
+
+
+  /* Tipografia base - sempre Poppins */
+  --fonte-principal: 'Poppins', sans-serif;
+
+  /* Hierarquia de tamanhos */
+  --titulo-grande: 3.5rem;     /* Usado para destaques ou hero */
+  --titulo: 2.5rem;            /* Títulos principais de seção */
+  --subtitulo: 1.75rem;        /* Subtítulos abaixo dos h2 */
+  --paragrafo: 1rem;           /* Texto comum */
+  --botao-texto: 1rem;         /* Botões padrão */
+
+  /* Pesos */
+  --peso-bold: 700;
+  --peso-semi: 600;
+  --peso-normal: 400;
+
+}

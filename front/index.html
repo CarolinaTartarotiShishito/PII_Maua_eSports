@@ -11,87 +11,13 @@
     <link rel="stylesheet" href="Css/NavBar.css">
     <link rel="stylesheet" href="Css/Footer.css">
     <link rel="stylesheet" href="Css/index.css">
+    <link rel="stylesheet" href="Css/variaveis.css">
 </head>
 
 <body>
     <header>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 align-items-center">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="imagens/LogoEsports.png" class="navbar-image mx-2" alt="CS2">
-                </a>
-                <a class="navbar-brand mx-sm-3" id="tituloSite">MAUÁ E-SPORTS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
-                    aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse nav-underline text-end" id="navBar">
-                    <ul class="navbar-nav ms-auto me-4">
-                        <li class="nav-item m-4"><a class="nav-link active" aria-current="page" href="#">Início</a></li>
-                        <li class="nav-item m-4"><a class="nav-link" href="jogos.html">Jogos</a></li>
-                        <li class="nav-item m-4"><a class="nav-link" href="jogadores.html">Jogadores</a></li>
-                        <li class="nav-item m-4"><a class="nav-link" href="eventos.html">Eventos</a></li>
-                        <li class="nav-item m-4 d-none"><a class="nav-link" href="gestao.html">Gestão</a></li>
-                    </ul>
-                </div>
-                <form action="login.html">
-                    <button class="loginButton btn btn-secondary px-4" a>Entrar</button>
-                </form>
-            </div>
-        </nav>
-
-        <!-- <nav class="navbar navbar-expand-md align-items-center" id="menu-nav" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a>
-                    <img src="images/logo_matematica_no_metro.JPG" id="icon-menu"
-                        alt="">
-                </a>
-                <a class="navbar-brand mx-sm-3" id="tituloSite">MATEMÁTICA NO METRÔ</a>
-    
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNav"
-                    aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-    
-                <div class="nav nav-underline collapse navbar-collapse text-end" id="myNav">
-                    <ul class="navbar-nav ms-auto me-4">
-                        <li class="nav-item">
-                            <a class="nav-link active me-2" aria-current="page" href="#">Início</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-2" href="sobrenos.html">Sobre nós</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-2" href="forum.html">Fórum</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-2" href="desafios.html">Desafios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link me-2 d-none" id="logoutButton" href="index.html"
-                                onclick="logout()">Logout</a>
-                        </li>
-                    </ul>
-                    <a class="nav-link me-2">
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <img src="images/modo_icon.png" id="icon-menu" alt="">
-                            </button>
-                            <ul class="dropdown-menu" id="modoTela">
-                                <li><button class="dropdown-item" id="modoTelaClaro" type="button" onclick="modoDaTela('claro')">Modo Claro</button></li>
-                                <li><button class="dropdown-item" id="modoTelaEscuro" type="button" onclick="modoDaTela('escuro')">Modo Escuro</button></li>
-                            </ul>
-                        </div>
-                    </a>
-                </div>
-                <a class="nav-link login-link">
-                    <img src="images/login_icon.png" id="icon"
-                        alt="">
-                </a>
-            </div>
-        </nav> -->
+        <!-- Navbar (componente) -->
+        <div id="navbar-placeholder"></div>
     </header>
 
     <!-- Conteúdo da página -->
@@ -104,47 +30,8 @@
         </div>
     </main>
 
-    <!-- Rodapé -->
-    <footer class="text-center">
-        <p>&copy; 2025 Sua Marca - Todos os direitos reservados.</p>
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <div class="container justify-content-left">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="social-media">
-                            <p>Nossas redes:</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en"><img src="imagens/InstaBlackIcon.png"
-                                    alt="Instagram"></a>
-                            <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png"
-                                    alt="Twitter"></a>
-                            <a href="https://www.youtube.com/@MauaeSports"><img src="imagens/YoutubeBlackIcon.png"
-                                    alt="YouTube"></a>
-                            <a href="https://www.twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png"
-                                    alt="Twitch"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-center">
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="index.html"><img src="imagens/LogoEsports.png" class="logo-footer" alt="Logo"></a>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-right">
-                <div class="row">
-                    <div class="col-md-12 justify-content-right align-items-right">
-                        <div class="faq">
-                            <p>Ficou com dúvida?</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en">FAQ</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </footer>
+    <!-- Rodapé (componente) -->
+    <div id="footer-placeholder"></div>
 
     <!-- Incluindo intérprete de Libras com o VLibras Widget-->
     <div vw class="enabled">
@@ -159,8 +46,8 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="scripts/NavBar.js"></script>
+    <script src="/scripts/layout.js"></script>
+    <script src="/scripts/NavBar.js"></script>
 </body>
 
 </html>

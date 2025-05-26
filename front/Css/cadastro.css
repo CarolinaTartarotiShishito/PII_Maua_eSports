@@ -1,0 +1,15 @@
+.aviso-card, .jogo-card {
+  background-color: var(--cor-cinza, #2C2C2C);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.aviso-card h6,
+.jogo-card h6 {
+  margin-bottom: 4px;
+}
+
+.jogo-card span {
+  margin: 0 5px;
+}

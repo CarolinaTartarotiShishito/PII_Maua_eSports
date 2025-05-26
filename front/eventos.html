@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,77 +9,63 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Css/NavBar.css">
-    <link rel="stylesheet" href="Css/Footer.css">
+    <link rel="stylesheet" href="Css/footer.css">
     <link rel="stylesheet" href="Css/eventos.css">
+    <link rel="stylesheet" href="Css/variaveis.css">
 </head>
+
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3 align-items-center">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="imagens/LogoEsports.png" class="navbar-image mx-2" alt="CS2">
-                </a>
-                <a class="navbar-brand mx-sm-3" id="tituloSite">MAUÁ E-SPORTS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
-                    aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse nav-underline text-end" id="navBar">
-                    <ul class="navbar-nav ms-auto me-4">
-                        <li class="nav-item m-4"><a class="nav-link" href="index.html">Início</a></li>
-                        <li class="nav-item m-4"><a class="nav-link" href="jogos.html">Jogos</a></li>
-                        <li class="nav-item m-4"><a class="nav-link" href="jogadores.html">Jogadores</a></li>
-                        <li class="nav-item m-4"><a class="nav-link active" aria-current="page" href="#">Eventos</a></li>
-                        <li class="nav-item m-4 d-none"><a class="nav-link" href="gestao.html">Gestão</a></li>
-                    </ul>
-                </div>
-                <form action="login.html">
-                    <button class="loginButton btn btn-secondary px-4" a>Entrar</button>
-                </form>
-            </div>
-        </nav>
+    <div id="navbar-placeholder"></div>
 
-    <!-- Rodapé -->
-    <footer class="text-center">
-        <p>&copy; 2025 Sua Marca - Todos os direitos reservados.</p>
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <div class="container justify-content-left">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="social-media">
-                            <p>Nossas redes:</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en"><img src="imagens/InstaBlackIcon.png"
-                                    alt="Instagram"></a>
-                            <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png"
-                                    alt="Twitter"></a>
-                            <a href="https://www.youtube.com/@MauaeSports"><img src="imagens/YoutubeBlackIcon.png"
-                                    alt="YouTube"></a>
-                            <a href="https://www.twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png"
-                                    alt="Twitch"></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-center">
-                <div class="row">
-                    <div class="col-md-12">
-                        <a href="home.html"><img src="imagens/LogoEsports.png" class="logo-footer" alt="Logo"></a>
-                    </div>
-                </div>
-            </div>
-            <div class="container justify-content-right">
-                <div class="row">
-                    <div class="col-md-12 justify-content-right align-items-right">
-                        <div class="faq">
-                            <p>Ficou com dúvida?</p>
-                            <a href="https://www.instagram.com/esportsmaua/?hl=en">FAQ</a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Construção do site -->
 
+    <!-- REDES E POSTS DO INSTAGRAM -->
+    <section class="instagram-area container mt-5">
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <div>
+                <h2 class="fs-4 fw-bold">Acompanhe os eventos!</h2>
+                <p>Entre em nossas redes sociais para acompanhar todos nossos eventos</p>
+            </div>
+            <div class="social-bar rounded-pill d-flex align-items-center px-3 py-2 mt-3 mt-md-0">
+                <strong class="me-3 text-white">Nossas redes</strong>
+                <a href="https://www.instagram.com/esportsmaua/?hl=en"><img src="imagens/InstaBlackIcon.png" alt="Instagram"></a>
+                <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png" alt="Twitter"></a>
+                <a href="https://www.youtube.com/@MauaeSports"><img src="imagens/YoutubeBlackIcon.png" alt="YouTube"></a>
+                <a href="https://www.twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png" alt="Twitch"></a>    
             </div>
         </div>
-    </footer>
+
+        <h5 class="fw-semibold mt-4">Últimas publicações</h5>
+        <div class="instagram-posts d-flex gap-3 flex-wrap mt-2 mb-4">
+            <div class="instagram-post skeleton"></div>
+            <div class="instagram-post skeleton"></div>
+            <div class="instagram-post skeleton"></div>
+        </div>
+        <a href="https://www.instagram.com/esportsmaua/?hl=en" class="btn btn-primary rounded-pill px-4 py-2">Ver todas as publicações</a>
+    </section>
+
+    <!-- AVISOS -->
+    <section class="avisos-section container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Avisos</h5>
+        </div>
+        <div id="listaAvisos" class="mt-3"></div>
+    </section>
+
+    <!-- CALENDÁRIO -->
+    <section class="jogos-section container mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Calendário de jogos</h5>
+        </div>
+        <div id="listaJogos" class="mt-3"></div>
+    </section>
+
+
+    <!---->
+
+    <!-- Rodapé -->
+    <div id="footer-placeholder"></div>
 
     <!-- Incluindo intérprete de Libras com o VLibras Widget-->
     <div vw class="enabled">
@@ -94,6 +81,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="scripts/NavBar.js"></script>
+    <script src="/scripts/NavBar.js"></script>
+    <script src="/scripts/eventos.js"></script>
+    <script src="/scripts/layout.js"></script>
 </body>
+
 </html>

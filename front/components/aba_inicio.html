@@ -1,0 +1,90 @@
+<h4 class="mb-2 titulo-secundario">Tela Inicial</h4>
+<h5 class="fw-bold subtitulo">Quem somos</h5>
+
+<!-- Caixa de descrição com texto editável -->
+<div class="descricao-box p-4 rounded mb-5">
+    <p id="quem-somos-texto">
+        Nós somos uma entidade da faculdade Instituto Mauá de Tecnologia que forma times de estudantes para diversos
+        jogos online. Além de incluir como hora PAE (Projetos e Atividades Especiais), reunimos aspirantes de games,
+        nerds e talentosos jogadores frequentemente para treinar suas habilidades e participar de campeonatos, criando
+        uma experiência inovativa e divertida.
+    </p>
+    <button class="btn-editar" id="btn-editar-quem-somos" aria-label="Editar texto">
+        <i class="bi bi-pencil"></i>
+    </button>
+</div>
+
+<h5 class="fw-bold subtitulo mb-3">Redes</h5>
+<!-- Cards de redes sociais -->
+<div class="d-flex flex-wrap gap-3">
+    <div class="rede-card">
+        <i class="bi bi-twitch"></i>
+        <span>/MauaEsports</span>
+        <button class="btn-editar ms-auto" data-rede="twitch" aria-label="Editar Twitch">
+            <i class="bi bi-pencil"></i>
+        </button>
+    </div>
+    <div class="rede-card">
+        <i class="bi bi-youtube"></i>
+        <span>/Maua_eSports</span>
+        <button class="btn-editar ms-auto" data-rede="youtube" aria-label="Editar YouTube">
+            <i class="bi bi-pencil"></i>
+        </button>
+    </div>
+    <div class="rede-card">
+        <i class="bi bi-instagram"></i>
+        <span>@mauaesports</span>
+        <button class="btn-editar ms-auto" data-rede="instagram" aria-label="Editar Instagram">
+            <i class="bi bi-pencil"></i>
+        </button>
+    </div>
+</div>
+</div>
+
+<!-- Modal para edição do texto "Quem somos" -->
+<div class="modal fade" id="modalEditarQuemSomos" tabindex="-1" aria-labelledby="modalEditarQuemSomosLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-escuro">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarQuemSomosLabel">Editar "Quem somos"</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control bg-dark text-white" id="textoQuemSomos" rows="6"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="salvarQuemSomos">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para edição das redes sociais -->
+<div class="modal fade" id="modalEditarRede" tabindex="-1" aria-labelledby="modalEditarRedeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-escuro">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarRedeLabel">Editar Rede Social</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="nomeUsuarioRede" class="form-label">Nome de usuário</label>
+                    <input type="text" class="form-control bg-dark text-white" id="nomeUsuarioRede">
+                </div>
+                <div class="mb-3">
+                    <label for="linkRede" class="form-label">Link</label>
+                    <input type="text" class="form-control bg-dark text-white" id="linkRede">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="salvarRede">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
