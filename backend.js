@@ -6,6 +6,8 @@ const PORT = 3000;
 const bodyParser = require('body-parser');
 const defaultTrains = require('./defaultTrains.json');
 const defaultModalities = require('./defaultModalities.json');
+const mongoose = require('mongoose');
+const User = require('./models/user'); // Importe o model
 
 app.use(cors());
 app.use(express.json());
@@ -192,5 +194,28 @@ app.get('/teams', (req, res) => {
     { name: "Time A" },
     { name: "Time B" }
   ]);
+});
+// Conecte ao MongoDB
+mongoose.connect('mongodb+srv://pedronoelialamov:<db_password>@cluster0.imjcz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB conectado!'))
+.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
+
+// Exemplo de rota para criar um usuário
+app.post('/usuarios', async (req, res) => {
+    try {
+        const novoUsuario = new User(req.body);
+        await novoUsuario.save();
+        res.status(201).json(novoUsuario);
+    } catch (err) {
+        res.status(400).json({ erro: err.message });
+    }
+});
+
+// Inicie o servidor
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
 });
 
