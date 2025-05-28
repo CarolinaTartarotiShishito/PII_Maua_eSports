@@ -40,12 +40,11 @@ footer {
     /* Para título em negrito */
 }
 
-.texto-explicativo {
+.texo-explicativo {
     font-size: 1.3rem;
 }
-
 .comeco {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: bold;
 }
 
@@ -62,17 +61,11 @@ footer {
     .nome-do-jogo {
         font-size: 1.2rem;
     }
-
-    .texto-de-explicatico {
-        font-size: 16px;
-    }
-
     .card-custom {
         flex-direction: column !important; /* Faz imagem e texto ficarem um embaixo do outro */
         align-items: center; /* Centraliza os itens */
         text-align: center; /* Centraliza o texto */
     }
-
     .game-image {
         width: 100% !important; /* Ocupa toda a largura disponível */
         max-width: 240px; /* Limite para não ficar exagerado */
@@ -80,6 +73,6 @@ footer {
     }
 
     .Card-de-jogos {
-        margin: 0 1rem;
+        margin: 1rem;
     }
 }
