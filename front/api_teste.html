@@ -1,0 +1,76 @@
+<!-- front/api-test.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste de Conexão com API</title>
+  <script src="../scripts/banco.js" defer></script>
+  
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fff;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Times Registrados</h1>
+  <ul id="lista-modalidades">Carregando...</ul>
+
+  <script>
+
+    const API_URL = "http://localhost:3000/modalities";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const lista = document.getElementById("lista-modalidades");
+      lista.innerHTML = "Carregando...";
+
+      fetch(API_URL)
+        .then(res => {
+          if (!res.ok) throw new Error("Erro na resposta da API.");
+          return res.json();
+        })
+        .then(modalities => {
+          lista.innerHTML = "";
+
+          if (!modalities.length) {
+            lista.innerHTML = "<li>Nenhuma modalidade encontrada.</li>";
+            return;
+          }
+
+          modalities.forEach(mod => {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${mod.Name}</strong>`;
+            lista.appendChild(li);
+          });
+        })
+        .catch(err => {
+          console.error("Erro ao carregar dados:", err);
+          lista.innerHTML = `<li>Erro ao carregar dados: ${err.message}</li>`;
+        });
+    });
+  </script>
+
+</body>
+
+</html>
