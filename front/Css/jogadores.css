@@ -23,8 +23,8 @@ body {
 
 /* Wrapper que segura todos os cards */
 .cards-wrapper {
-    background-image: linear-gradient(to left, #272d52, #2D2C43);
-    border-radius: 15px;
+
+    border-right: 1px solid #ffffff;
     display: flex;
     flex-wrap: wrap;
     /* Permite que os cards quebrem para a próxima linha */
@@ -82,36 +82,43 @@ body {
     position: relative;
     clip-path: path('M0,0 L0,160 L240,160 L240,0 L170,0 C170,70 70,70 70,0 Z');
 
+}
+
+.nome {
+    margin-top: 20%;
+    font-size: 16px;
+}
+
+.funcao {
+    color: #6A5ACD;
+    /* Azul arroxeado */
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.botao-time {
+    padding: 6px 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Responsividade opcional para ajustar imagem ou conteúdo */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        max-width: 90vw;
     }
 
-    .nome {
-        margin-top: 20%;
+    body {
+        font-size: 14px;
+    }
+
+    .nome-do-jogo {
+        font-size: 1.2rem;
+    }
+
+    .texto-de-explicatico {
         font-size: 16px;
     }
-
-    .funcao {
-        color: #6A5ACD;
-        /* Azul arroxeado */
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-    /* Responsividade opcional para ajustar imagem ou conteúdo */
-    @media (max-width: 768px) {
-        .card {
-            width: 100%;
-            max-width: 90vw;
-        }
-
-        body {
-            font-size: 14px;
-        }
-
-        .nome-do-jogo {
-            font-size: 1.2rem;
-        }
-
-        .texto-de-explicatico {
-            font-size: 16px;
-        }
-    }
+}
