@@ -12,10 +12,10 @@
   --fonte-principal: 'Poppins', sans-serif;
 
   /* Hierarquia de tamanhos */
-  --titulo-grande: 3.5rem;     /* Usado para destaques ou hero */
-  --titulo: 2.5rem;            /* Títulos principais de seção */
+  --titulo-grande: 50px;     /* Usado para destaques ou hero */
+  --titulo: 35px;            /* Títulos principais de seção */
   --subtitulo: 1.75rem;        /* Subtítulos abaixo dos h2 */
-  --paragrafo: 1rem;           /* Texto comum */
+  --paragrafo: 1.2rem;           /* Texto comum */
   --botao-texto: 1rem;         /* Botões padrão */
 
   /* Pesos */
