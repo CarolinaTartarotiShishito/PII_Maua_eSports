@@ -13,9 +13,9 @@
 
   /* Hierarquia de tamanhos */
   --titulo-grande: 3.125rem;     /* Usado para destaques ou hero */
-  --titulo: 2.1875rem;            /* Títulos principais de seção */
-  --subtitulo: 1.75rem;        /* Subtítulos abaixo dos h2 */
-  --paragrafo: 1.2rem;           /* Texto comum */
+  --titulo: 2.5rem;            /* Títulos principais de seção */
+  --subtitulo: 2rem;        /* Subtítulos abaixo dos h2 */
+  --paragrafo: 1.1rem;           /* Texto comum */
   --botao-texto: 1rem;         /* Botões padrão */
 
   /* Pesos */
