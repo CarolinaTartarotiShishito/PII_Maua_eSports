@@ -1,20 +1,3 @@
-/*const modalidades = [
-  { id: "641246ec14a24f13c339bb1f", nome: "Counter Strike 2 A" },
-  { id: "641902c127cd51b2d0f2bd92", nome: "Counter Strike 2 B" },
-  { id: "64408e2748ac52dbe2d7af62", nome: "FIFA 25" },
-  { id: "63641abd9328c1ab1e364c86", nome: "Rocket League" },
-  { id: "6418aa5f9dec6ec29dc77be9", nome: "League of Legends A" },
-  { id: "64e16a08639c17d83824cfa8", nome: "League of Legends B" },
-  {id: "642cc2bf81b714e8f342ccfa", nome: "TFT A" },
-  {id: "64f62ee5257dd75e74425e0c", nome: "TFT B" },
-  {id: "6429eebd5ee71b5d45436aa3", nome: "Rainbow Six" },
-  {id: "642b6ac5bc274fddaadf57e3", nome: "Rainbow Six Academy" },
-  {id: "6360944b04a823de3a359357", nome: "Valorant Feminino" },
-  {id: "64124b4c14a24f13c339bb20", nome: "Valorant Misto Blue" },
-  {id: "64124b9114a24f13c339bb21", nome: "Valorant Misto Black" },
-
-  // Adicione outras modalidades aqui
-];*/
 const modalidades = {
   "Counter Strike 2":[
     {"id": "641246ec14a24f13c339bb1f", "time": "A"},
