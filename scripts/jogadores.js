@@ -35,7 +35,7 @@ const modalidades = {
     {"id": "642b6ac5bc274fddaadf57e3", "time": "Academy"}
   ],
   "valorant":[
-    {"id": "6360944b04a823de3a359357", "time": "Feminino"},
+    {"id": "6360944b04a823de3a359357", "time": "Feminina"},
     {"id": "64124b4c14a24f13c339bb20", "time": "Misto Blue"},
     {"id": "64124b9114a24f13c339bb21", "time": "Misto Black"}
   ]
@@ -72,7 +72,7 @@ function renderModalidades(trains) {
     times.forEach((time, index) => {
       const botao = document.createElement("button");
       botao.className = "botao-time btn btn-outline-primary me-2 mb-2";
-      botao.textContent = `Time ${time.time}`;
+      botao.textContent = `Equipe ${time.time}`;
 
       botao.onclick = () => {
         cardsWrapper.innerHTML = "";

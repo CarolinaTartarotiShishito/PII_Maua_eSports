@@ -21,7 +21,7 @@ body {
 }
 
 .corpo-site {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     /* Centraliza na tela */
     padding: 0 20px;
@@ -82,7 +82,7 @@ footer {
 }
 
 .nome-do-jogo {
-    font-size: var(--titulo);
+    font-size: var(--subtitulo);
     font-weight: bold;
     /* Para título em negrito */
     margin-bottom: 12px;
@@ -93,7 +93,7 @@ footer {
 }
 
 .comeco {
-    font-size: var(--titulo-grande);
+    font-size: var(--titulo);
     font-weight: bold;
     margin-bottom: 21px;
     margin-top: 80px;

@@ -6,7 +6,7 @@ body {
 }
 
 .comeco {
-    font-size: 3rem;
+    font-size: var(--titulo);
     font-weight: bold;
 }
 
@@ -23,8 +23,6 @@ body {
 
 /* Wrapper que segura todos os cards */
 .cards-wrapper {
-
-    border-right: 1px solid #ffffff;
     display: flex;
     flex-wrap: wrap;
     /* Permite que os cards quebrem para a próxima linha */
@@ -85,7 +83,7 @@ body {
 }
 
 .nome {
-    margin-top: 20%;
+    margin-top: 10%;
     font-size: 16px;
 }
 
@@ -97,10 +95,23 @@ body {
 }
 
 .botao-time {
-    padding: 6px 12px;
+    padding: 10px 16px;
     font-weight: bold;
-    border-radius: 8px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 12px;
     cursor: pointer;
+
+    background: var(--cor-primaria);
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.botao-time:hover {
+    border-bottom: 2px solid #a6c2e0;
+    transform: translateY(-2px); /* efeito de leve elevação */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsividade opcional para ajustar imagem ou conteúdo */
