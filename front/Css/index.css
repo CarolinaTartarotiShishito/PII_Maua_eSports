@@ -1,3 +1,11 @@
+.custom-navbar { /*tirando o box-shadow apenas para a página Index */
+    box-shadow: unset;
+}
+
+header {
+    overflow: hidden; /* Evita que imagens rotacionadas "vazem" e criem barras de rolagem */
+}
+
 body {
     background: linear-gradient(to bottom, #20242f, #1a1d27);
     color: white;
@@ -8,6 +16,65 @@ body {
 footer {
     background-color: #181b22;
     padding: 2rem 0;
+}
+
+.painelIndex {
+    background-image: linear-gradient(to right, #5963A8, #2D2C43);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+.conteudoPainel{
+    display: flex;
+}
+
+.buttonInscricao{
+    background-color: #322BFF;
+    color: white;
+    border-color: #4665FF;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilizando os cards */
+#imagensPainel {
+    position: relative;
+    width: 50%;
+    height: 400px; 
+}
+
+.game-image {
+    position: absolute; 
+    width: 250px; 
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.game-image:hover {
+    transform: translateY(-10px);
+}
+
+/* Posições específicas para criar a sobreposição */
+.image-1 {
+    top: 0;
+    left: 100px;
+    z-index: 1; /* Fica na frente */
+    /* transform: rotate(-5deg); */
+}
+
+.image-2 {
+    top: 50px;
+    left: 50px;
+    z-index: 2; /* Fica atrás */
+    /* transform: rotate(8deg); */
+}
+
+.image-3 {
+    top: 100px;
+    left: 0;
+    z-index: 3; /* Fica atrás */
+    /* transform: rotate(8deg); */
 }
 
 /* Ajuste responsivo */
