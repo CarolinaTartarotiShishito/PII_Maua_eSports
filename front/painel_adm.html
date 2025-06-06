@@ -15,7 +15,101 @@
 
 
 </head>
+<script>
+  // Mostra o container de eventos ao clicar no botão "Eventos"
+  const botoesMenu = document.querySelectorAll('.botao-menu');
+  const eventosContainer = document.getElementById('eventos-container');
+  const painelConteudo = document.getElementById('painel-conteudo');
 
+  botoesMenu.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Verifica se é o botão de eventos
+      if (this.querySelector('.bi-calendar-event')) {
+        eventosContainer.style.display = 'block';
+        painelConteudo.style.display = 'none';
+        carregarEventos();
+      } else {
+        eventosContainer.style.display = 'none';
+        painelConteudo.style.display = 'block';
+      }
+    });
+  });
+
+  // Funções para consumir a API de eventos
+  async function listarEventos() {
+    const res = await fetch('/api/eventos');
+    return await res.json();
+  }
+
+  async function adicionarEvento(nome, descricao) {
+    await fetch('/api/eventos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, descricao })
+    });
+    carregarEventos();
+  }
+
+  async function editarEvento(id, nome, descricao) {
+    await fetch(`/api/eventos/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, descricao })
+    });
+    carregarEventos();
+  }
+
+  async function excluirEvento(id) {
+    await fetch(`/api/eventos/${id}`, { method: 'DELETE' });
+    carregarEventos();
+  }
+
+  async function carregarEventos() {
+    const eventos = await listarEventos();
+    const lista = document.getElementById('lista-eventos');
+    lista.innerHTML = '';
+    eventos.forEach(ev => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.innerHTML = `
+        <span><strong>${ev.nome}</strong> - ${ev.descricao}</span>
+        <span>
+          <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoEvento('${ev._id}', '${ev.nome}', '${ev.descricao}')">Editar</button>
+          <button class="btn btn-sm btn-danger" onclick="excluirEvento('${ev._id}')">Excluir</button>
+        </span>
+      `;
+      lista.appendChild(li);
+    });
+  }
+
+  window.prepararEdicaoEvento = function(id, nome, descricao) {
+    document.getElementById('evento-id').value = id;
+    document.getElementById('evento-nome').value = nome;
+    document.getElementById('evento-descricao').value = descricao;
+    document.getElementById('cancelar-edicao').style.display = 'inline-block';
+  };
+
+  document.getElementById('form-evento').onsubmit = function(e) {
+    e.preventDefault();
+    const id = document.getElementById('evento-id').value;
+    const nome = document.getElementById('evento-nome').value;
+    const descricao = document.getElementById('evento-descricao').value;
+    if (id) {
+      editarEvento(id, nome, descricao);
+    } else {
+      adicionarEvento(nome, descricao);
+    }
+    this.reset();
+    document.getElementById('evento-id').value = '';
+    document.getElementById('cancelar-edicao').style.display = 'none';
+  };
+
+  document.getElementById('cancelar-edicao').onclick = function() {
+    document.getElementById('form-evento').reset();
+    document.getElementById('evento-id').value = '';
+    this.style.display = 'none';
+  };
+</script>
 <body class="painel">
   <div class="tela-completa">
     <!-- Navbar (componente) -->
@@ -82,12 +176,28 @@
 
       <!-- CONTEÚDO PRINCIPAL DINÂMICO -->
       <main id="painel-conteudo" class="conteudo flex-grow-1 p-5"></main>
+      <!-- Container de Eventos -->
+      <div id="eventos-container" style="display:none;">
+        <h3>Eventos</h3>
+        <form id="form-evento" class="mb-3">
+          <input type="hidden" id="evento-id">
+          <div class="mb-2">
+            <input type="text" id="evento-nome" class="form-control" placeholder="Nome do evento" required>
+          </div>
+          <div class="mb-2">
+            <input type="text" id="evento-descricao" class="form-control" placeholder="Descrição" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary" id="cancelar-edicao" style="display:none;">Cancelar</button>
+        </form>
+        <ul id="lista-eventos" class="list-group"></ul>
+      </div>
     
     </div>
 
     <!-- Rodapé (componente) -->
     <div id="footer-placeholder"></div>
-  </div>6
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/scripts/layout.js"></script>

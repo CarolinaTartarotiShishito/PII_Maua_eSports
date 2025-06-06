@@ -8,6 +8,9 @@ const defaultTrains = require('./defaultTrains.json');
 const defaultModalities = require('./defaultModalities.json');
 const mongoose = require('mongoose');
 const User = require('./models/user'); // Importe o model
+const jogosRouter = require('./routes/jogos');
+const eventosRouter = require('./routes/eventos');
+const treinosRouter = require('./routes/treinos');
 
 app.use(cors());
 app.use(express.json());
@@ -213,6 +216,11 @@ app.post('/usuarios', async (req, res) => {
         res.status(400).json({ erro: err.message });
     }
 });
+
+app.use('/api/jogos', jogosRouter);
+app.use('/api/eventos', eventosRouter);
+app.use('/api/treinos', treinosRouter);
+
 
 // Inicie o servidor
 app.listen(3000, () => {

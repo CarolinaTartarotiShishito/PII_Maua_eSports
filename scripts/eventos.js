@@ -126,7 +126,39 @@ async function carregarPostsInstagram() {
     });
   }
 }
+// Exemplo de função para adicionar um evento
+async function adicionarEvento(nome, descricao) {
+    const resposta = await fetch('/api/eventos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, descricao })
+    });
+    const dados = await resposta.json();
+    // Atualize a interface conforme necessário
+}
+// Listar eventos
+async function listarEventos() {
+    const resposta = await fetch('/api/eventos');
+    return await resposta.json();
+}
 
+// Editar evento
+async function editarEvento(id, dados) {
+    const resposta = await fetch(`/api/eventos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dados)
+    });
+    return await resposta.json();
+}
+
+// Excluir evento
+async function excluirEvento(id) {
+    const resposta = await fetch(`/api/eventos/${id}`, {
+        method: 'DELETE'
+    });
+    return await resposta.json();
+}
 // === Inicialização ao carregar a página ===
 document.addEventListener("DOMContentLoaded", () => {
   carregarPostsInstagram();
