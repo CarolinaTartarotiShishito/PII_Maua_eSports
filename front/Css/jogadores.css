@@ -11,15 +11,40 @@ body {
 }
 
 .text-introducao {
-    font-size: 1.3rem;
+    font-size: var(--paragrafo);
 }
 
 .nome-jogo {
-    background-color: #161414;
+    position: relative;
+    background-color: #222020b3;
     border-radius: 15px;
-    text-align: center;
+    font-size: var(--subtitulo);
+    display:block;
+    align-items: center;           
+    padding: 1rem 1.25rem;           
+    height: 4rem;
+    color: white; 
+    overflow: hidden;
+    z-index: 1;               
+}
+/* Primeira listra */
+.nome-jogo::before,
+.nome-jogo::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    right: 160px;
+    width: 30px;
+    height: 300%;
+    background-color: #f18f1e; /* Branco com opacidade */
+    transform: rotate(126deg); /* Inclinação da listra */
+    z-index: 0;
 }
 
+/* Segunda listra com deslocamento */
+.nome-jogo::after {
+    right: 300px; /* Ajusta a posição da segunda listra */
+}
 
 /* Wrapper que segura todos os cards */
 .cards-wrapper {
