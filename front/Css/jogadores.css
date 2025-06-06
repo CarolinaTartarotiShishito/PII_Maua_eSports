@@ -23,8 +23,9 @@ body {
 
 .nome-jogo {
     position: relative;
-    background-color: #222020b3;
-    border-radius: 15px;
+    background-color: #1312128f;
+    border-radius: 25px;
+    /* border: 2px solid #131212a9 ; */
     font-size: var(--subtitulo);
     display:block;
     align-items: center;           
@@ -101,22 +102,23 @@ body {
     font-size: 34px;
     position: relative;
     z-index: 2;
-    border: 1px solid white;
+    border: 2px solid #131212a9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 
 }
 
 .info-box {
-    background-color: #222222;
-    border-radius: 20px;
-    padding: 40px 20px 10px 20px;
+    background-color: #1312128f;
+    border-radius: 35px;
+    padding: 40px 20px 20px 20px;
+    border: 2px solid #131212a9;
     /* Top padding aumentado para encaixar o círculo */
     margin-top: -40px;
     /* Sobe o box para o círculo parecer "encaixado" */
     z-index: 1;
     position: relative;
     clip-path: path('M0,0 L0,160 L240,160 L240,0 L170,0 C170,70 70,70 70,0 Z');
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.13);
 }
 
 
@@ -137,7 +139,7 @@ body {
     font-weight: bold;
     border: none;
     border-bottom: 2px solid transparent;
-    border-radius: 12px;
+    border-radius: 16px;
     cursor: pointer;
     background: transparent;
     color: white;
@@ -146,7 +148,7 @@ body {
 }
 
 .botao-time:hover {
-    background: var(--cor-primaria);
+    background: #2b2a2ab4;
     border-bottom: 2px solid #a6c2e0;
     transform: translateY(-2px); /* efeito de leve elevação */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
