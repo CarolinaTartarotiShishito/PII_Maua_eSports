@@ -1,26 +1,26 @@
 const modalidades = {
-  "Counter Strike 2":[
-    {"id": "641246ec14a24f13c339bb1f", "time": "A"},
-    {"id": "641902c127cd51b2d0f2bd92", "time": "B"}
+  "Counter Strike 2": [
+    { "id": "641246ec14a24f13c339bb1f", "time": "A" },
+    { "id": "641902c127cd51b2d0f2bd92", "time": "B" }
   ],
-  "FIFA 25":[{"id": "64408e2748ac52dbe2d7af62", "time": "A"}],
-  "Rocket Legue":[{"id": "63641abd9328c1ab1e364c86", "time": "A"}],
-  "League of Legends":[
-    {"id": "6418aa5f9dec6ec29dc77be9", "time": "A"},
-    {"id": "64e16a08639c17d83824cfa8", "time": "B"}
+  "FIFA 25": [{ "id": "64408e2748ac52dbe2d7af62", "time": "A" }],
+  "Rocket Legue": [{ "id": "63641abd9328c1ab1e364c86", "time": "A" }],
+  "League of Legends": [
+    { "id": "6418aa5f9dec6ec29dc77be9", "time": "A" },
+    { "id": "64e16a08639c17d83824cfa8", "time": "B" }
   ],
-  "TFT":[
-    {"id": "642cc2bf81b714e8f342ccfa", "time": "A"},
-    {"id": "64f62ee5257dd75e74425e0c", "time": "B"}
+  "TFT": [
+    { "id": "642cc2bf81b714e8f342ccfa", "time": "A" },
+    { "id": "64f62ee5257dd75e74425e0c", "time": "B" }
   ],
-  "Rainbow Six":[
-    {"id": "6429eebd5ee71b5d45436aa3", "time": "A"},
-    {"id": "642b6ac5bc274fddaadf57e3", "time": "Academy"}
+  "Rainbow Six": [
+    { "id": "6429eebd5ee71b5d45436aa3", "time": "A" },
+    { "id": "642b6ac5bc274fddaadf57e3", "time": "Academy" }
   ],
-  "valorant":[
-    {"id": "6360944b04a823de3a359357", "time": "Feminina"},
-    {"id": "64124b4c14a24f13c339bb20", "time": "Misto Blue"},
-    {"id": "64124b9114a24f13c339bb21", "time": "Misto Black"}
+  "valorant": [
+    { "id": "6360944b04a823de3a359357", "time": "Feminina" },
+    { "id": "64124b4c14a24f13c339bb20", "time": "Misto Blue" },
+    { "id": "64124b9114a24f13c339bb21", "time": "Misto Black" }
   ]
 };
 
@@ -58,6 +58,10 @@ function renderModalidades(trains) {
       botao.textContent = `Equipe ${time.time}`;
 
       botao.onclick = () => {
+        botoesWrapper.querySelectorAll(".botao-time").forEach(btn => {
+          btn.classList.remove("selecionado");
+        });
+        botao.classList.add("selecionado");
         cardsWrapper.innerHTML = "";
 
         const treinosDoTime = trains.filter((t) => t.ModalityId == time.id);

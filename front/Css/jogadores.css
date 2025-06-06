@@ -139,18 +139,33 @@ body {
     border-bottom: 2px solid transparent;
     border-radius: 12px;
     cursor: pointer;
-
-    background: var(--cor-primaria);
+    background: transparent;
     color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    margin-top: 12px;
 }
 
 .botao-time:hover {
+    background: var(--cor-primaria);
     border-bottom: 2px solid #a6c2e0;
     transform: translateY(-2px); /* efeito de leve elevação */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+.botao-time.selecionado {
+    background: #f18f1e; /* destaque para botão selecionado */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* .botao-time:not(.selecionado) {
+    background: transparent;
+    color: white;
+    border-bottom: 2px solid transparent;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+} */
 
 /* Responsividade opcional para ajustar imagem ou conteúdo */
 @media (max-width: 768px) {
