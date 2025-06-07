@@ -21,34 +21,52 @@
     <div class="corpo-site">
         <div class="comeco">Conta</div>
         <div class="subComeco">Configure sua conta do jeito que preferir</div>
-        <div class="configuracao-inicial d-flex flex-row justify-content-between">
+        <div class="configuracao-inicial d-flex flex-row justify-content-start">
             <div class="circle">
-                pp
+                02
             </div>
             <div>
                 <div class="titulo">Nome de Usuário</div>
                 <div class="sub-titulo">Deixe seu nome de usuário com o seu estilo!</div>
+                <div class="sub-titulo" id="NomeUsuario">Nome: ooooooooooo</div>
                 <div class="text-nome">
-                    <textarea name="nome" id="nomeJogador" placeholder="Insira seu novo nome aqui"></textarea>
-                    <button class="botaoSalvar" id="Salvar">Salvar</button>
+                    <input type="text" class="nome" id="nomeJogador" placeholder="Insira seu novo nome aqui"></input>
+                    <button type="button" class="botaoSalvar" id="Salvar">Salvar</button>
                 </div>
             </div>
         </div>
         <div class="time-informacao">
             <div class="titulo">Time & Formação</div>
-            <div class="sub-titulo">Consulte suas informações por aqui</div>
+            <div class="sub-titulo">Consulte informações do seu time por aqui</div>
             <div class="time-horas d-flex flex-row justify-content-between">
                 <div class="time">
                     <div class="Time-jogo">
                         <div class="Time">Time:</div>
                         <div class="jogo" id="Jogo">CS2</div>
                     </div>
-                    <div class="time-treino">
+                    <div class="titulo">Horário de Treino</div>
+                    <div class="time-treino d-flex flex-row justify-content-between">
                         <div class="time-treinos-dias" id="time-treinos-dias">
-                            segunda-feita
+                            segunda - feita
                         </div>
                         <div class="time-treinos-horas" id="time-treinos-horas">
-                            14H
+                           14:00 - 13:00
+                        </div>
+                    </div>
+                    <div class="time-treino d-flex flex-row justify-content-between">
+                        <div class="time-treinos-dias" id="time-treinos-dias">
+                            segunda - feita
+                        </div>
+                        <div class="time-treinos-horas" id="time-treinos-horas">
+                            14:00 - 13:00
+                        </div>
+                    </div>
+                    <div class="time-treino d-flex flex-row justify-content-between">
+                        <div class="time-treinos-dias" id="time-treinos-dias">
+                            segunda - feita
+                        </div>
+                        <div class="time-treinos-horas" id="time-treinos-horas">
+                            14:00 - 13:00
                         </div>
                     </div>
                 </div>
@@ -57,12 +75,29 @@
                         <div class="Horas">Horas PAE:</div>
                         <div class="PAE" id="HPaes">15</div>
                     </div>
-                    <div class="proximo-jogos">
+                    <div class="titulo">Próximo Jogo</div>
+                    <div class="proximo-jogos d-flex flex-row justify-content-between">
                         <div class="proximo-jogos-dia" id="proximo-jogos-dia">
-                            Terça-feira
+                            Terça - feira
                         </div>
                         <div class="proximo-jogos-horas" id="proximo-jogos-horas">
-                            14H
+                            14:00 - 13:00
+                        </div>
+                    </div>
+                    <div class="proximo-jogos d-flex flex-row justify-content-between">
+                        <div class="proximo-jogos-dia" id="proximo-jogos-dia">
+                            Terça - feira
+                        </div>
+                        <div class="proximo-jogos-horas" id="proximo-jogos-horas">
+                            14:00 - 13:00
+                        </div>
+                    </div>
+                    <div class="proximo-jogos d-flex flex-row justify-content-between">
+                        <div class="proximo-jogos-dia" id="proximo-jogos-dia">
+                            Terça - feira
+                        </div>
+                        <div class="proximo-jogos-horas" id="proximo-jogos-horas">
+                            14:00 - 13:00
                         </div>
                     </div>
                 </div>
@@ -87,7 +122,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/scripts/layout.js"></script>
     <script src="/scripts/NavBar.js"></script>
-    <script src="/scripts/jogadores.js"></script>
+    <script src="/scripts/pagina_jogador.js"></script>
 </body>
 
 </html>
