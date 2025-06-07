@@ -59,25 +59,33 @@ footer {
     transform: translateY(-10px);
 }
 
+.imagemEquipe {
+    transition: transform 0.3s ease;
+}
+
+.imagemEquipe:hover {
+    transform: translateY(-10px);
+}
+
 /* Posições específicas para criar a sobreposição */
 .image-1 {
     top: 0;
     left: 100px;
-    z-index: 1; /* Fica na frente */
+    z-index: 1; /* Fica atrás */
     /* transform: rotate(-5deg); */
 }
 
 .image-2 {
     top: 50px;
     left: 50px;
-    z-index: 2; /* Fica atrás */
+    z-index: 2; /* Fica no meio */
     /* transform: rotate(8deg); */
 }
 
 .image-3 {
     top: 100px;
     left: 0;
-    z-index: 3; /* Fica atrás */
+    z-index: 3; /* Fica na frente */
     /* transform: rotate(8deg); */
 }
 
