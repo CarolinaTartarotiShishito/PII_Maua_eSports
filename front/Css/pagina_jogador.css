@@ -1,0 +1,246 @@
+body {
+    background: linear-gradient(to bottom, #20242f, #1a1d27);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.corpo-site {
+    max-width: 1100px;
+    margin: 0 auto;
+    /* Centraliza na tela */
+    padding: 0 20px;
+    /* Espaçamento lateral */
+}
+
+.comeco {
+    font-size: var(--titulo);
+    font-weight: bold;
+    margin-bottom: 4px;
+    margin-top: 80px;
+}
+
+.subComeco {
+    font-size: var(--paragrafo);
+    margin-bottom: 40px;
+}
+
+.configuracao-inicial {
+    display: flex;
+    flex-wrap: nowrap;
+    /* Espaço entre itens */
+    background-color: #222222;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    align-items: center;
+    /* Verticalmente alinhados */
+}
+
+.circle {
+    width: 155px;
+    height: 155px;
+    background-color: #D1D2F6;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #322BFF;
+    font-weight: bold;
+    font-size: 4rem;
+    border: 2px solid #131212a9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    margin: 24px 89px 24px 45px;
+    /* se quiser espaçamento da borda esquerda */
+}
+
+.titulo {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+}
+
+.sub-titulo {
+    font-size: var(--paragrafo);
+}
+
+.text-nome {
+    border: 1px solid #cccbcb;
+    border-radius: 12px;
+    align-items: center;
+    display: flex;
+    margin-top: 1rem;
+}
+
+.nome {
+    background: transparent;
+    width: 600px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+}
+
+.botaoSalvar {
+    padding: 4px 12px;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--cor-primaria);
+    color: white;
+    transition: all 0.3s ease;
+    margin-right: 4px;
+
+}
+
+.botaoSalvar:hover {
+    background: #134eff71;
+    border-bottom: 2px solid #a6c2e0;
+    transform: translateY(-1px);
+    /* efeito de leve elevação */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.botaoSalvar:active {
+    background: #00aeff;
+    transform: scale(0.95);
+    /* efeito de "apertar" */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.time-informacao {
+    background-color: #222222;
+    border-radius: 20px;
+    margin-bottom: 64px;
+    padding: 38px 48px;
+}
+
+.Time-jogo {
+    border: 1px solid #cccbcb;
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 400px;
+    margin-bottom: 40px;
+    margin-top: 1rem;
+}
+
+.Time {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.jogo {
+    font-size: var(--paragrafo);
+}
+
+.time-treino {
+    font-size: var(--paragrafo);
+}
+
+.horasPAE {
+    border: 1px solid #cccbcb;
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 400px;
+    margin-bottom: 40px;
+    margin-top: 1rem;
+}
+
+.Horas {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.PAE {
+    font-size: var(--paragrafo);
+}
+
+.proximo-jogos {
+    font-size: var(--paragrafo);
+}
+
+@media (max-width: 992px) {
+    .configuracao-inicial {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+    }
+
+    .circle {
+        width: 120px;
+        height: 120px;
+        font-size: 3rem;
+    }
+
+    .text-nome {
+        width: 100%;
+    }
+
+    .nome {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .botaoSalvar {
+        width: 100%;
+    }
+
+    .time-horas {
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+
+    .Time-jogo,
+    .horasPAE,
+    .time-treino,
+    .proximo-jogos {
+        width: 100%;
+    }
+    .Time-jogo{
+        margin-bottom: 20px;
+    }
+    .horasPAE{
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .configuracao-inicial {
+        flex-wrap: wrap;
+    }
+
+    .circle {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+
+    .text-nome {
+        flex-direction: column;
+    }
+
+    .botaoSalvar {
+        width: 75%;
+        margin-bottom: 4px;
+    }
+
+    .titulo {
+        font-size: 1.2rem;
+    }
+
+    .Time {
+        font-size: 1rem;
+    }
+
+    .Horas {
+        font-size: 1rem;
+    }
+    .time-treino{
+        font-size: 0.6rem;
+    }
+    .proximo-jogos{
+        font-size: 0.6rem;
+    }
+}
