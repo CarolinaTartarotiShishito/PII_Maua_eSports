@@ -36,6 +36,10 @@ async function fazerLogin (){
         localStorage.setItem("cargo", response.data.cargo);
         localStorage.setItem("avatar", getIniciais(loginResponse.account.name));
         exibeAlerta(".alert-login", "Login efetuado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
+
     } catch (error) {
         console.error("Erro durante o login:", error);
         exibeAlerta(".alert-login", "Falha no login!", ['show', 'alert-danger'], ['d-none'], 4000);

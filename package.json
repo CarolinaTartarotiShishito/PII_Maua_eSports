@@ -10,7 +10,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "mongodb": "^6.17.0",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^2.7.0",
     "passport": "^0.7.0",
     "passport-azure-ad": "^4.3.5"
   },

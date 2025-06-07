@@ -170,41 +170,6 @@ app.delete('/jogos/:id', (req, res) => {
   }
 });
 
-// MEMBROS
-app.get('/membros', (req, res) => res.json(membros));
-app.post('/membros', (req, res) => {
-  const { nome, cargo } = req.body;
-  if (nome && cargo) {
-    const novoMembro = { _id: Date.now().toString(), nome, cargo };
-    membros.push(novoMembro);
-    res.status(201).json(novoMembro);
-  } else {
-    res.status(400).json({ error: 'Nome e cargo são obrigatórios' });
-  }
-});
-app.put('/membros/:id', (req, res) => {
-  const { id } = req.params;
-  const { nome, cargo } = req.body;
-  const membro = membros.find(m => m._id === id);
-  if (membro) {
-    membro.nome = nome;
-    membro.cargo = cargo;
-    res.json(membro);
-  } else {
-    res.status(404).json({ error: 'Membro não encontrado' });
-  }
-});
-app.delete('/membros/:id', (req, res) => {
-  const { id } = req.params;
-  const index = membros.findIndex(m => m._id === id);
-  if (index !== -1) {
-    membros.splice(index, 1);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ error: 'Membro não encontrado' });
-  }
-});
-
 // Endpoint para jogadores por modalidade
 app.get('/jogadores-por-modalidade', (req, res) => {
   const trainsPath = path.join(__dirname, 'defaultTrains.json');
@@ -286,6 +251,7 @@ app.get('/usuarios', async (req, res) => {
     res.json(usuarios)
 });
 
+// Verifica se o usuário com o email passado está cadastrado no banco de dados
 app.post('/buscaUsuario', async (req, res) => {
     const email = req.body.email;
 

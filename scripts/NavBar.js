@@ -13,12 +13,17 @@ if (navbar) {
     };
 }
 
-function prepararNavBar(){
+function safePrepararNavBar(){
     const cargo = localStorage.getItem("cargo");
+    const entrar = document.querySelector(".entrar-btn");
+    const divAvt = document.querySelector("#avatar")
+
+    if (!entrar || !divAvt) {
+        setTimeout(safePrepararNavBar, 100);
+        return;
+    }
     if (localStorage.getItem("token") != null) {
         entrar.classList.add(['d-none']);
-        const entrar = document.querySelector("#entrar-btn");
-        const divAvt = document.querySelector("#avatar")
         const avatar = localStorage.getItem("avatar");
         divAvt.innerHTML = avatar;
         divAvt.classList.remove(['d-none']);
@@ -33,5 +38,5 @@ function prepararNavBar(){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    prepararNavBar();
+    safePrepararNavBar();
 });
