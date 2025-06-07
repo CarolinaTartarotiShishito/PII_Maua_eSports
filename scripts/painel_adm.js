@@ -19,23 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const lista = document.getElementById("lista-membros-ul");
             if (!lista) return;
 
-            fetch("http://localhost:3000/trains")
-                .then(res => res.json())
-                .then(trains => {
-                    lista.innerHTML = "";
-                    if (!trains.length) {
-                        lista.innerHTML = "<li>Nenhum membro encontrado.</li>";
-                        return;
-                    }
-                    trains.forEach(train => {
-                        const li = document.createElement("li");
-                        li.innerHTML = `<strong>ID:</strong> ${train.id} &mdash; <strong>Nome:</strong> ${train.Name || "Sem nome"}`;
-                        lista.appendChild(li);
-                    });
-                })
-                .catch(err => {
-                    lista.innerHTML = `<li>Erro ao carregar membros: ${err.message}</li>`;
-                });
+            prepararAbaMembros(); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "inicio") inicializarInicio();
         // Adicione outras abas aqui se necessário

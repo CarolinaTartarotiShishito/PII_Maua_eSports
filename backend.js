@@ -8,6 +8,12 @@ const defaultTrains = require('./defaultTrains.json');
 const defaultModalities = require('./defaultModalities.json');
 const mongoose = require('mongoose');
 const User = require('./models/user'); // Importe o model
+const fetch = require('node-fetch');
+const urlBase = 'https://API-Esports.lcstuber.net/';
+const modalidadesEndpoint = 'modality/';
+const treinosEndpoint = 'treinos';
+const access_token = 'frontendmauaesports';
+const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
@@ -33,10 +39,32 @@ app.get('/trains', (req, res) => {
   res.json(trains);
 });
 
-app.get('/modalities', (req, res) => {
-  // Retorna só os valores (array de modalidades)
-  res.json(Object.values(modalities));
+// Código para pegar as modalidades da API deles (usar de referência)
+app.get('/modalidades', async (req, res) => {
+  const urlModalidades = `${urlBase}${modalidadesEndpoint}all`
+  const response = await fetch(urlModalidades, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    }
+  });
+  const modalidades = await response.json();
+  res.json(modalidades);
 });
+
+app.get('/treinos', async (req, res) => {
+  const urlTreinos = `${urlBase}${treinosEndpoint}all`;
+  const response = await fetch(urlTreinos, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`
+    }
+  });
+  const treinos = await response.json();
+  res.json(treinos);
+})
 
 app.post('/api/avisos', (req, res) => {
   const { titulo, descricao, data } = req.body;
@@ -195,10 +223,11 @@ app.get('/teams', (req, res) => {
     { name: "Time B" }
   ]);
 });
+
 // Conecte ao MongoDB
-mongoose.connect('mongodb+srv://pedronoelialamov:<db_password>@cluster0.imjcz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
 .then(() => console.log('MongoDB conectado!'))
 .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
@@ -210,12 +239,55 @@ app.post('/usuarios', async (req, res) => {
         await novoUsuario.save();
         res.status(201).json(novoUsuario);
     } catch (err) {
-        res.status(400).json({ erro: err.message });
+        res.status(400).json({erro: err.message });
     }
 });
+
+// Código para buscar usuários no banco de dados
+app.get('/usuarios', async (req, res) => {
+    const usuarios = await User.find().sort({
+      Cargo: -1, // desendente (Z-A)
+      NomeCompleto: -1 // desendente (Z-A)
+    });
+    res.json(usuarios)
+});
+
+app.post('/buscaUsuario', async (req, res) => {
+    const email = req.body.email;
+
+    const usuarioExiste = await User.findOne({ Email: email });
+
+    if (!usuarioExiste) {
+        return res.status(401).json({ mensagem: "Usuário não está cadastrado!" });
+    }
+
+    const token = jwt.sign (
+        {Email: email},
+        "id-secreto",
+        {expiresIn: "1h"}
+    )
+
+    res.status(200).json({cargo: usuarioExiste.Cargo, token: token});
+})
 
 // Inicie o servidor
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
 });
 
+
+app.delete('/usuarios', async (req, res) => {
+  try {
+    const emailToDelete = '24.00165-0@maua.br';
+
+    const result = await User.deleteOne({ Email: emailToDelete });
+
+    if (result.deletedCount === 1) {
+      console.log(`Document with email "${emailToDelete}" deleted successfully.`);
+    } else {
+      console.log(`No document found with email "${emailToDelete}".`);
+    }
+  } catch (err) {
+    console.error('Error deleting document:', err);
+}
+});

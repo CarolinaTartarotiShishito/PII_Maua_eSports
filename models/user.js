@@ -1,18 +1,31 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    Cargo: {
-        type: String,
-        required: true
-    },
     Email: {
         type: String,
         required: true,
         unique: true
     },
-    Jogo: {
+    NomeCompleto: {
         type: String,
         required: true
+    },
+    Nickname: {
+        type: String,
+        required: true
+    },
+    IdDiscord: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    Cargo: {
+        type: String,
+        required: true
+    },
+    Time: {
+        type: String,
+        required: false
     }
 });
 

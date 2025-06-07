@@ -14,28 +14,61 @@
     <ul id="lista-membros-ul">Carregando...</ul>
   </section>
 
-  <table class="table table-dark table-bordered table-sm">
+  <table class="table table-dark table-bordered table-sm" id="lista-membros">
     <thead>
       <tr>
         <th>Cargo</th>
+        <th>Email</th>
         <th>Nome</th>
         <th>Time</th>
         <th>Horas</th>
         <th>Ações</th>
       </tr>
     </thead>
-    <tbody id="lista-membros">
-      <tr>
-        <td>Capitão</td>
-        <td>José da Silva Santos</td>
-        <td>CS2</td>
-        <td>23.7</td>
-        <td>
-          <button class="btn btn-sm btn-outline-light"><i class="bi bi-pencil"></i></button>
-          <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-        </td>
-      </tr>
+    <tbody>
     </tbody>
   </table>
-  <button class="btn btn-primary rounded-circle"><i class="bi bi-plus"></i></button>
+  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalAdicionarMembro" onclick="exibeTimes()">
+    <i class="bi bi-plus"></i>
+    Adicionar Membro
+  </button>
+
+  <div class="modal fade" id="modalAdicionarMembro" tabindex="-1" aria-labelledby="modalAdicionarMembroLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-escuro">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAdicionarMembroLabel">Adicionar Membro</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <label for="emailUsuario" class="mb-3">Email:</label>
+                <input type="text" class="form-control bg-dark text-white" id="emailUsuario"></input>
+                <label for="nomeUsuario" class="my-3">Nome:</label>
+                <input type="text" class="form-control bg-dark text-white" id="nomeUsuario"></input>
+                <label for="nicknameUsuario" class="my-3">Nickname:</label>
+                <input type="text" class="form-control bg-dark text-white" id="nicknameUsuario"></input>
+                <label for="idUsuario" class="my-3">ID do Discord:</label>
+                <input type="text" class="form-control bg-dark text-white" id="idUsuario"></input>
+                <label for="cargoUsuarioSelect" class="my-3">Cargo:</label>
+                <select class="form-select bg-dark text-white" id="cargoUsuarioSelect">
+                    <option selected disabled value="">Selecione um Cargo</option> 
+                    <option value="Administrador Primário">Administrador</option>
+                    <option value="Capitao">Capitão</option>
+                    <option value="Jogador">Jogador</option>
+                </select>
+                <label for="timesUsuarioSelect" class="mt-3">Time:</label>
+                <p class="text-white text-opacity-50 mb-3">(caso o membro não pertença a nenhum time específico, não selecione nada)</p>
+                <select class="form-select bg-dark text-white" id="timesUsuarioSelect">
+                    <option selected value="">Selecione um Time</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="salvarQuemSomos" onclick="novoUsuario()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
