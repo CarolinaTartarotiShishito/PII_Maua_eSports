@@ -50,7 +50,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5>Avisos</h5>
         </div>
-        <div id="listaAvisos" class="mt-3"></div>
+        <ul id="listaAvisos" class="mt-3 list-group"></ul>
     </section>
 
     <!-- CALENDÁRIO -->
@@ -84,6 +84,35 @@
     <script src="/scripts/NavBar.js"></script>
     <script src="/scripts/eventos.js"></script>
     <script src="/scripts/layout.js"></script>
+    <script>
+        // Troque o endereço se seu backend estiver em outro local/porta
+        const API_URL = 'http://localhost:3000/eventos';
+
+        async function carregarAvisosEventos() {
+            try {
+                const res = await fetch(API_URL);
+                const eventos = await res.json();
+                const lista = document.getElementById('listaAvisos');
+                lista.innerHTML = '';
+                if (eventos.length === 0) {
+                    lista.innerHTML = '<li class="list-group-item">Nenhum aviso de evento no momento.</li>';
+                } else {
+                    eventos.forEach(ev => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.innerHTML = `<strong>${ev.nome}</strong>: ${ev.descricao}`;
+                        lista.appendChild(li);
+                    });
+                }
+            } catch (err) {
+                document.getElementById('listaAvisos').innerHTML = '<li class="list-group-item text-danger">Erro ao carregar avisos.</li>';
+                console.error('Erro ao carregar avisos de eventos:', err);
+            }
+        }
+
+        // Carrega avisos ao abrir a página
+        carregarAvisosEventos();
+    </script>
 </body>
 
 </html>

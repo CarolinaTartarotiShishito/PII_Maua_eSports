@@ -1,6 +1,6 @@
-// Exemplo de função para adicionar um jogo
-async function adicionarJogo(nome, descricao) {
-    const resposta = await fetch('/api/jogos', {
+// Exemplo de função para adicionar um treino
+async function adicionarTreino(nome, descricao) {
+    const resposta = await fetch('/api/treinos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, descricao })
@@ -8,15 +8,15 @@ async function adicionarJogo(nome, descricao) {
     const dados = await resposta.json();
     // Atualize a interface conforme necessário
 }
-// Listar jogos
-async function listarJogos() {
-    const resposta = await fetch('/api/jogos');
+// Listar treinos
+async function listarTreinos() {
+    const resposta = await fetch('/api/treinos');
     return await resposta.json();
 }
 
-// Editar jogo
-async function editarJogo(id, dados) {
-    const resposta = await fetch(`/api/jogos/${id}`, {
+// Editar treino
+async function editarTreino(id, dados) {
+    const resposta = await fetch(`/api/treinos/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dados)
@@ -24,9 +24,9 @@ async function editarJogo(id, dados) {
     return await resposta.json();
 }
 
-// Excluir jogo
-async function excluirJogo(id) {
-    const resposta = await fetch(`/api/jogos/${id}`, {
+// Excluir treino
+async function excluirTreino(id) {
+    const resposta = await fetch(`/api/treinos/${id}`, {
         method: 'DELETE'
     });
     return await resposta.json();

@@ -1,11 +1,9 @@
 const express = require('express');
-const app = express();
 const path = require('path');
 const cors = require('cors');
+const fs = require('fs');
+const app = express();
 const PORT = 3000;
-const bodyParser = require('body-parser');
-const defaultTrains = require('./defaultTrains.json');
-const defaultModalities = require('./defaultModalities.json');
 const mongoose = require('mongoose');
 const User = require('./models/user'); // Importe o model
 const fetch = require('node-fetch');
@@ -17,26 +15,54 @@ const jwt = require('jsonwebtoken');
 
 app.use(cors());
 app.use(express.json());
-
-// arquivos estáticos da pasta 'front'
 app.use(express.static(path.join(__dirname, 'front')));
 
-let avisos = [];
+let eventos = [];
 let jogos = [];
+let membros = [];
 
-app.get('/api/avisos', (req, res) => {
-  res.json(avisos);
+// EVENTOS
+// Listar eventos
+app.get('/eventos', (req, res) => {
+  res.json(eventos);
 });
 
+// Adicionar evento
+app.post('/eventos', (req, res) => {
+  const { nome, descricao } = req.body;
+  if (nome && descricao) {
+    const novoEvento = { _id: Date.now().toString(), nome, descricao };
+    eventos.push(novoEvento);
+    res.status(201).json(novoEvento);
+  } else {
+    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
+  }
+});
 
+// Editar evento
+app.put('/eventos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, descricao } = req.body;
+  const evento = eventos.find(ev => ev._id === id);
+  if (evento) {
+    evento.nome = nome;
+    evento.descricao = descricao;
+    res.json(evento);
+  } else {
+    res.status(404).json({ error: 'Evento não encontrado' });
+  }
+});
 
-app.get('/trains', (req, res) => {
-  // Retorna um array com os objetos, cada um com seu ID
-  const trains = Object.entries(defaultTrains).map(([id, obj]) => ({
-    id,
-    ...obj
-  }));
-  res.json(trains);
+// Excluir evento
+app.delete('/eventos/:id', (req, res) => {
+  const { id } = req.params;
+  const index = eventos.findIndex(ev => ev._id === id);
+  if (index !== -1) {
+    eventos.splice(index, 1);
+    res.json({ message: 'Evento excluído com sucesso' });
+  } else {
+    res.status(404).json({ error: 'Evento não encontrado' });
+  }
 });
 
 // Código para pegar as modalidades da API deles (usar de referência)
@@ -66,162 +92,170 @@ app.get('/treinos', async (req, res) => {
   res.json(treinos);
 })
 
-app.post('/api/avisos', (req, res) => {
-  const { titulo, descricao, data } = req.body;
-  if (titulo && descricao && data) {
-    avisos.push({ titulo, descricao, data });
-    res.status(201).json({ message: 'Aviso adicionado com sucesso' });
+// Alias para listar eventos na raiz
+app.get('/', (req, res) => {
+  res.json(eventos);
+});
+
+// Alias para adicionar evento na raiz
+app.post('/', (req, res) => {
+  const { nome, descricao } = req.body;
+  if (nome && descricao) {
+    const novoEvento = { _id: Date.now().toString(), nome, descricao };
+    eventos.push(novoEvento);
+    res.status(201).json(novoEvento);
   } else {
-    res.status(400).json({ message: 'Campos obrigatórios ausentes' });
+    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
   }
 });
 
-app.get('/api/jogos', (req, res) => {
-  res.json(jogos);
+// Alias para editar evento na raiz (ex: PUT /123)
+app.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, descricao } = req.body;
+  const evento = eventos.find(ev => ev._id === id);
+  if (evento) {
+    evento.nome = nome;
+    evento.descricao = descricao;
+    res.json(evento);
+  } else {
+    res.status(404).json({ error: 'Evento não encontrado' });
+  }
 });
 
-app.post('/api/jogos', (req, res) => {
-  const { titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim, tipo } = req.body;
-  if (titulo && timeA && timeB && horario && dataInicio && dataFim) {
-    jogos.push({ titulo, timeA, timeB, horario, aoVivo, dataInicio, dataFim, tipo });
-    res.status(201).json({ message: 'Jogo adicionado com sucesso' });
+// Alias para excluir evento na raiz (ex: DELETE /123)
+app.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  const index = eventos.findIndex(ev => ev._id === id);
+  if (index !== -1) {
+    eventos.splice(index, 1);
+    res.json({ message: 'Evento excluído com sucesso' });
   } else {
-    res.status(400).json({ message: 'Campos obrigatórios ausentes' });
+    res.status(404).json({ error: 'Evento não encontrado' });
   }
+});
+
+// JOGOS
+app.get('/jogos', (req, res) => res.json(jogos));
+app.post('/jogos', (req, res) => {
+  const { nome, descricao } = req.body;
+  if (nome && descricao) {
+    const novoJogo = { _id: Date.now().toString(), nome, descricao };
+    jogos.push(novoJogo);
+    res.status(201).json(novoJogo);
+  } else {
+    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
+  }
+});
+app.put('/jogos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, descricao } = req.body;
+  const jogo = jogos.find(j => j._id === id);
+  if (jogo) {
+    jogo.nome = nome;
+    jogo.descricao = descricao;
+    res.json(jogo);
+  } else {
+    res.status(404).json({ error: 'Jogo não encontrado' });
+  }
+});
+app.delete('/jogos/:id', (req, res) => {
+  const { id } = req.params;
+  const index = jogos.findIndex(j => j._id === id);
+  if (index !== -1) {
+    jogos.splice(index, 1);
+    res.status(204).end();
+  } else {
+    res.status(404).json({ error: 'Jogo não encontrado' });
+  }
+});
+
+// MEMBROS
+app.get('/membros', (req, res) => res.json(membros));
+app.post('/membros', (req, res) => {
+  const { nome, cargo } = req.body;
+  if (nome && cargo) {
+    const novoMembro = { _id: Date.now().toString(), nome, cargo };
+    membros.push(novoMembro);
+    res.status(201).json(novoMembro);
+  } else {
+    res.status(400).json({ error: 'Nome e cargo são obrigatórios' });
+  }
+});
+app.put('/membros/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, cargo } = req.body;
+  const membro = membros.find(m => m._id === id);
+  if (membro) {
+    membro.nome = nome;
+    membro.cargo = cargo;
+    res.json(membro);
+  } else {
+    res.status(404).json({ error: 'Membro não encontrado' });
+  }
+});
+app.delete('/membros/:id', (req, res) => {
+  const { id } = req.params;
+  const index = membros.findIndex(m => m._id === id);
+  if (index !== -1) {
+    membros.splice(index, 1);
+    res.status(204).end();
+  } else {
+    res.status(404).json({ error: 'Membro não encontrado' });
+  }
+});
+
+// Endpoint para jogadores por modalidade
+app.get('/jogadores-por-modalidade', (req, res) => {
+  const trainsPath = path.join(__dirname, 'defaultTrains.json');
+  const modalitiesPath = path.join(__dirname, 'defaultModalities.json');
+
+  // Lê ambos os arquivos
+  fs.readFile(trainsPath, 'utf8', (err, trainsData) => {
+    if (err) return res.status(500).json({ error: 'Erro ao ler defaultTrains.json' });
+    fs.readFile(modalitiesPath, 'utf8', (err2, modalitiesData) => {
+      if (err2) return res.status(500).json({ error: 'Erro ao ler defaultModalities.json' });
+
+      let trains = [];
+      let modalities = {};
+      try {
+        trains = JSON.parse(trainsData);
+        modalities = JSON.parse(modalitiesData);
+      } catch (e) {
+        return res.status(500).json({ error: 'Erro ao processar JSON' });
+      }
+
+      // Agrupa jogadores por modalidade
+      const resultado = {};
+      trains.forEach(train => {
+        const modalidadeId = train.ModalityId;
+        const modalidadeNome = modalities[modalidadeId]?.Name || modalidadeId;
+        if (!resultado[modalidadeId]) {
+          resultado[modalidadeId] = {
+            modalidadeId,
+            modalidadeNome,
+            jogadores: new Set()
+          };
+        }
+        train.AttendedPlayers.forEach(player => {
+          resultado[modalidadeId].jogadores.add(player.PlayerId);
+        });
+      });
+
+      // Converte Set para Array e prepara resposta
+      const resposta = Object.values(resultado).map(item => ({
+        modalidadeId: item.modalidadeId,
+        modalidadeNome: item.modalidadeNome,
+        jogadores: Array.from(item.jogadores)
+      }));
+
+      res.json(resposta);
+    });
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
-app.get('/api/instagram-posts', async (req, res) => {
-  const token = process.env.INSTAGRAM_TOKEN;
-
-  if (!token) {
-    return res.status(200).json([]);
-  }
-
-  const url = `https://graph.instagram.com/me/media?fields=id,media_type,media_url,thumbnail_url,permalink&access_token=${token}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    res.json(data.data.slice(0, 3));
-  } catch (error) {
-    console.error("Erro ao buscar posts:", error);
-    res.status(500).json({ error: "Erro ao buscar posts do Instagram" });
-  }
-});
-
-app.post('/api/set-token', (req, res) => {
-  const novoToken = req.body.token;
-  const conteudo = fs.readFileSync('.env', 'utf-8');
-  const atualizado = conteudo.replace(/INSTAGRAM_TOKEN=.*/, `INSTAGRAM_TOKEN=${novoToken}`);
-  fs.writeFileSync('.env', atualizado);
-  res.sendStatus(200);
-});
-// scripts/banco.js
-
-app.use(bodyParser.json());
-
-// --- Authentication Middleware ---
-function authenticate(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || authHeader !== 'Bearer frontendmauaesports') {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-}
-
-// In-memory copies for runtime
-let trains = JSON.parse(JSON.stringify(defaultTrains));
-let modalities = JSON.parse(JSON.stringify(defaultModalities));
-
-// --- Reset Data Every 24 Hours ---
-function resetData() {
-  trains = JSON.parse(JSON.stringify(defaultTrains));
-  modalities = JSON.parse(JSON.stringify(defaultModalities));
-  console.log('Data has been reset to default values.');
-}
-setInterval(resetData, 24 * 60 * 60 * 1000);
-
-// --- API Routes ---
-
-// GET /trains/all
-// Accepts query parameters: "StartTimestamp>", "StartTimestamp<", and "Status"
-app.get('/trains/all', authenticate, (req, res) => {
-  let filteredTrains = trains;
-  const startTimestampGt = req.query['StartTimestamp>'];
-  const startTimestampLt = req.query['StartTimestamp<'];
-  const status = req.query['Status'];
-
-  if (startTimestampGt) {
-    filteredTrains = filteredTrains.filter(t => t.StartTimestamp > Number(startTimestampGt));
-  }
-  if (startTimestampLt) {
-    filteredTrains = filteredTrains.filter(t => t.StartTimestamp < Number(startTimestampLt));
-  }
-  if (status) {
-    filteredTrains = filteredTrains.filter(t => t.Status === status);
-  }
-
-  res.json(filteredTrains);
-});
-
-// GET /modality/all
-// Accepts an optional query parameter "Tag". If provided, only returns modalities with matching Tag.
-app.get('/modality/all', authenticate, (req, res) => {
-  const tag = req.query['Tag'];
-  const result = {};
-  for (const key in modalities) {
-    if (modalities.hasOwnProperty(key)) {
-      const mod = modalities[key];
-      if (!tag || mod.Tag === tag) {
-        result[key] = mod;
-      }
-    }
-  }
-  res.json(result);
-});
-
-// PATCH /modality with CRON validation
-// Expects a JSON body with at least "_id" and "ScheduledTrainings"
-app.patch('/modality', authenticate, (req, res) => {
-  const { _id, ScheduledTrainings } = req.body;
-  if (!_id) {
-    return res.status(400).json({ error: 'Missing _id in request body' });
-  }
-  if (!modalities[_id]) {
-    return res.status(404).json({ error: 'Modality not found' });
-  }
-  if (!Array.isArray(ScheduledTrainings)) {
-    return res.status(400).json({ error: 'ScheduledTrainings must be an array' });
-  }
-  
-  // Simple regex to validate a 6-field CRON expression (seconds, minutes, hours, day-of-month, month, day-of-week)
-  const cronRegex = /^(\d{1,2}|\*)\s+(\d{1,2}|\*)\s+(\d{1,2}|\*)\s+(\d{1,2}|\*)\s+(\d{1,2}|\*)\s+(\d{1,2}|\*)$/;
-  
-  for (const training of ScheduledTrainings) {
-    if (!training.Start || !training.End) {
-      return res.status(400).json({ error: 'Each ScheduledTraining must have Start and End' });
-    }
-    if (!cronRegex.test(training.Start)) {
-      return res.status(400).json({ error: `Invalid CRON expression for Start: ${training.Start}` });
-    }
-    if (!cronRegex.test(training.End)) {
-      return res.status(400).json({ error: `Invalid CRON expression for End: ${training.End}` });
-    }
-  }
-
-  modalities[_id].ScheduledTrainings = ScheduledTrainings;
-  res.json({ message: 'Item updated' });
-});
-
-app.get('/teams', (req, res) => {
-  res.json([
-    { name: "Time A" },
-    { name: "Time B" }
-  ]);
 });
 
 // Conecte ao MongoDB
@@ -273,21 +307,4 @@ app.post('/buscaUsuario', async (req, res) => {
 // Inicie o servidor
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
-});
-
-
-app.delete('/usuarios', async (req, res) => {
-  try {
-    const emailToDelete = '24.00165-0@maua.br';
-
-    const result = await User.deleteOne({ Email: emailToDelete });
-
-    if (result.deletedCount === 1) {
-      console.log(`Document with email "${emailToDelete}" deleted successfully.`);
-    } else {
-      console.log(`No document found with email "${emailToDelete}".`);
-    }
-  } catch (err) {
-    console.error('Error deleting document:', err);
-}
 });

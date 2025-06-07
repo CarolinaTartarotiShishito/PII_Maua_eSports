@@ -6,25 +6,56 @@ body {
 }
 
 .comeco {
-    font-size: 3rem;
+    font-size: var(--titulo);
     font-weight: bold;
+}
+.corpo-site {
+    max-width: 1100px;
+    margin: 0 auto;
+    /* Centraliza na tela */
+    padding: 0 20px;
+    /* Espaçamento lateral */
 }
 
 .text-introducao {
-    font-size: 1.3rem;
+    font-size: var(--paragrafo);
 }
 
 .nome-jogo {
-    background-color: #161414;
-    border-radius: 15px;
-    text-align: center;
+    position: relative;
+    background-color: #1312128f;
+    border-radius: 25px;
+    /* border: 2px solid #131212a9 ; */
+    font-size: var(--subtitulo);
+    display:block;
+    align-items: center;           
+    padding: 1rem 1.25rem;           
+    height: 4rem;
+    color: white; 
+    overflow: hidden;
+    z-index: 1;               
+}
+/* Primeira listra */
+.nome-jogo::before,
+.nome-jogo::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    right: 160px;
+    width: 30px;
+    height: 300%;
+    background-color: #f18f1e; /* Branco com opacidade */
+    transform: rotate(126deg); /* Inclinação da listra */
+    z-index: 0;
 }
 
+/* Segunda listra com deslocamento */
+.nome-jogo::after {
+    right: 300px; /* Ajusta a posição da segunda listra */
+}
 
 /* Wrapper que segura todos os cards */
 .cards-wrapper {
-    background-image: linear-gradient(to left, #272d52, #2D2C43);
-    border-radius: 15px;
     display: flex;
     flex-wrap: wrap;
     /* Permite que os cards quebrem para a próxima linha */
@@ -46,6 +77,10 @@ body {
     color: white;
     position: relative;
     width: 240px;
+    transition: transform 0.3s ease;
+}
+.card-container:hover {
+  transform: translateY(-5px);
 }
 
 .titulo {
@@ -67,51 +102,89 @@ body {
     font-size: 34px;
     position: relative;
     z-index: 2;
-    border: 1px solid white;
+    border: 2px solid #131212a9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
 }
 
 .info-box {
-    background-color: #222222;
-    border-radius: 20px;
-    padding: 40px 20px 10px 20px;
+    background-color: #1312128f;
+    border-radius: 35px;
+    padding: 40px 20px 20px 20px;
+    border: 2px solid #131212a9;
     /* Top padding aumentado para encaixar o círculo */
     margin-top: -40px;
     /* Sobe o box para o círculo parecer "encaixado" */
     z-index: 1;
     position: relative;
     clip-path: path('M0,0 L0,160 L240,160 L240,0 L170,0 C170,70 70,70 70,0 Z');
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.13);
+}
 
+
+.nome {
+    margin-top: 10%;
+    font-size: 16px;
+}
+
+.funcao {
+    color: #6A5ACD;
+    /* Azul arroxeado */
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.botao-time {
+    padding: 10px 16px;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.botao-time:hover {
+    background: #2b2a2ab4;
+    border-bottom: 2px solid #a6c2e0;
+    transform: translateY(-2px); /* efeito de leve elevação */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.botao-time.selecionado {
+    background: #f18f1e; /* destaque para botão selecionado */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* .botao-time:not(.selecionado) {
+    background: transparent;
+    color: white;
+    border-bottom: 2px solid transparent;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+} */
+
+/* Responsividade opcional para ajustar imagem ou conteúdo */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        max-width: 90vw;
     }
 
-    .nome {
-        margin-top: 10%;
+    body {
+        font-size: 14px;
+    }
+
+    .nome-do-jogo {
+        font-size: 1.2rem;
+    }
+
+    .texto-de-explicatico {
         font-size: 16px;
     }
-
-    .funcao {
-        color: #6A5ACD;
-        /* Azul arroxeado */
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-    /* Responsividade opcional para ajustar imagem ou conteúdo */
-    @media (max-width: 768px) {
-        .card {
-            width: 100%;
-            max-width: 90vw;
-        }
-
-        body {
-            font-size: 14px;
-        }
-
-        .nome-do-jogo {
-            font-size: 1.2rem;
-        }
-
-        .texto-de-explicatico {
-            font-size: 16px;
-        }
-    }
+}
