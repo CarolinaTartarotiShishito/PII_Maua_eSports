@@ -16,7 +16,8 @@ if (navbar) {
 function safePrepararNavBar(){
     const cargo = localStorage.getItem("cargo");
     const entrar = document.querySelector(".entrar-btn");
-    const divAvt = document.querySelector("#avatar")
+    const avtrDrop = document.querySelector("#avatar-dropdown");
+    const divAvt = document.querySelector("#avatar");
 
     if (!entrar || !divAvt) {
         setTimeout(safePrepararNavBar, 100);
@@ -25,13 +26,14 @@ function safePrepararNavBar(){
     if (localStorage.getItem("token") != null) {
         entrar.classList.add(['d-none']);
         const avatar = localStorage.getItem("avatar");
+        avtrDrop.classList.remove(['d-none']);
         divAvt.innerHTML = avatar;
         divAvt.classList.remove(['d-none']);
     }
     if(cargo?.includes("Administrador")){
         const painelAdm = document.querySelector("#painel-adm");
         painelAdm.classList.remove(["d-none"]);
-    }if(cargo?.includes("Capitão")) {
+    }else if(cargo?.includes("Capitão")) {
         const painelCap = document.querySelector("#painel-cap")
         painelCap.classList.remove(["d-none"])
     }

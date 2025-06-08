@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function inicializarScriptEspecifico(nomeAba) {
         if (nomeAba == "membros") {
-            const lista = document.getElementById("lista-membros-ul");
-            if (!lista) return;
-
             prepararAbaMembros(); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "inicio") inicializarInicio();

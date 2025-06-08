@@ -268,7 +268,16 @@ app.post('/buscaUsuario', async (req, res) => {
     )
 
     res.status(200).json({cargo: usuarioExiste.Cargo, token: token});
-})
+});
+
+app.post('/deletaUsuarios', async (req, res) => {
+  try {
+    await User.deleteOne({ Email: req.body.Email });
+    res.status(200).json();
+  } catch (err) {
+    console.error('Erro ao deletar usuário:', err);
+  }
+});
 
 // Inicie o servidor
 app.listen(3000, () => {
