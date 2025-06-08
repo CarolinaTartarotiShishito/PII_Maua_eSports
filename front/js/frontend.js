@@ -112,8 +112,8 @@ async function prepararAbaMembros(){
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0]
     const membrosEndpoint = "/usuarios";
     const urlCompletaMembros = `${protocolo}${baseURL}${membrosEndpoint}`;
-    membros = (await axios.get(urlCompletaMembros)).data;
-    for(membro of membros) {
+    let membros = (await axios.get(urlCompletaMembros)).data;
+    for(let membro of membros) {
         let linha = corpoTabela.insertRow(0);
         let celCargo = linha.insertCell(0);
         let celEmail = linha.insertCell(1);
@@ -134,14 +134,30 @@ async function prepararAbaMembros(){
             botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
             iEditar.className = 'bi bi-pencil';
             botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
+            botaoApagar.onclick = () => apagarUsuario(membro.NomeCompleto, membro.Email, linha)
             iApagar.className = 'bi bi-trash';
             botaoEditar.appendChild(iEditar);
             botaoApagar.appendChild(iApagar);
             celAcoes.appendChild(botaoEditar);
             celAcoes.appendChild(botaoApagar);
+            celCargo.innerHTML = membro.Cargo;
         } else {
             celCargo.innerHTML = "Administrador";
         }
+    }
+}
+
+async function apagarUsuario(nome, email, linha) {
+    try {
+        if (!confirm(`Tem certeza que deseja deletar o usuário ${nome}?`)) {
+            return;
+        }
+        const deletaUsuarioEndpoint = "/deletaUsuarios";
+        const urlCompletaDeletar = `${protocolo}${baseURL}${deletaUsuarioEndpoint}`;
+        await axios.post(urlCompletaDeletar, { Email: email });
+        linha.remove();
+    } catch (error) {
+        console.error("Erro ao deletar usuário:", error);
     }
 }
 
@@ -195,5 +211,11 @@ async function checkStreamerStatus() {
         document.getElementById('twitch-popup').style.display = 'none';
     }
 }
+
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+
 checkStreamerStatus();
 setInterval(checkStreamerStatus, 60000);
