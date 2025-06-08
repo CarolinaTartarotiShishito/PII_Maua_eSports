@@ -5,9 +5,6 @@
     </a>
 
     <div class="d-flex align-items-center flex-grow-1 justify-content-end justify-content-md-end">
-      <form action="login.html" class="d-md-none me-auto ms-auto order-1 order-md-2">
-        <button class="loginButton btn btn-secondary px-4">Entrar</button>
-      </form>
 
       <button class="navbar-toggler order-2 order-md-1" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
         aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
@@ -33,10 +30,7 @@
           <a class="nav-link" href="painel_adm.html">Área Administrativa</a>
         </li>
         <li class="nav-item m-3 d-none" id="painel-cap">
-          <a class="nav-link" href="painel_cap.html"Painel Capitão</a>
-        </li>
-        <li class="nav-item m-3 d-none">
-          <a class="nav-link" href="painelCapitao.html">Painel Capitão</a>
+          <a class="nav-link" href="painelCapitao.html"Painel Capitão">Painel Capitão</a>
         </li>
       </ul>
     </div>
@@ -45,7 +39,16 @@
       <button class="loginButton btn btn-secondary px-4">Entrar</button>
     </form>
 
-    <div id="avatar" class="rounded-circle d-none">
+    <div class="dropdown d-none" id="avatar-dropdown">
+      <button class="btn d-flex align-items-center pe-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div id="avatar" class="rounded-circle d-none me-2"></div>
+        <span class="dropdown-toggle"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="/front/pogina_jogador.html">Configurações</a></li>
+        <li><a class="dropdown-item" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
       
     </div>
   </div>
