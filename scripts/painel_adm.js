@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
             prepararAbaMembros(); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "inicio") inicializarInicio();
-        // Adicione outras abas aqui se necessário
     }
     
     // Carrega o conteúdo inicial
