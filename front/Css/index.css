@@ -3,7 +3,7 @@
 }
 
 header {
-    overflow: hidden; /* Evita que imagens rotacionadas "vazem" e criem barras de rolagem */
+    overflow: clip
 }
 
 body {
@@ -13,7 +13,7 @@ body {
     font-size: 16px;
 }
 
-h3 {
+h3, h1 {
     font-weight: bold;
 }
 
@@ -24,15 +24,15 @@ footer {
 
 .painelIndex {
     background-image: linear-gradient(to right, #5963A8, #2D2C43);
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 40px;
+    gap: 40px; */
 }
 
-.conteudoPainel{
+/* .conteudoPainel{
     display: flex;
-}
+} */
 
 .buttonInscricao{
     background-color: #322BFF;
@@ -41,16 +41,26 @@ footer {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
+#textoInscricao {
+    padding-left: 8rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 450px;
+}
+
 /* Estilizando os cards */
 #imagensPainel {
     position: relative;
-    width: 50%;
-    height: 400px; 
+    justify-content: flex-end;
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+    min-height: 450px; /* Mesma altura da coluna de texto para alinhar */
 }
 
 .game-image {
     position: absolute; 
-    width: 250px; 
+    width: clamp(150px, 18vw, 250px);
     border-radius: 15px;
     transition: transform 0.3s ease;
 }
@@ -70,34 +80,43 @@ footer {
 /* Posições específicas para criar a sobreposição */
 .image-1 {
     top: 0;
-    left: 100px;
+    left: 150px;
     z-index: 1; /* Fica atrás */
-    /* transform: rotate(-5deg); */
 }
 
 .image-2 {
     top: 50px;
-    left: 50px;
+    left: 100px;
     z-index: 2; /* Fica no meio */
-    /* transform: rotate(8deg); */
 }
 
 .image-3 {
     top: 100px;
-    left: 0;
+    left: 50px;
     z-index: 3; /* Fica na frente */
-    /* transform: rotate(8deg); */
 }
 
 .imagemEquipe{
     width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.imagemEquipe:hover {
+    transform: translateY(-10px);
 }
 
 /* Ajuste responsivo */
 @media (max-width: 768px) {
-    .card {
-        width: 100%;
-        max-width: 90vw;
+    #textoInscricao {
+        /* text-align: center;
+        padding-left: 0; */
+        min-height: auto;
+        padding-left: 3rem;
+    }
+    #imagensPainel {
+        margin-bottom: 1px;
+        justify-content: center;
+        transform: none;
     }
 
     body {
