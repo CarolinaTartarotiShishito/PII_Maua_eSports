@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const conteudo = document.querySelector('.conteudo');
 
     function carregarAba(nomeAba) {
-        fetch(`components/aba_${nomeAba}.html`)
+        fetch(`components/PainelCapitao/aba_${nomeAba}.html`)
             .then(res => res.text())
             .then(html => {
                 conteudo.innerHTML = html;
@@ -36,57 +36,57 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // === CÓDIGO ORIGINAL DA ABA INÍCIO ADAPTADO ===
-    function inicializarInicio() {
-        const btnEditarQuemSomos = document.getElementById('btn-editar-quem-somos');
-        const textoQuemSomos = document.getElementById('quem-somos-texto');
-        const modalQuemSomos = new bootstrap.Modal(document.getElementById('modalEditarQuemSomos'));
-        const textareaQuemSomos = document.getElementById('textoQuemSomos');
-        const btnSalvarQuemSomos = document.getElementById('salvarQuemSomos');
+    // // === CÓDIGO ORIGINAL DA ABA INÍCIO ADAPTADO ===
+    // function inicializarInicio() {
+    //     const btnEditarQuemSomos = document.getElementById('btn-editar-quem-somos');
+    //     const textoQuemSomos = document.getElementById('quem-somos-texto');
+    //     const modalQuemSomos = new bootstrap.Modal(document.getElementById('modalEditarQuemSomos'));
+    //     const textareaQuemSomos = document.getElementById('textoQuemSomos');
+    //     const btnSalvarQuemSomos = document.getElementById('salvarQuemSomos');
 
-        if (btnEditarQuemSomos) {
-            btnEditarQuemSomos.addEventListener('click', function () {
-                textareaQuemSomos.value = textoQuemSomos.innerText;
-                modalQuemSomos.show();
-            });
+    //     if (btnEditarQuemSomos) {
+    //         btnEditarQuemSomos.addEventListener('click', function () {
+    //             textareaQuemSomos.value = textoQuemSomos.innerText;
+    //             modalQuemSomos.show();
+    //         });
 
-            btnSalvarQuemSomos.addEventListener('click', function () {
-                textoQuemSomos.innerText = textareaQuemSomos.value;
-                modalQuemSomos.hide();
-                mostrarNotificacao('Texto atualizado com sucesso!');
-            });
-        }
+    //         btnSalvarQuemSomos.addEventListener('click', function () {
+    //             textoQuemSomos.innerText = textareaQuemSomos.value;
+    //             modalQuemSomos.hide();
+    //             mostrarNotificacao('Texto atualizado com sucesso!');
+    //         });
+    //     }
 
-        const botoesEditarRede = document.querySelectorAll('.btn-editar[data-rede]');
-        const modalRede = new bootstrap.Modal(document.getElementById('modalEditarRede'));
-        const inputNomeUsuario = document.getElementById('nomeUsuarioRede');
-        const inputLinkRede = document.getElementById('linkRede');
-        const btnSalvarRede = document.getElementById('salvarRede');
-        let redeAtual = null;
-        let cardAtual = null;
+    //     const botoesEditarRede = document.querySelectorAll('.btn-editar[data-rede]');
+    //     const modalRede = new bootstrap.Modal(document.getElementById('modalEditarRede'));
+    //     const inputNomeUsuario = document.getElementById('nomeUsuarioRede');
+    //     const inputLinkRede = document.getElementById('linkRede');
+    //     const btnSalvarRede = document.getElementById('salvarRede');
+    //     let redeAtual = null;
+    //     let cardAtual = null;
 
-        botoesEditarRede.forEach(botao => {
-            botao.addEventListener('click', function () {
-                redeAtual = this.dataset.rede;
-                cardAtual = this.closest('.rede-card');
-                const textoAtual = cardAtual.querySelector('span').innerText;
+    //     botoesEditarRede.forEach(botao => {
+    //         botao.addEventListener('click', function () {
+    //             redeAtual = this.dataset.rede;
+    //             cardAtual = this.closest('.rede-card');
+    //             const textoAtual = cardAtual.querySelector('span').innerText;
 
-                inputNomeUsuario.value = textoAtual;
-                inputLinkRede.value = '';
+    //             inputNomeUsuario.value = textoAtual;
+    //             inputLinkRede.value = '';
 
-                document.getElementById('modalEditarRedeLabel').innerText = `Editar ${redeAtual.charAt(0).toUpperCase() + redeAtual.slice(1)}`;
-                modalRede.show();
-            });
-        });
+    //             document.getElementById('modalEditarRedeLabel').innerText = `Editar ${redeAtual.charAt(0).toUpperCase() + redeAtual.slice(1)}`;
+    //             modalRede.show();
+    //         });
+    //     });
 
-        btnSalvarRede.addEventListener('click', function () {
-            if (!redeAtual || !cardAtual) return;
+    //     btnSalvarRede.addEventListener('click', function () {
+    //         if (!redeAtual || !cardAtual) return;
 
-            cardAtual.querySelector('span').innerText = inputNomeUsuario.value;
-            modalRede.hide();
-            mostrarNotificacao('Rede social atualizada com sucesso!');
-        });
-    }
+    //         cardAtual.querySelector('span').innerText = inputNomeUsuario.value;
+    //         modalRede.hide();
+    //         mostrarNotificacao('Rede social atualizada com sucesso!');
+    //     });
+    // }
 
     // === FUNÇÃO DE NOTIFICAÇÃO ===
     function mostrarNotificacao(mensagem) {

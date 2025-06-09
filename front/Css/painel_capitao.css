@@ -1,0 +1,473 @@
+/* Corpo da página do painel */
+body.painel {
+  background: linear-gradient(to bottom right, var(--cor-fundo), var(--cor-suave));
+  font-family: var(--fonte-principal);
+  color: var(--cor-texto);
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Container principal abaixo da navbar */
+.painel-container {
+  min-height: calc(100vh - 200px);
+  position: relative;
+  margin-top: 40px;
+}
+
+/* Menu lateral padrão (aberto) */
+.menu-lateral {
+  width: 500px;
+  background-color: var(--cor-cinza);
+  border-right: 2px solid #333;
+  color: var(--cor-texto);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+  z-index: 10;
+  border-radius: 20px;
+  padding-right: 20px;
+}
+
+/* Menu lateral retraído (menor largura) */
+.menu-lateral.retraido {
+  width: 120px;
+}
+
+/* Em telas médias (768px a 1199px), força o menu retraído exceto se tiver classe forcar-aberto */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .menu-lateral:not(.forcar-aberto) {
+    width: 120px !important;
+  }
+
+  .menu-lateral:not(.forcar-aberto) .titulo,
+  .menu-lateral:not(.forcar-aberto) .texto-menu,
+  .menu-lateral:not(.forcar-aberto) .btn-toggle-menu {
+    display: none !important;
+  }
+}
+
+/* Cabeçalho do menu lateral (título + botão de retração) */
+.cabecalho-menu {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0px;
+}
+
+/* Título do painel administrativo */
+.titulo {
+  font-size: var(--subtitulo);
+  font-weight: var(--peso-bold);
+  white-space: wrap;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+/* Esconde o título se o menu estiver retraído */
+.menu-lateral.retraido .titulo {
+  opacity: 0;
+  transform: translateX(-20px);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Botão para retrair o menu */
+.btn-toggle-menu {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 30px;
+  min-height: 30px;
+  z-index: 5;
+  position: static;
+  right: 15px;
+  top: 50%;
+}
+
+/* Esconde o botão de retração em telas pequenas */
+@media (max-width: 766px) {
+  .btn-toggle-menu {
+    display: none !important;
+  }
+}
+
+/* Hover no botão de retração */
+.btn-toggle-menu:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Aparência do botão quando o menu está retraído */
+.menu-lateral.retraido .btn-toggle-menu {
+  right: 20px;
+  background-color: var(--cor-cinza);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  transform: translateY(0%);
+}
+
+/* Ícone do botão rotacionado ao retrair */
+.menu-lateral.retraido .btn-toggle-menu i {
+  transform: rotate(180);
+  transition: all 0.3s ease;
+}
+
+/* Botões do menu (Início, Jogos etc.) */
+.botao-menu {
+  background: none;
+  border: none;
+  color: var(--cor-texto);
+  font-weight: var(--peso-semi);
+  padding: 12px;
+  border-radius: 15px;
+  text-align: left;
+  width: 100%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+/* Container dos ícones */
+.icone-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Ajuste do container de ícones no modo retraído */
+.menu-lateral.retraido .icone-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  margin: 0 auto;
+}
+
+/* Tamanho dos ícones */
+.botao-menu i {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+/* Ícones maiores no modo retraído */
+.menu-lateral.retraido .botao-menu i {
+  font-size: 1.5rem;
+}
+
+/* Texto do botão */
+.texto-menu {
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* Esconde o texto no menu retraído */
+.menu-lateral.retraido .texto-menu {
+  opacity: 0;
+  transform: translateX(-20px);
+  position: absolute;
+  left: 70px;
+  background-color: var(--cor-cinza);
+  padding: 8px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Mostra o texto como tooltip ao passar o mouse no modo retraído */
+.menu-lateral.retraido .botao-menu:hover .texto-menu {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Indicador verde do item ativo */
+.indicador-selecao {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: var(--cor-primaria);
+  border-radius: 50%;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+/* Mostra o indicador no botão ativo */
+.botao-menu.ativo .indicador-selecao {
+  opacity: 1;
+}
+
+/* Estilo do botão ativo */
+.botao-menu.ativo {
+  background-color: var(--cor-primaria);
+  color: white;
+}
+
+/* Botão ativo no menu retraído não muda fundo */
+.menu-lateral.retraido .botao-menu.ativo {
+  background-color: transparent;
+}
+
+/* Ícone ativo recebe fundo colorido no menu retraído */
+.menu-lateral.retraido .botao-menu.ativo .icone-container {
+  background-color: var(--cor-primaria);
+}
+
+/* Hover nos botões normais */
+.botao-menu:hover:not(.ativo) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hover no ícone no menu retraído */
+.menu-lateral.retraido .botao-menu:hover:not(.ativo) .icone-container {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Botão de voltar para o site */
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  background-color: var(--cor-aviso);
+  color: white;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+/* Hover no botão de voltar */
+.btn-voltar:hover {
+  background-color: #e01e4f;
+  color: white;
+}
+
+/* Botão de voltar no menu retraído */
+.menu-lateral.retraido .btn-voltar {
+  padding: 0;
+  background-color: transparent;
+  justify-content: center;
+}
+
+/* Ícone do botão voltar no retraído */
+.menu-lateral.retraido .btn-voltar .icone-container {
+  background-color: var(--cor-aviso);
+}
+
+/* Hover no ícone do botão voltar */
+.menu-lateral.retraido .btn-voltar:hover .icone-container {
+  background-color: #e01e4f;
+}
+
+/* Texto do botão voltar como tooltip no retraído */
+.menu-lateral.retraido .btn-voltar .texto-menu {
+  left: 70px;
+  background-color: var(--cor-aviso);
+}
+
+/* Hover revela texto */
+.menu-lateral.retraido .btn-voltar:hover .texto-menu {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Conteúdo principal */
+.conteudo {
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* Títulos secundários */
+.titulo-secundario {
+  font-size: var(--subtitulo);
+}
+
+.subtitulo {
+  color: var(--cor-texto);
+}
+
+/* Bloco de descrição */
+.descricao-box {
+  background-color: var(--cor-suave);
+  color: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Botão de editar dentro do bloco */
+.descricao-box .btn-editar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+/* Cartões de redes sociais */
+.rede-card {
+  background-color: var(--cor-cinza);
+  border-radius: 15px;
+  padding: 16px 20px;
+  min-width: 260px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Hover nos cartões */
+.rede-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Ícones nas redes sociais */
+.rede-card i {
+  font-size: 1.3rem;
+}
+
+/* Botão editar genérico */
+.btn-editar {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-editar:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Modal escuro */
+.modal-escuro {
+  background-color: var(--cor-suave);
+  color: white;
+  border-radius: 15px;
+}
+
+.modal-escuro .modal-header {
+  border-bottom: 1px solid #444;
+}
+
+.modal-escuro .modal-footer {
+  border-top: 1px solid #444;
+}
+
+/* Notificações */
+.notificacao-sucesso {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--cor-primaria);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 9999;
+}
+
+.notificacao-sucesso.mostrar {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notificacao-sucesso i {
+  font-size: 1.2rem;
+}
+
+/* Largura do menu em telas menores */
+@media (max-width: 992px) {
+  .menu-lateral {
+    width: 200px;
+  }
+}
+
+/* Ajustes de layout em telas pequenas (até 768px) */
+@media (max-width: 768px) {
+  .painel-container {
+    flex-direction: column;
+  }
+
+  .menu-lateral {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid #333;
+  }
+
+  .menu-lateral.retraido {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .menu-lateral.retraido .botao-menu {
+    display: inline-flex;
+    justify-content: center;
+    padding: 8px;
+    width: auto;
+    margin-right: 10px;
+  }
+
+  .menu-lateral.retraido .icone-container {
+    margin: 0;
+    width: 40px;
+    height: 40px;
+  }
+
+  .menu-lateral.retraido .cabecalho-menu {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .menu-lateral.retraido .btn-toggle-menu {
+    position: static;
+    transform: none;
+    margin-left: 10px;
+  }
+
+  .menu-lateral.retraido .btn-toggle-menu i {
+    transform: rotate(90deg);
+  }
+
+  .rede-card {
+    width: 100%;
+  }
+
+  .menu-lateral.retraido .texto-menu {
+    display: none;
+  }
+}

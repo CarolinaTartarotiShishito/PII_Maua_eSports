@@ -1,71 +1,25 @@
-// === Avisos ===
-async function carregarAvisos() {
-  const container = document.getElementById('listaAvisos');
+
+const API_URL = 'http://localhost:3000/eventos';
+
+async function carregarAvisosEventos() {
   try {
-    const resposta = await fetch('http://localhost:3000/api/avisos');
-    const avisos = await resposta.json();
-
-    console.log('Avisos recebidos:', avisos);
-
-    container.innerHTML = '';
-    avisos.forEach(a => {
-      const card = document.createElement('div');
-      card.className = 'aviso-card mb-3 p-3 rounded bg-dark text-light shadow';
-
-      card.innerHTML = `
-        <div class="d-flex justify-content-between">
-          <h6>${a.titulo}</h6>
-          <span>${formatarData(a.data)}</span>
-        </div>
-        <p class="mb-0">${a.descricao}</p>
-      `;
-
-      container.appendChild(card);
-    });
+    const res = await fetch(API_URL);
+    const eventos = await res.json();
+    const lista = document.getElementById('listaAvisos');
+    lista.innerHTML = '';
+    if (eventos.length === 0) {
+      lista.innerHTML = '<li class="list-group-item">Nenhum aviso de evento no momento.</li>';
+    } else {
+      eventos.forEach(ev => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.innerHTML = `<strong>${ev.nome}</strong>: ${ev.descricao}`;
+        lista.appendChild(li);
+      });
+    }
   } catch (err) {
-    console.error('Erro ao carregar avisos:', err);
-    container.innerHTML = '<p class="text-danger">Erro ao carregar avisos.</p>';
-  }
-}
-
-// === Jogos ===
-async function carregarJogos() {
-  const container = document.getElementById('listaJogos');
-  try {
-    const resposta = await fetch('http://localhost:3000/api/jogos');
-    const jogos = await resposta.json();
-
-    console.log('Jogos recebidos:', jogos);
-
-    container.innerHTML = '';
-    jogos.forEach(j => {
-      const card = document.createElement('div');
-      card.className = 'jogo-card mb-3 p-3 rounded bg-dark text-light shadow';
-
-      // Tipo de partida, se não for "nenhum"
-      const tipo = j.tipo && j.tipo.toLowerCase() !== 'nenhum' ? `<span class="badge bg-secondary">${j.tipo}</span>` : '';
-      card.innerHTML = `
-        <h6 class="mb-2">${j.titulo}</h6>
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div class="d-flex align-items-center gap-2">
-            ${tipo}
-            <span>${j.timeA}</span>
-            <span>X</span>
-            <span>${j.timeB}</span>
-          </div>
-          <div class="d-flex align-items-center gap-2">
-            <span>${j.horario}</span>
-            ${j.aoVivo ? '<span class="text-danger fw-bold">AO VIVO 🔴</span>' : ''}
-          </div>
-        </div>
-        <small>${formatarPeriodo(j.dataInicio, j.dataFim)}</small>
-      `;
-
-      container.appendChild(card);
-    });
-  } catch (err) {
-    console.error('Erro ao carregar jogos:', err);
-    container.innerHTML = '<p class="text-danger">Erro ao carregar jogos.</p>';
+    document.getElementById('listaAvisos').innerHTML = '<li class="list-group-item text-danger">Erro ao carregar avisos.</li>';
+    console.error('Erro ao carregar avisos de eventos:', err);
   }
 }
 
@@ -126,7 +80,8 @@ async function carregarPostsInstagram() {
     });
   }
 }
-// Exemplo de função para adicionar um evento
+
+// Função para criar evento
 async function adicionarEvento(nome, descricao) {
     const resposta = await fetch('/api/eventos', {
         method: 'POST',
@@ -134,7 +89,6 @@ async function adicionarEvento(nome, descricao) {
         body: JSON.stringify({ nome, descricao })
     });
     const dados = await resposta.json();
-    // Atualize a interface conforme necessário
 }
 // Listar eventos
 async function listarEventos() {
@@ -159,9 +113,9 @@ async function excluirEvento(id) {
     });
     return await resposta.json();
 }
+
 // === Inicialização ao carregar a página ===
 document.addEventListener("DOMContentLoaded", () => {
   carregarPostsInstagram();
-  carregarAvisos();
-  carregarJogos();
+  carregarAvisosEventos()
 });
