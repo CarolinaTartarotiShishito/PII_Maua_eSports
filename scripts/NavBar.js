@@ -15,7 +15,8 @@ if (navbar) {
 
 function safePrepararNavBar(){
     const cargo = localStorage.getItem("cargo");
-    const entrar = document.querySelector(".entrar-btn");
+    const entrar = document.querySelector("#entrar-btn");
+    const entrarLg = document.querySelector("#entrar-btn-lg");
     const avtrDrop = document.querySelector("#avatar-dropdown");
     const divAvt = document.querySelector("#avatar");
 
@@ -24,7 +25,8 @@ function safePrepararNavBar(){
         return;
     }
     if (localStorage.getItem("token") != null) {
-        entrar.classList.add(['d-none']);
+        entrar.classList.remove(['d-md-block']);
+        entrarLg.classList.add(['d-none']);
         const avatar = localStorage.getItem("avatar");
         avtrDrop.classList.remove(['d-none']);
         divAvt.innerHTML = avatar;
