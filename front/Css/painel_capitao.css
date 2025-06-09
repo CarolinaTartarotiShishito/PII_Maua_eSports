@@ -205,7 +205,7 @@ body.painel {
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: var(--cor-adm);
+  background-color: var(--cor-primaria);
   border-radius: 50%;
   bottom: 0;
   right: 0;
@@ -220,7 +220,7 @@ body.painel {
 
 /* Estilo do botão ativo */
 .botao-menu.ativo {
-  background-color: var(--cor-adm);
+  background-color: var(--cor-primaria);
   color: white;
 }
 
@@ -231,7 +231,7 @@ body.painel {
 
 /* Ícone ativo recebe fundo colorido no menu retraído */
 .menu-lateral.retraido .botao-menu.ativo .icone-container {
-  background-color: var(--cor-adm);
+  background-color: var(--cor-primaria);
 }
 
 /* Hover nos botões normais */
@@ -386,7 +386,7 @@ body.painel {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: var(--cor-adm);
+  background-color: var(--cor-primaria);
   color: white;
   padding: 12px 20px;
   border-radius: 10px;
