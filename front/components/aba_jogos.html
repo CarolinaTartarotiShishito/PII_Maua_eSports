@@ -2,6 +2,100 @@
   <h4 class="mb-3">Jogos</h4>
   <p>Escolha quais jogos vão aparecer na tela inicial</p>
   <div class="d-flex flex-wrap gap-3 mb-4" id="lista-jogos"></div>
-  <button class="btn btn-primary fw-bold px-4">+ Adicionar</button>
   <p class="mt-4">Para modificar a descrição de cada jogo, clique em editar e altere conforme seu gosto</p>
+
+
+  <table class="table table-dark table-bordered table-sm" id="lista-jogos">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="jogos-tbody">
+      <!-- Os jogos serão inseridos aqui via JavaScript -->
+    </tbody>
+  </table>
+  <button class="btn btn-primary rounded-3" id="btn-adicionar-jogo" data-bs-toggle="modal"
+    data-bs-target="#modalAdicionarJogo">
+    <i class="bi bi-plus"></i>
+    Adicionar Jogo
+  </button>
+
+  <!-- Modal Adicionar Jogo -->
+
+  <div class="modal fade" id="modalAdicionarJogo" tabindex="-1" aria-labelledby="modalAdicionarJogoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-escuro">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAdicionarJogoLabel">Adicionar Jogo</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Nome do Jogo -->
+          <div class="mb-3">
+            <input type="text" class="form-control bg-dark text-white" id="nome-jogo" placeholder="Nome do Jogo"
+              required>
+          </div>
+
+          <!-- Descrição -->
+          <div class="mb-3">
+            <textarea class="form-control bg-dark text-white" id="descricao-jogo" rows="3" placeholder="Descrição"
+              required></textarea>
+          </div>
+
+          <!-- Imagem -->
+          <div class="mb-3">
+            <input type="file" class="form-control bg-dark text-white" id="imagem-jogo" accept="image/*" required>
+          </div>
+
+          <!-- Preview da Imagem -->
+          <div class="mt-3 text-center">
+            <img id="imagemPreview" src="#" alt="Preview da imagem" class="img-fluid d-none" style="max-height: 150px;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" id="salvarJogo">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Jogo -->
+  <div class="modal fade" id="modalEditarJogo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content modal-escuro">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Jogo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="jogoId"> <!-- Mantido como jogoId -->
+                
+                <div class="mb-3">
+                    <input type="text" class="form-control bg-dark text-white" id="editar-nome" placeholder="Nome do Jogo" required>
+                </div>
+                
+                <div class="mb-3">
+                    <textarea class="form-control bg-dark text-white" id="editar-descricao" placeholder="Descrição" required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <input type="file" class="form-control bg-dark text-white" id="editar-imagem" accept="image/*">
+                </div>
+                
+                <div class="text-center">
+                    <img id="imagemPreview" src="#" alt="Preview da imagem" class="img-fluid d-none" style="max-height: 150px;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btn-salvar-edicao">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
