@@ -15,9 +15,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 0 40px;
 }
 
-/* Linha superior: redes - logo - FAQ */
+/* Linha superior: redes - logo - Contato */
 .footer-top {
   display: flex;
   justify-content: space-between;
@@ -37,6 +38,13 @@
   font-size: var(--paragrafo);
   font-weight: var(--peso-bold);
   margin-bottom: 8px;
+}
+
+.footer-subtitulo {
+  font-size: var(--paragrafo);
+  font-weight: var(--peso-bold);
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .footer-redes {
@@ -86,14 +94,14 @@
 /* Linha de links */
 .footer-links-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 28px;
+  gap: 12rem;
 }
 
 .footer-col.links {
   min-width: 160px;
-  flex: 1;
+  /* flex: 1; */
 }
 
 .footer-col.links h2 a {
@@ -143,20 +151,24 @@
     text-align: center;
   }
 
-  .footer-col.faq {
-    align-items: center;
+  .footer-links-row {
+    gap: 2rem; /* Reduz o gap para um valor bem menor */
   }
 
-  .footer-col.redes {
-    align-items: center;
-  }
-
+  .footer-col.faq,
+  .footer-col.redes,
   .footer-col.links {
     align-items: center;
+    margin-top: 1rem;
   }
 
   .faq-botao {
     margin-left: 0;
     margin-right: 0;
+  }
+}
+@media (max-width: 950px){
+  .footer-links-row {
+    gap: 2rem; /* Reduz o gap para um valor bem menor */
   }
 }

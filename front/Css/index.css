@@ -108,15 +108,13 @@ footer {
 /* Ajuste responsivo */
 @media (max-width: 768px) {
     #textoInscricao {
-        /* text-align: center;
-        padding-left: 0; */
+        text-align: center;
+        padding-left: 0;
         min-height: auto;
-        padding-left: 3rem;
+        /* padding-left: 3rem; */
     }
     #imagensPainel {
-        margin-bottom: 1px;
-        justify-content: center;
-        transform: none;
+        display: none;
     }
 
     body {
