@@ -53,8 +53,8 @@ function getIniciais(nomeCompleto) {
   return `${primeiraLetra}${ultimaLetra}`.toUpperCase();
 }
 
-async function exibeTimes(){
-    const seletor = document.querySelector('#timesUsuarioSelect');
+async function exibeTimes(idSeletor){
+    const seletor = document.querySelector(idSeletor);
     const modalidadesEndpoint = '/modalidades';
     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
     const response = (await axios.get(urlCompleta)).data;
@@ -64,8 +64,12 @@ async function exibeTimes(){
         opcao.innerHTML = time.Name;
         opcao.value = time.Name;
         seletor.appendChild(opcao);
+        if(idSeletor.includes("#filtro-times-select")){
+            opcao.onclick = () => filtrarMembros("time", opcao.value);
+        }
     }
 }
+
 
 // adicionaar usuários ao banco de dados
 async function novoUsuario() {
@@ -107,43 +111,58 @@ async function novoUsuario() {
 }
 
 // Prepara a página de membros
-async function prepararAbaMembros(){
+async function prepararAbaMembros(idSeletor){
+    exibeTimes(idSeletor);
     let tabelaMembros = document.querySelector('#lista-membros');
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0]
     const membrosEndpoint = "/usuarios";
     const urlCompletaMembros = `${protocolo}${baseURL}${membrosEndpoint}`;
     let membros = (await axios.get(urlCompletaMembros)).data;
     for(let membro of membros) {
-        let linha = corpoTabela.insertRow(0);
-        let celCargo = linha.insertCell(0);
-        let celEmail = linha.insertCell(1);
-        let celNome = linha.insertCell(2);
-        let celTime = linha.insertCell(3);
-        let celHoras = linha.insertCell(4);
-        let celAcoes = linha.insertCell(5);
-        let botaoEditar = document.createElement('button');
-        let botaoApagar = document.createElement('button');
-        let iEditar = document.createElement('i');
-        let iApagar = document.createElement('i');
-        console.log(membro)
-        celEmail.innerHTML = membro.Email;
-        celNome.innerHTML = membro.NomeCompleto;
-        celTime.innerHTML = membro.Time;
-        // celHoras.innerHTML = calculoHoras(membro.IdDiscord);
-        if(membro.Cargo != "Administrador Primário"){
-            botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
-            iEditar.className = 'bi bi-pencil';
-            botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
-            botaoApagar.onclick = () => apagarUsuario(membro.NomeCompleto, membro.Email, linha)
-            iApagar.className = 'bi bi-trash';
-            botaoEditar.appendChild(iEditar);
-            botaoApagar.appendChild(iApagar);
-            celAcoes.appendChild(botaoEditar);
-            celAcoes.appendChild(botaoApagar);
-            celCargo.innerHTML = membro.Cargo;
-        } else {
-            celCargo.innerHTML = "Administrador";
-        }
+        await exibeMembro(membro, corpoTabela);
+    }
+}
+
+async function exibeMembro(membro, corpoTabela){
+    let linha = corpoTabela.insertRow(0);
+    let celCargo = linha.insertCell(0);
+    let celEmail = linha.insertCell(1);
+    let celNome = linha.insertCell(2);
+    let celTime = linha.insertCell(3);
+    let celHoras = linha.insertCell(4);
+    let celAcoes = linha.insertCell(5);
+    let botaoEditar = document.createElement('button');
+    let botaoApagar = document.createElement('button');
+    let iEditar = document.createElement('i');
+    let iApagar = document.createElement('i');
+    console.log(membro)
+    celEmail.innerHTML = membro.Email;
+    celNome.innerHTML = membro.NomeCompleto;
+    celTime.innerHTML = membro.Time;
+    let horas = await calculoHoras(membro.IdDiscord);
+    celHoras.innerHTML = horas || "";
+    if(membro.Cargo != "Administrador Primário"){
+        botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
+        iEditar.className = 'bi bi-pencil';
+        botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
+        botaoApagar.onclick = () => apagarUsuario(membro.NomeCompleto, membro.Email, linha)
+        iApagar.className = 'bi bi-trash';
+        botaoEditar.appendChild(iEditar);
+        botaoApagar.appendChild(iApagar);
+        celAcoes.appendChild(botaoEditar);
+        celAcoes.appendChild(botaoApagar);
+        celCargo.innerHTML = membro.Cargo;
+    } else {
+        celCargo.innerHTML = "Administrador";
+    }
+}
+
+async function filtrarMembros(tipo, filtro){
+    const buscaEndpoint = '/buscaEspecificaUsuario';
+    const urlCompleta = `${protocolo}${baseURL}${buscaEndpoint}`;
+    let membros = (await axios.get(urlCompleta, {Tipo: tipo, Filtro: filtro})).data;
+    for(let membro of membros) {
+        await exibeMembro(membro, corpoTabela);
     }
 }
 
@@ -162,27 +181,40 @@ async function apagarUsuario(nome, email, linha) {
 }
 
 async function calculoHoras(idDiscord) {
-    const treinosEndpoint = "/treinos";
-    const urlCompletaTreinos = `${protocolo}${baseURL}${treinosEndpoint}`;
-    let treinos = (await axios.get(urlCompletaTreinos)).data;
+    try {
+        const treinosEndpoint = "/treinos";
+        const urlCompletaTreinos = `${protocolo}${baseURL}${treinosEndpoint}`;
+        let treinos = (await axios.get(urlCompletaTreinos)).data;
 
-    let totalHoras = 0;
+        let totalHoras = 0;
+        let usuarioEncontrado = false;
 
-    treinos.forEach(treino => {
-        const entradaJogador = treino.AttendedPlayers.filter(p => p.PlayerId === idDiscord);
+        treinos.forEach(treino => {
+            const entradaJogador = treino.AttendedPlayers.filter(p => p.PlayerId === idDiscord);
 
-        if(entradaJogador.length > 0){
-            entradaJogador.forEach(entrada => {
-                if(entrada.EntranceTimestamp > 0 && entrada.ExitTimestamp > 0){
-                    let difMs = entrada.ExitTimestamp - entrada.EntranceTimestamp;
-                    let difHoras = difMs / (1000 * 60 * 60); // o tempo é medido em milissegundos e precisa ser tranformado em horas
-                    totalHoras += difHoras;    
-                }    
-            })    
+            if(entradaJogador.length > 0){
+                usuarioEncontrado = true;
+                entradaJogador.forEach(entrada => {
+                    if(entrada.EntranceTimestamp > 0 && entrada.ExitTimestamp > 0){
+                        let difMs = entrada.ExitTimestamp - entrada.EntranceTimestamp;
+                        let difHoras = difMs / (1000 * 60 * 60);
+                        totalHoras += difHoras;    
+                    }    
+                })    
+            }
+        });
+
+        // Retorna 0 se o usuário não foi encontrado em nenhum treino
+        if (!usuarioEncontrado) {
+            return 0;
         }
-    });
 
-    return totalHoras;
+        return totalHoras;    
+    }
+    catch (error) {
+        console.log("Não foi possível obter a quantidade de horas do usuário");
+        return 0;
+    }
 }
 
 function exibeAlerta(seletor, innerHTML, classesToAdd, classesToRemove, timeout) {

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function inicializarScriptEspecifico(nomeAba) {
         if (nomeAba == "membros") {
-            prepararAbaMembros(); // no arquivo frontend.js na pasta js
+            prepararAbaMembros("#filtro-times-select"); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "inicio") inicializarInicio();
         // Adicione outras abas aqui se necessário

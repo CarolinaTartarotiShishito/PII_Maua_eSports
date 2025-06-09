@@ -279,6 +279,30 @@ app.post('/deletaUsuarios', async (req, res) => {
   }
 });
 
+app.get('/buscaEspecificaUsuario', async (req, res) => {
+  try{
+    const tipo = req.body.Tipo;
+    const filtro = req.body.Filtro
+    let usuarios;
+    if(tipo === "time"){
+      usuarios = await User.find({ Time: filtro });
+    }
+    if(tipo === "cargo"){
+      usuarios = await User.find({ Cargo: filtro });
+    }
+
+    usuarios = usuarios.sort({
+      Cargo: -1, // desendente (Z-A)
+      NomeCompleto: -1 // desendente (Z-A)
+    });
+
+    res.json(usuarios);
+    
+  } catch (error) {
+    console.error('Erro ao buscar usuários: ', error);
+  }
+})
+
 // Inicie o servidor
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
