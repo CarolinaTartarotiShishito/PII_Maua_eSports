@@ -177,6 +177,7 @@ async function pegaMembros(){
 // função para exibir um membro na aba_membros.html
 async function exibeMembro(membro, corpoTabela){
     let linha = corpoTabela.insertRow(0);
+    linha.className = 'member-card';
     let celCargo = linha.insertCell(0);
     let celEmail = linha.insertCell(1);
     let celNome = linha.insertCell(2);

@@ -471,3 +471,11 @@ body.painel {
     display: none;
   }
 }
+
+/* CSS DAS ABAS DO MENU CAPITAO */
+.member-card{
+  height: 3rem;
+  width: auto;
+  border-radius: 10px;
+  background-color: rgb(95, 95, 95);
+}
