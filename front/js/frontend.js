@@ -99,10 +99,12 @@ function pegarInfosModal(){
             };
             return modelo;
         } else{
-            alert(`O e-mail deve pertencer ao domínio do Instituto Mauá de Tecnologia ("@maua.br)!`);
+            exibeAlerta(".alert-membros", `O e-mail deve pertencer ao domínio do Instituto Mauá de Tecnologia ("@maua.br)!`, 
+                ['show', 'alert-danger'], ['d-none'], 4000);
         }
     } else {
-        alert("Preencha todos os campos obrigatórios!");
+        exibeAlerta(".alert-membros", "Preencha todos os campos obrigatórios!", 
+                ['show', 'alert-danger'], ['d-none'], 4000);
     }
 }
 
@@ -113,6 +115,7 @@ async function novoUsuario() {
         const urlCompletaUsuarios = `${protocolo}${baseURL}${novoUsuarioEndpoint}`;
         let modelo = pegarInfosModal();
         await axios.post(urlCompletaUsuarios, modelo)
+        exibeAlerta(".alert-membros", "Usuário adicionado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
     }
     catch (error) {
         console.log(error);
@@ -238,6 +241,7 @@ async function atualizarMembros() {
 }
 
 function modalAdicionarMembro(){
+    limparModalMembro();
     const divTitulo = document.querySelector('#modalMembroLabel')
     const btnSalvar = document.querySelector('#salvarMembro');
     divTitulo.innerHTML = "Adicionar Membro";

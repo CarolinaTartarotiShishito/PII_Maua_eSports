@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function inicializarGerenciamentoJogos() {
     // Variáveis privadas
     let jogos = JSON.parse(localStorage.getItem('jogos')) || [];
+    const urlBase = 'http://localhost:3000'
 
     // Funções internas (compartilhadas)
     function salvarJogo(nome, descricao, imagem) {
@@ -162,14 +163,14 @@ function inicializarGerenciamentoJogos() {
         }
 
         const novoJogo = {
-            id: Date.now(),
             nome: nome,
             descricao: descricao,
             imagem: imagem || null
         };
 
-        jogos.push(novoJogo);
-        salvarNoLocalStorage();
+        const endpointJogos = "/jogos";
+        const urlCompletaJogos = `${urlBase}${endpointJogos}`;
+        await axios.post(urlCompletaJogos, )
         return true;
     }
 
