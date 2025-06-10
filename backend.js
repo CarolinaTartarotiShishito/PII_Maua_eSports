@@ -7,7 +7,10 @@ const PORT = 3000;
 const mongoose = require('mongoose');
 const User = require('./models/user'); // Importe o model
 const fetch = require('node-fetch');
-const urlBase = 'https://API-Esports.lcstuber.net/';
+// caminho para a API oficial:
+// const urlAPI = 'https://API-Esports.lcstuber.net/';
+// caminho para a API de testes:
+const urlAPITeste = 'http://localhost:5000/';
 const modalidadesEndpoint = 'modality/';
 const treinosEndpoint = 'treinos';
 const access_token = 'frontendmauaesports';
@@ -67,7 +70,7 @@ app.delete('/eventos/:id', (req, res) => {
 
 // Código para pegar as modalidades da API deles (usar de referência)
 app.get('/modalidades', async (req, res) => {
-  const urlModalidades = `${urlBase}${modalidadesEndpoint}all`
+  const urlModalidades = `${urlAPITeste}${modalidadesEndpoint}all`
   const response = await fetch(urlModalidades, {
     method: 'GET',
     headers: {
@@ -80,7 +83,7 @@ app.get('/modalidades', async (req, res) => {
 });
 
 app.get('/treinos', async (req, res) => {
-  const urlTreinos = `${urlBase}${treinosEndpoint}all`;
+  const urlTreinos = `${urlAPITeste}trains/all`;
   const response = await fetch(urlTreinos, {
     method: 'GET',
     headers: {
@@ -237,8 +240,8 @@ app.post('/usuarios', async (req, res) => {
         const novoUsuario = new User(req.body);
         await novoUsuario.save();
         res.status(201).json(novoUsuario);
-    } catch (err) {
-        res.status(400).json({erro: err.message });
+    } catch (error) {
+        res.status(400).json({erro: error.message });
     }
 });
 
@@ -281,17 +284,9 @@ app.post('/deletaUsuarios', async (req, res) => {
 
 app.get('/buscaEspecificaUsuario', async (req, res) => {
   try{
-    const tipo = req.body.Tipo;
-    const filtro = req.body.Filtro
-    let usuarios;
-    if(tipo === "time"){
-      usuarios = await User.find({ Time: filtro });
-    }
-    if(tipo === "cargo"){
-      usuarios = await User.find({ Cargo: filtro });
-    }
-
-    usuarios = usuarios.sort({
+    const tipo = req.query.Tipo;
+    const filtro = req.query.Filtro
+    let usuarios = await User.find({ [tipo]: filtro }).sort({
       Cargo: -1, // desendente (Z-A)
       NomeCompleto: -1 // desendente (Z-A)
     });
@@ -301,7 +296,27 @@ app.get('/buscaEspecificaUsuario', async (req, res) => {
   } catch (error) {
     console.error('Erro ao buscar usuários: ', error);
   }
-})
+});
+
+app.get('/dadosUsuario', async (req, res) => {
+  try{
+    let dados = await User.findOne({ Email: req.query.email });
+
+    res.json(dados);
+  } catch (error) {
+    console.error('Erro ao buscar dados do usuário: ', error);
+  }
+});
+
+app.post('/editarUsuario', async (req, res) => {
+  try {
+    const dadosAtualizados = req.body;
+    await User.updateOne({Email: dadosAtualizados.Email}, { $set: dadosAtualizados })
+    res.status(201).json();
+  } catch (error) {
+        res.status(400).json({erro: error.message });
+  }
+});
 
 // Inicie o servidor
 app.listen(3000, () => {

@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function inicializarScriptEspecifico(nomeAba) {
         if (nomeAba == "membros") {
             prepararAbaMembros("#filtro-times-select"); // no arquivo frontend.js na pasta js
+            exibeTimes('#timesUsuarioSelect')
         }
         if (nomeAba === "inicio") inicializarInicio();
     }
@@ -138,5 +139,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     window.addEventListener('resize', ajustarIconeToggle);
+    
 });
-

@@ -35,6 +35,7 @@ async function fazerLogin (){
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("cargo", response.data.cargo);
         localStorage.setItem("avatar", getIniciais(loginResponse.account.name));
+        localStorage.setItem("email", loginResponse.account.username)
         exibeAlerta(".alert-login", "Login efetuado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
         setTimeout(() => {
             window.location.href = "index.html";
@@ -53,26 +54,33 @@ function getIniciais(nomeCompleto) {
   return `${primeiraLetra}${ultimaLetra}`.toUpperCase();
 }
 
+// Função para exiber os times nos seletores
 async function exibeTimes(idSeletor){
     const seletor = document.querySelector(idSeletor);
     const modalidadesEndpoint = '/modalidades';
     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
     const response = (await axios.get(urlCompleta)).data;
-    const times = Object.values(response);
+    let times = Object.values(response);
     for(let time of times){
         const opcao = document.createElement('option');
         opcao.innerHTML = time.Name;
         opcao.value = time.Name;
         seletor.appendChild(opcao);
-        if(idSeletor.includes("#filtro-times-select")){
-            opcao.onclick = () => filtrarMembros("time", opcao.value);
-        }
-    }
+    };
+
+    if(idSeletor === "#filtro-times-select") {
+        seletor.addEventListener('change', async (event) => {
+            if(event.target.value == "Todos") {
+                await atualizarMembros();
+            }
+            else if (event.target.value){
+                filtrarMembros("Time", event.target.value);
+            }
+        });
+    };
 }
 
-
-// adicionaar usuários ao banco de dados
-async function novoUsuario() {
+function pegarInfosModal(){
     const email = (document.querySelector('#emailUsuario')).value;
     const nome = (document.querySelector('#nomeUsuario')).value;
     const nickname = (document.querySelector('#nicknameUsuario')).value;
@@ -81,32 +89,58 @@ async function novoUsuario() {
     const time = (document.querySelector('#timesUsuarioSelect')).value;
     if (email && nome && nickname && idDiscord && cargo) {
         if(email.includes('@maua.br')){
-            try {
-                const novoUsuarioEndpoint = "/usuarios";
-                const urlCompletaUsuarios = `${protocolo}${baseURL}${novoUsuarioEndpoint}`;
-                const modelo = {
-                    Email: email,
-                    NomeCompleto: nome,
-                    Nickname: nickname,
-                    IdDiscord: idDiscord,
-                    Cargo: cargo,
-                    Time: time // Time é opicional, caso não seja seleciondo, armazenará uma String vazia
-                };
-                const response = await axios.post(urlCompletaUsuarios, modelo)
-                console.log(response);
-                const modal = document.querySelector('#modalAdicionarMembro');
-                modal.hide();
-            }
-            catch (e) {
-                console.log(e);
-            }    
+            const modelo = {
+                Email: email,
+                NomeCompleto: nome,
+                Nickname: nickname,
+                IdDiscord: idDiscord,
+                Cargo: cargo,
+                Time: time // Time é opicional, caso não seja seleciondo, armazenará uma String vazia
+            };
+            return modelo;
         } else{
             alert(`O e-mail deve pertencer ao domínio do Instituto Mauá de Tecnologia ("@maua.br)!`);
         }
     } else {
         alert("Preencha todos os campos obrigatórios!");
-        const modal = document.querySelector('#modalAdicionarMembro');
-                modal.hide();
+    }
+}
+
+// adicionaar usuários ao banco de dados
+async function novoUsuario() {
+    try {
+        const novoUsuarioEndpoint = "/usuarios";
+        const urlCompletaUsuarios = `${protocolo}${baseURL}${novoUsuarioEndpoint}`;
+        let modelo = pegarInfosModal();
+        await axios.post(urlCompletaUsuarios, modelo)
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function apagarUsuario(nome, email) {
+    try {
+        if (!confirm(`Tem certeza que deseja deletar o usuário ${nome}?`)) {
+            return;
+        }
+        const deletaUsuarioEndpoint = "/deletaUsuarios";
+        const urlCompletaDeletar = `${protocolo}${baseURL}${deletaUsuarioEndpoint}`;
+        await axios.post(urlCompletaDeletar, { Email: email });
+    } catch (error) {
+        console.error("Erro ao deletar usuário:", error);
+    }
+}
+
+async function editarUsuario() {
+    try {
+        const editarUsuarioEndpoint = "/editarUsuario";
+        const urlCompletaUsuarios = `${protocolo}${baseURL}${editarUsuarioEndpoint}`;
+        let modelo = pegarInfosModal();
+        await axios.post(urlCompletaUsuarios, modelo)
+    }
+    catch (error) {
+        console.log(error);
     }
 }
 
@@ -114,15 +148,33 @@ async function novoUsuario() {
 async function prepararAbaMembros(idSeletor){
     exibeTimes(idSeletor);
     let tabelaMembros = document.querySelector('#lista-membros');
-    let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0]
-    const membrosEndpoint = "/usuarios";
-    const urlCompletaMembros = `${protocolo}${baseURL}${membrosEndpoint}`;
-    let membros = (await axios.get(urlCompletaMembros)).data;
+    let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    let membros = await pegaMembros();
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
+    
+    const seletorCargo = document.querySelector("#filtro-cargos-select");
+    seletorCargo.addEventListener('change', async (event) => {
+        const valorSelecionado = event.target.value;
+        if (!valorSelecionado) return;
+        if (valorSelecionado === "Todos") {
+            await atualizarMembros();
+        } else {
+            await filtrarMembros("Cargo", valorSelecionado);
+        }
+    });
 }
 
+async function pegaMembros(){
+    const membrosEndpoint = "/usuarios";
+    const urlCompletaMembros = `${protocolo}${baseURL}${membrosEndpoint}`;
+    const response = (await axios.get(urlCompletaMembros))
+    return response.data;
+}
+
+// função para exibir um membro na aba_membros.html
 async function exibeMembro(membro, corpoTabela){
     let linha = corpoTabela.insertRow(0);
     let celCargo = linha.insertCell(0);
@@ -135,7 +187,6 @@ async function exibeMembro(membro, corpoTabela){
     let botaoApagar = document.createElement('button');
     let iEditar = document.createElement('i');
     let iApagar = document.createElement('i');
-    console.log(membro)
     celEmail.innerHTML = membro.Email;
     celNome.innerHTML = membro.NomeCompleto;
     celTime.innerHTML = membro.Time;
@@ -144,8 +195,14 @@ async function exibeMembro(membro, corpoTabela){
     if(membro.Cargo != "Administrador Primário"){
         botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
         iEditar.className = 'bi bi-pencil';
+        botaoEditar.setAttribute('data-bs-toggle', 'modal')
+        botaoEditar.setAttribute('data-bs-target', `#modalMembro`)
+        botaoEditar.onclick = () => modalEditarMembro(membro);
         botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
-        botaoApagar.onclick = () => apagarUsuario(membro.NomeCompleto, membro.Email, linha)
+        botaoApagar.onclick = async () => {
+            await apagarUsuario(membro.NomeCompleto, membro.Email);
+            await atualizarMembros();
+        };
         iApagar.className = 'bi bi-trash';
         botaoEditar.appendChild(iEditar);
         botaoApagar.appendChild(iApagar);
@@ -160,24 +217,70 @@ async function exibeMembro(membro, corpoTabela){
 async function filtrarMembros(tipo, filtro){
     const buscaEndpoint = '/buscaEspecificaUsuario';
     const urlCompleta = `${protocolo}${baseURL}${buscaEndpoint}`;
-    let membros = (await axios.get(urlCompleta, {Tipo: tipo, Filtro: filtro})).data;
+    let tabelaMembros = document.querySelector('#lista-membros');
+    let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0]
+    corpoTabela.innerHTML = '';
+    let membros = (await axios.get(urlCompleta, { params: { Tipo: tipo, Filtro: filtro } })).data;
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
 }
 
-async function apagarUsuario(nome, email, linha) {
-    try {
-        if (!confirm(`Tem certeza que deseja deletar o usuário ${nome}?`)) {
-            return;
-        }
-        const deletaUsuarioEndpoint = "/deletaUsuarios";
-        const urlCompletaDeletar = `${protocolo}${baseURL}${deletaUsuarioEndpoint}`;
-        await axios.post(urlCompletaDeletar, { Email: email });
-        linha.remove();
-    } catch (error) {
-        console.error("Erro ao deletar usuário:", error);
+async function atualizarMembros() {
+    let tabelaMembros = document.querySelector('#lista-membros');
+    let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    let membros = await pegaMembros();
+    for(let membro of membros) {
+        await exibeMembro(membro, corpoTabela);
     }
+}
+
+function modalAdicionarMembro(){
+    const divTitulo = document.querySelector('#modalMembroLabel')
+    const btnSalvar = document.querySelector('#salvarMembro');
+    divTitulo.innerHTML = "Adicionar Membro";
+    btnSalvar.onclick = async () => {
+        await novoUsuario();
+        await atualizarMembros();
+    };
+}
+
+function modalEditarMembro(membro) {
+    const divTitulo = document.querySelector('#modalMembroLabel');
+    const emailCampo = document.querySelector('#emailUsuario');
+    const nomeCampo = document.querySelector('#nomeUsuario');
+    const nicknameCampo = document.querySelector('#nicknameUsuario');
+    const idDiscordCampo = document.querySelector('#idUsuario');
+    const cargoCampo = document.querySelector('#cargoUsuarioSelect');
+    const timeCampo = document.querySelector('#timesUsuarioSelect');
+    const btnSalvar = document.querySelector('#salvarMembro');
+    divTitulo.innerHTML = "Editar informações"
+    emailCampo.value = membro.Email;
+    nomeCampo.value = membro.NomeCompleto;
+    nicknameCampo.value = membro.Nickname;
+    idDiscordCampo.value = membro.IdDiscord;
+    cargoCampo.value = membro.Cargo;
+    timeCampo.value = membro.Time;
+    btnSalvar.onclick = async () => {
+        await editarUsuario();
+        await atualizarMembros();
+    };
+}
+
+function limparModalMembro(){
+    const emailCampo = document.querySelector('#emailUsuario');
+    const nomeCampo = document.querySelector('#nomeUsuario');
+    const nicknameCampo = document.querySelector('#nicknameUsuario');
+    const idDiscordCampo = document.querySelector('#idUsuario');
+    const cargoCampo = document.querySelector('#cargoUsuarioSelect');
+    const timeCampo = document.querySelector('#timesUsuarioSelect');
+    emailCampo.value = '';
+    nomeCampo.value = '';
+    nicknameCampo.value = '';
+    idDiscordCampo.value = '';
+    cargoCampo.value = '';
+    timeCampo.value = '';
 }
 
 async function calculoHoras(idDiscord) {
@@ -185,7 +288,6 @@ async function calculoHoras(idDiscord) {
         const treinosEndpoint = "/treinos";
         const urlCompletaTreinos = `${protocolo}${baseURL}${treinosEndpoint}`;
         let treinos = (await axios.get(urlCompletaTreinos)).data;
-
         let totalHoras = 0;
         let usuarioEncontrado = false;
 
@@ -200,21 +302,26 @@ async function calculoHoras(idDiscord) {
                         let difHoras = difMs / (1000 * 60 * 60);
                         totalHoras += difHoras;    
                     }    
-                })    
-            }
+                });    
+            };
         });
-
-        // Retorna 0 se o usuário não foi encontrado em nenhum treino
         if (!usuarioEncontrado) {
             return 0;
-        }
-
+        };
         return totalHoras;    
     }
     catch (error) {
         console.log("Não foi possível obter a quantidade de horas do usuário");
-        return 0;
     }
+}
+
+async function buscarDadosUsuario(){
+    const email = localStorage.getItem("email");
+    const dadosEndpoint = "/dadosUsuario";
+    const urlCompletaDados = `${protocolo}${baseURL}${dadosEndpoint}`;
+    const response = (await axios.get(urlCompletaDados, { params: { email: email } })).data;
+    console.log(response);
+    return response;
 }
 
 function exibeAlerta(seletor, innerHTML, classesToAdd, classesToRemove, timeout) {

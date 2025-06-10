@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -23,12 +23,12 @@
         <div class="subComeco">Configure sua conta do jeito que preferir</div>
         <div class="configuracao-inicial d-flex flex-row justify-content-start">
             <div class="circle">
-                02
+                
             </div>
             <div>
                 <div class="titulo">Nome de Usuário</div>
                 <div class="sub-titulo">Deixe seu nome de usuário com o seu estilo!</div>
-                <div class="sub-titulo" id="NomeUsuario">Nome: ooooooooooo</div>
+                <div class="sub-titulo" id="NomeUsuario"></div>
                 <div class="text-nome">
                     <input type="text" class="nome" id="nomeJogador" placeholder="Insira seu novo nome aqui"></input>
                     <button type="button" class="botaoSalvar" id="Salvar">Salvar</button>
@@ -42,7 +42,7 @@
                 <div class="time">
                     <div class="Time-jogo">
                         <div class="Time">Time:</div>
-                        <div class="jogo" id="Jogo">CS2</div>
+                        <div class="jogo" id="Jogo"></div>
                     </div>
                     <div class="titulo">Horário de Treino</div>
 
@@ -104,6 +104,7 @@
     <script src="/scripts/NavBar.js"></script>
     <script src="/scripts/pagina_jogador.js"></script>
     <script src="/front/js/frontend.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

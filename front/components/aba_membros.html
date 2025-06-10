@@ -8,7 +8,7 @@
     </div>
     <div class="col-auto">
         <select class="form-select bg-dark text-white" id="filtro-cargos-select">
-            <option selected value="">Todos os cargos</option>
+            <option selected value="Todos">Todos os cargos</option>
             <option value="Administrador">Administrador</option>
             <option value="Capitão">Capitão</option>
             <option value="Jogador">Jogador</option>
@@ -19,7 +19,7 @@
     </div>
     <div class="col-auto">
         <select class="form-select bg-dark text-white" id="filtro-times-select">
-            <option selected value="">Todos os times</option>
+            <option selected value="Todos">Todos os times</option>
         </select>
     </div>
   </div>
@@ -38,17 +38,17 @@
     <tbody>
     </tbody>
   </table>
-  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalAdicionarMembro" onclick="exibeTimes('#timesUsuarioSelect')">
+  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalMembro" onclick="modalAdicionarMembro()">
     <i class="bi bi-plus"></i>
     Adicionar Membro
   </button>
 
-  <div class="modal fade" id="modalAdicionarMembro" tabindex="-1" aria-labelledby="modalAdicionarMembroLabel"
+  <div class="modal fade" id="modalMembro" tabindex="-1" aria-labelledby="modalMembroLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-escuro">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalAdicionarMembroLabel">Adicionar Membro</h5>
+                <h5 class="modal-title" id="modalMembroLabel">Adicionar Membro</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Fechar"></button>
             </div>
@@ -75,8 +75,8 @@
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="salvarQuemSomos" onclick="novoUsuario()">Salvar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limparModalMembro()">Cancelar</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="salvarMembro">Salvar</button>
             </div>
         </div>
     </div>
