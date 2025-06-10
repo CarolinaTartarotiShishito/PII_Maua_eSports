@@ -237,6 +237,7 @@ async function atualizarMembros() {
 }
 
 function modalAdicionarMembro(){
+    limparModalMembro();
     const divTitulo = document.querySelector('#modalMembroLabel')
     const btnSalvar = document.querySelector('#salvarMembro');
     divTitulo.innerHTML = "Adicionar Membro";
