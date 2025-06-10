@@ -19,9 +19,17 @@ document.addEventListener('DOMContentLoaded', function () {
             prepararAbaMembros("#filtro-times-select"); // no arquivo frontend.js na pasta js
             exibeTimes('#timesUsuarioSelect')
         }
-        if (nomeAba === "inicio") inicializarInicio();
+        if (nomeAba == "inicio") inicializarInicio();
+
+        if (nomeAba == "jogos") {
+            // Aguarda 50ms para garantir que o HTML foi renderizado
+            setTimeout(() => {
+                inicializarGerenciamentoJogos();
+
+            }, 50);
+        }
     }
-    
+
     // Carrega o conteúdo inicial
     carregarAba('inicio');
 
@@ -137,7 +145,254 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<i class="bi bi-chevron-left"></i>';
         }
     }
-    
+
     window.addEventListener('resize', ajustarIconeToggle);
     
 });
+
+function inicializarGerenciamentoJogos() {
+    // Variáveis privadas
+    let jogos = JSON.parse(localStorage.getItem('jogos')) || [];
+
+    // Funções internas (compartilhadas)
+    function salvarJogo(nome, descricao, imagem) {
+        if (!nome || !descricao) {
+            alert('Nome e descrição são obrigatórios!');
+            return false;
+        }
+
+        const novoJogo = {
+            id: Date.now(),
+            nome: nome,
+            descricao: descricao,
+            imagem: imagem || null
+        };
+
+        jogos.push(novoJogo);
+        salvarNoLocalStorage();
+        return true;
+    }
+
+    function excluirJogo(id) {
+        const index = jogos.findIndex(jogo => jogo.id === id);
+        if (index !== -1) {
+            jogos.splice(index, 1);
+            salvarNoLocalStorage();
+            return true;
+        }
+        return false;
+    }
+
+    function editarJogo(id, novoNome, novaDescricao, novaImagem) {
+        const jogo = jogos.find(jogo => jogo.id === id);
+        if (jogo) {
+            if (novoNome !== undefined) jogo.nome = novoNome;
+            if (novaDescricao !== undefined) jogo.descricao = novaDescricao;
+            if (novaImagem !== undefined) jogo.imagem = novaImagem;
+            salvarNoLocalStorage();
+            return true;
+        }
+        return false;
+    }
+
+    function carregarImagemComoBase64(arquivo, callback) {
+        if (!arquivo) {
+            callback(null);
+            return;
+        }
+        const leitor = new FileReader();
+        leitor.onload = (e) => callback(e.target.result);
+        leitor.readAsDataURL(arquivo);
+    }
+
+    function salvarNoLocalStorage() {
+        localStorage.setItem('jogos', JSON.stringify(jogos));
+    }
+
+    // Renderização para ADMIN (tabela)
+    function renderizarTabelaAdmin() {
+        const tbody = document.getElementById('jogos-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = jogos.map(jogo => `
+        <tr data-id="${jogo.id}">
+            <td>${jogo.nome}</td>
+            <td>${jogo.descricao}</td>
+            <td>
+                <!-- Botão Editar com ID único (prefixo + id do jogo) -->
+                <button 
+                    id="btn-editar-${jogo.id}" 
+                    class="btn btn-sm btn-outline-light mx-auto editar" 
+                    data-id="${jogo.id}"
+                >
+                    <i class="bi bi-pencil"></i>
+                </button>
+
+                <!-- Botão Excluir com ID único -->
+                <button 
+                    id="btn-excluir-${jogo.id}" 
+                    class="btn btn-sm btn-outline-danger mx-auto excluir" 
+                    data-id="${jogo.id}"
+                >
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+        `).join('');
+
+        configurarEventosAdmin(); // Reconfigura os eventos
+    }
+
+    // Renderização para USUÁRIOS (cards)
+    function renderizarCardsUsuarios() {
+        const container = document.getElementById('jogos-container');
+
+        if (!container) {
+            console.error('Container #jogos-container não encontrado!');
+            return;
+        }
+
+        // Garanta que jogos é um array
+        jogos = Array.isArray(jogos) ? jogos : [];
+
+        if (jogos.length === 0) {
+            container.innerHTML = '<p class="text-center">Nenhum jogo disponível no momento.</p>';
+            return;
+        }
+
+        container.innerHTML = jogos.map((jogo, index) => {
+            const isEven = index % 2 === 0;
+            // Use imagem padrão se não houver imagem
+            const imagemUrl = jogo.imagem || 'imagens/placeholder.png';
+
+            return `
+        <div class="card card-custom d-flex flex-row flex-wrap justify-content-between align-items-center my-4">
+            ${isEven ? `
+            <div class="col-12 col-md-6 order-2 order-md-1 p-3">
+                <h3 class="nome-do-jogo text-center text-md-end">${jogo.nome}</h3>
+                <p class="texo-explicativo text-center text-md-end">${jogo.descricao}</p>
+            </div>
+            <div class="col-12 col-md-6 order-1 order-md-2">
+                <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
+            </div>
+            ` : `
+            <div class="col-12 col-md-6 order-1 order-md-1">
+                <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
+            </div>
+            <div class="col-12 col-md-6 order-2 order-md-2 p-3">
+                <h3 class="nome-do-jogo text-center text-md-start">${jogo.nome}</h3>
+                <p class="texo-explicativo text-center text-md-start">${jogo.descricao}</p>
+            </div>
+            `}
+        </div>`;
+        }).join('');
+    }
+
+    // Chame a função quando o DOM estiver pronto
+
+    renderizarCardsUsuarios();
+
+
+    // Configura eventos do admin
+    function configurarEventosAdmin() {
+
+        // Excluir jogo (usa classe .excluir)
+        document.querySelectorAll('.excluir').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(e.currentTarget.dataset.id); // currentTarget é mais seguro que target
+                if (confirm('Tem certeza que deseja excluir este jogo?')) {
+                    if (excluirJogo(id)) {
+                        renderizarTabelaAdmin();
+                        renderizarCardsUsuarios();
+                    }
+                }
+            });
+        });
+
+        // Editar jogo (usa classe .editar)
+        document.querySelectorAll('.editar').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(e.currentTarget.dataset.id);
+                const jogo = jogos.find(j => j.id === id);
+                if (jogo) preencherFormularioEdicao(jogo);
+            });
+        });
+    }
+
+    function preencherFormularioEdicao(jogo) {
+        // Preenche os campos (agora com os IDs corretos) aleluia
+        document.getElementById('editar-nome').value = jogo.nome || '';
+        document.getElementById('editar-descricao').value = jogo.descricao || '';
+        document.getElementById('jogoId').value = jogo.id || '';
+
+        // Atualiza preview da imagem
+        if (jogo.imagemUrl) {
+            const preview = document.getElementById('imagemPreview');
+            preview.src = jogo.imagemUrl;
+            preview.classList.remove('d-none');
+        }
+
+        // Mostra o modal
+        const modal = new bootstrap.Modal(document.getElementById('modalEditarJogo'));
+        modal.show();
+    }
+
+    // Evento para salvar novo jogo (com validação)
+    document.getElementById('salvarJogo')?.addEventListener('click', () => {
+        const nome = document.getElementById('nome-jogo').value; // ID deve existir
+        const descricao = document.getElementById('descricao-jogo').value;
+        const imagemInput = document.getElementById('imagem-jogo');
+
+        if (!nome || !descricao) {
+            alert('Preencha nome e descrição!');
+            return;
+        }
+
+        carregarImagemComoBase64(imagemInput.files[0], (imagemBase64) => {
+            if (salvarJogo(nome, descricao, imagemBase64)) {
+                alert('Jogo salvo!');
+                document.getElementById('nome-jogo').value = '';
+                document.getElementById('descricao-jogo').value = '';
+                imagemInput.value = '';
+                renderizarTabelaAdmin();
+                renderizarCardsUsuarios();
+            }
+        });
+    });
+
+    // Evento para salvar edição
+    document.getElementById('btn-salvar-edicao')?.addEventListener('click', () => {
+        const id = parseInt(document.getElementById('jogoId').value); // Agora usando jogoId
+        const novoNome = document.getElementById('editar-nome').value;
+        const novaDescricao = document.getElementById('editar-descricao').value;
+        const novaImagemInput = document.getElementById('editar-imagem');
+
+        // Se não foi selecionada nova imagem, passa null
+        if (!novaImagemInput.files[0]) {
+            if (editarJogo(id, novoNome, novaDescricao, null)) {
+                alert('Jogo atualizado com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('modalEditarJogo')).hide();
+                renderizarTabelaAdmin();
+                renderizarCardsUsuarios();
+            }
+            return;
+        }
+
+        // Se tem nova imagem, converte para base64
+        carregarImagemComoBase64(novaImagemInput.files[0], (novaImagemBase64) => {
+            if (editarJogo(id, novoNome, novaDescricao, novaImagemBase64)) {
+                alert('Jogo atualizado com sucesso!');
+                bootstrap.Modal.getInstance(document.getElementById('modalEditarJogo')).hide();
+                renderizarTabelaAdmin();
+                renderizarCardsUsuarios();
+            }
+        });
+    });
+    // Inicialização automática das views corretas
+    if (document.getElementById('jogos-tbody')) {
+        renderizarTabelaAdmin(); // Se existir tabela, é o admin
+    }
+    if (document.getElementById('jogos-container')) {
+        renderizarCardsUsuarios(); // Se existir container, é a página de jogos
+    }
+}

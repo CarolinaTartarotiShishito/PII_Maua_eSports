@@ -31,3 +31,39 @@ async function excluirJogo(id) {
     });
     return await resposta.json();
 }
+
+function renderizarCardsJogos() {
+    const container = document.getElementById('jogos-container');
+    if (!container) return;
+    
+    const jogos = JSON.parse(localStorage.getItem('jogos')) || [];
+    
+    if (jogos.length === 0) {
+        container.innerHTML = '<p class="text-center">Nenhum jogo disponível no momento.</p>';
+        return;
+    }
+    
+    container.innerHTML = jogos.map((jogo, index) => {
+        const isEven = index % 2 === 0;
+        const imagemUrl = jogo.imagem || 'imagens/placeholder.png';
+        
+        return `
+        <div class="card card-custom d-flex flex-row justify-content-between">
+            ${isEven ? `
+            <div class="Card-de-jogos-d text-center text-sm-end justify-content-center align-items-center order-1 order-sm-1">
+                <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                <p class="texo-explicativo">${jogo.descricao}</p>
+            </div>
+            <img src="${imagemUrl}" class="game-image-d order-2 order-sm-2" alt="Card do jogo ${jogo.nome}">
+            ` : `
+            <img src="${imagemUrl}" class="game-image-e order-2 order-sm-1" alt="Card do jogo ${jogo.nome}">
+            <div class="Card-de-jogos-e text-center text-sm-start order-1 order-sm-2">
+                <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                <p class="texo-explicativo">${jogo.descricao}</p>
+            </div>
+            `}
+        </div>`;
+    }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', renderizarCardsJogos);
