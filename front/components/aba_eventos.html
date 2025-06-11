@@ -1,21 +1,8 @@
 <div>
-  <h4 class="mb-3">Eventos</h4>
+  <h4 class="fw-bold mb-2 titulo-secundario">Eventos</h4>
   <!-- CONTEÚDO PRINCIPAL DINÂMICO -->
-  <form id="form-evento" class="mb-3">
-    <input type="hidden" id="evento-id">
-    <div class="mb-2">
-      <input type="text" id="evento-nome" class="form-control" placeholder="Nome do evento" required>
-    </div>
-    <div class="mb-2">
-      <input type="text" id="evento-descricao" class="form-control" placeholder="Descrição" required>
-    </div>
-    <button type="submit" class="btn btn-primary mt-2">Salvar</button>
-    <button type="button" class="btn btn-secondary" id="cancelar-edicao" style="display:none;">Cancelar</button>
-  </form>
-  <ul id="lista-eventos" class="list-group"></ul>
-  </div>
   
-  <h5>Posts no Instagram</h5>
+  <h5 class="fw-bold mb-2">Posts no Instagram</h5>
   <p class="text-muted">Para aparecer as publicações dentro do site, coloque o TOKEN abaixo:</p>
   <input class="form-control bg-dark text-white" id="instagramTokenInput" placeholder="TOKEN do Instagram" />
   <a class="text-info small d-block my-2" href="https://developers.facebook.com/tools/explorer/" target="_blank">
@@ -25,9 +12,12 @@
 
   <hr class="my-4" />
 
-  <h5 class="mb-3">Avisos</h5>
+  <h5 class="fw-bold mb-2">Avisos</h5>
   <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded">
     <span>Numero de avisos abertos: <span id="contador-avisos">0</span></span>
-    <button class="btn btn-primary btn-sm">+</button>
+    <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalMembro" onclick="modalAdicionarMembro()">
+    <i class="bi bi-plus"></i>
+    Adicionar Aviso
+  </button>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <div>
-  <h4 class="mb-2 titulo-secundario">Treinos</h4>
+  <h4 class="fw-bold mb-2 titulo-secundario">Treinos</h4>
   <h5 class="fw-bold subtitulo">Gerenciador de Treinos</h5>
 
   <div class="row align-items-center mb-3" id="filtros-treinos">
@@ -29,7 +29,7 @@
     </table>
   </div>
 
-  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalTreino" onclick="modalAdicionarMembro()">
+  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalTreino" onclick="modalAdicionarTreino()">
     <i class="bi bi-plus"></i>
     Adicionar Treino
   </button>
@@ -53,13 +53,13 @@
                 <label for="selecionarDia" class="my-3">Dia da semana:</label>
                 <select id="selecionarDia" class="form-select bg-dark text-white" aria-label="Default select example">
                     <option selected disabled>Dias da semana</option>
-                    <option value="1">Domingo</option>
-                    <option value="2">Segunda-feira</option>
-                    <option value="3">Terça-feira</option>
-                    <option value="4">Quarta-feira</option>
-                    <option value="5">Quinta-feira</option>
-                    <option value="6">Sexta-feira</option>
-                    <option value="7">Sábado</option>
+                    <option value="0">Domingo</option>
+                    <option value="1">Segunda-feira</option>
+                    <option value="2">Terça-feira</option>
+                    <option value="3">Quarta-feira</option>
+                    <option value="4">Quinta-feira</option>
+                    <option value="5">Sexta-feira</option>
+                    <option value="6">Sábado</option>
                 </select>
                 <div>
                     <label class="my-3" for="primeiroHorario">Horário Inicial:</label>
@@ -74,8 +74,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limparModalMembro()">Cancelar</button>
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="salvarMembro">Salvar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limparModalTreino()">Cancelar</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="salvarTreino">Salvar</button>
             </div>
         </div>
     </div>

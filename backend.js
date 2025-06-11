@@ -27,6 +27,7 @@ const upload = multer()
 let eventos = [];
 let jogos = [];
 let membros = [];
+let avisos = [];
 
 // EVENTOS
 // Listar eventos
@@ -177,6 +178,50 @@ app.delete('/jogos/:id', (req, res) => {
   }
 });
 
+// AVISOS
+// Listar avisos
+app.get('/avisos', (req, res) => {
+  res.json(avisos);
+});
+
+// Adicionar aviso
+app.post('/avisos', (req, res) => {
+  const { nome, descricao } = req.body;
+  if (nome && descricao) {
+    const novoAviso = { _id: Date.now().toString(), nome, descricao };
+    avisos.push(novoAviso);
+    res.status(201).json(novoAviso);
+  } else {
+    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
+  }
+});
+
+// Editar aviso
+app.put('/avisos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nome, descricao } = req.body;
+  const aviso = avisos.find(av => av._id === id);
+  if (aviso) {
+    aviso.nome = nome;
+    aviso.descricao = descricao;
+    res.json(aviso);
+  } else {
+    res.status(404).json({ error: 'Aviso não encontrado' });
+  }
+});
+
+// Excluir aviso
+app.delete('/avisos/:id', (req, res) => {
+  const { id } = req.params;
+  const index = avisos.findIndex(av => av._id === id);
+  if (index !== -1) {
+    avisos.splice(index, 1);
+    res.json({ message: 'Aviso excluído com sucesso' });
+  } else {
+    res.status(404).json({ error: 'Aviso não encontrado' });
+  }
+});
+
 // Endpoint para jogadores por modalidade
 app.get('/jogadores-por-modalidade', (req, res) => {
   const trainsPath = path.join(__dirname, 'defaultTrains.json');
@@ -226,10 +271,6 @@ app.get('/jogadores-por-modalidade', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
-
 // Conecte ao MongoDB
 mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
@@ -241,6 +282,7 @@ mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongod
 // Exemplo de rota para criar um usuário
 app.post('/usuarios', async (req, res) => {
     try {
+        console.log(req.body)
         const novoUsuario = new User(req.body);
         await novoUsuario.save();
         res.status(201).json(novoUsuario);
