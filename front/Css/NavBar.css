@@ -43,7 +43,7 @@
     font-weight: bold;
 }
 
-#avatar {
+#avatar, #avatar-lg {
     border-color: var(--cor-fundo);
     background-color: #D1D2F6;
     color: var(--cor-primaria);
