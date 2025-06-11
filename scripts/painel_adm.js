@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             }, 50);
         }
+
+        if (nomeAba === "treinos") {
+            prepararAbaTreinos('#filtro-times-select') //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
+        }
     }
 
     // Carrega o conteúdo inicial

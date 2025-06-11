@@ -17,6 +17,7 @@ const treinosEndpoint = 'trains/';
 const access_token = 'frontendmauaesports';
 const User = require('./models/user');
 const Jogo = require('./models/jogo');
+const { url } = require('inspector');
 
 app.use(cors());
 app.use(express.json());
@@ -341,6 +342,23 @@ app.post('/jogos', async (req, res) => {
     res.status(500).json({ error: 'Erro ao salvar jogo: ' + error.message });
   }
 });
+
+app.patch('/treinos', async (req, res) => {
+  try {
+    const dados = req.body;
+    const urlCompleta = `${urlAPITeste}${modalidadesEndpoint}`
+    const response = await fetch(urlCompleta, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`
+      },
+      body: JSON.stringify(dados)
+    });
+  } catch (error) {
+    console.error("Erro ao dar patch em modalidades: ", error);
+  }
+})
 
 // Inicie o servidor
 app.listen(3000, () => {
