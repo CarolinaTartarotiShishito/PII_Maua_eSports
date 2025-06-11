@@ -18,19 +18,25 @@ function safePrepararNavBar(){
     const entrar = document.querySelector("#entrar-btn");
     const entrarLg = document.querySelector("#entrar-btn-lg");
     const avtrDrop = document.querySelector("#avatar-dropdown");
+    const avtrDropLg = document.querySelector("#avatar-dropdown-lg");
     const divAvt = document.querySelector("#avatar");
+    const divAvtLg = document.querySelector("#avatar-lg");
 
     if (!entrar || !divAvt) {
         setTimeout(safePrepararNavBar, 100);
         return;
     }
     if (localStorage.getItem("token") != null) {
-        entrar.classList.remove(['d-md-block']);
+        entrar.classList.remove(['d-lg-block']);
+        entrar.classList.add(['d-none']);
         entrarLg.classList.add(['d-none']);
         const avatar = localStorage.getItem("avatar");
-        avtrDrop.classList.remove(['d-none']);
+        avtrDropLg.classList.remove(['d-none']);
         divAvt.innerHTML = avatar;
+        divAvtLg.innerHTML = avatar;
         divAvt.classList.remove(['d-none']);
+        avtrDrop.classList.add(['d-lg-block']);
+        avtrDropLg.classList.remove(['d-none']);
     }
     if(cargo?.includes("Administrador")){
         const painelAdm = document.querySelector("#painel-adm");

@@ -4,12 +4,24 @@
       <img src="imagens/LogoEsports.png" class="navbar-image mx-2" alt="Logo da Maua eSports">
     </a>
 
-    <div class="d-flex align-items-center flex-grow-1 justify-content-end justify-content-md-end">
-      <form action="login.html" class="d-md-none me-auto ms-auto order-1 order-md-2" id="entrar-btn-lg">
+    <div class="d-flex align-items-center ms-auto">
+      <form action="login.html" class="d-lg-none me-auto ms-auto order-2 order-lg-3" id="entrar-btn-lg">
         <button class="loginButton btn btn-secondary px-4">Entrar</button>
       </form>
 
-      <button class="navbar-toggler order-2 order-md-1" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
+      <div class="dropdown d-none d-lg-none order-1 order-lg-3" id="avatar-dropdown-lg">
+        <button class="btn d-flex align-items-center pe-2" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <div id="avatar-lg" class="rounded-circle me-2"></div>
+          <span class="dropdown-toggle"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="/front/pagina_jogador.html">Configurações</a></li>
+          <li><a class="dropdown-item" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+
+      <button class="navbar-toggler order-3 order-lg-1" type="button" data-bs-toggle="collapse" data-bs-target="#navBar"
         aria-controls="myNav" aria-expanded="false" aria-label="Toggle Navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -38,13 +50,13 @@
       </ul>
     </div>
 
-    <form action="login.html" class="d-none d-md-block" id="entrar-btn">
+    <form action="login.html" class="d-none d-lg-block" id="entrar-btn">
       <button class="loginButton btn btn-secondary px-4">Entrar</button>
     </form>
 
-    <div class="dropdown d-none" id="avatar-dropdown">
+    <div class="dropdown d-none order-lg-2" id="avatar-dropdown">
       <button class="btn d-flex align-items-center pe-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <div id="avatar" class="rounded-circle d-none me-2"></div>
+        <div id="avatar" class="rounded-circle me-2"></div>
         <span class="dropdown-toggle"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
@@ -52,7 +64,6 @@
         <li><a class="dropdown-item" onclick="logout()">Logout</a></li>
       </ul>
     </div>
-      
-    </div>
+
   </div>
 </nav>
