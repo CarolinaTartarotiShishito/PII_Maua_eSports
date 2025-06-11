@@ -21,32 +21,44 @@
     <div class="corpo-site">
         <div class="comeco mt-5">Conta</div>
         <div class="subComeco">Configure sua conta do jeito que preferir</div>
-        <div class="configuracao-inicial d-flex flex-row justify-content-start">
+        <div class="configuracao-inicial d-flex flex-row">
             <div class="circle">
-                
+
             </div>
-            <div>
-                <div class="titulo">Nome de Usuário</div>
-                <div class="sub-titulo">Deixe seu nome de usuário com o seu estilo!</div>
-                <div class="sub-titulo" id="NomeUsuario"></div>
+            <div class="configuracao-nickname my-3">
+                <div class="titulo" id="NomeUsuario">Nome de Usuário</div>
+                <div class="sub-titulo">Deixe seu nickname de usuário com o seu estilo!</div>
+                <div id="nicknameUsuario"></div>
+                <div id="emailUsuario">a</div>
                 <div class="text-nome">
-                    <input type="text" class="nome" id="nomeJogador" placeholder="Insira seu novo nome aqui"></input>
-                    <button type="button" class="botaoSalvar" id="Salvar">Salvar</button>
+                    <input type="text" class="nome" id="nicknameInput" placeholder="Insira seu novo nome aqui"></input>
+                    <button type="button" class="botaoSalvar" id="Salvar" onclick="editarNickname()">Salvar</button>
                 </div>
+                <div class="alert d-none alert-dismissible fade alert-nickname mt-3"></div>
             </div>
         </div>
         <div class="time-informacao">
             <div class="titulo">Time & Informações</div>
             <div class="sub-titulo">Consulte informações do seu time por aqui</div>
             <div class="time-horas d-flex flex-row justify-content-between">
-                <div class="time">
+                <div class="time col-12 col-md-5">
                     <div class="Time-jogo">
                         <div class="Time">Time:</div>
                         <div class="jogo" id="Jogo"></div>
                     </div>
                     <div class="titulo">Horário de Treino</div>
-
-                    <ul class="p-2">
+                    <table class="table table-dark table-bordered table-sm table-striped" id="lista-treinos">
+                        <thead>
+                            <tr>
+                                <th>Dia da Semana</th>
+                                <th>Horário Inicial</th>
+                                <th>Horário Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <!-- <ul class="p-2">
                         <div class="time-treino d-flex flex-row justify-content-between">
                             <div class="time-treinos-dias" id="time-treinos-dias">
                                 segunda - feira
@@ -73,12 +85,12 @@
                                 14:00 - 13:00
                             </div>
                         </div>
-                    </ul>
+                    </ul> -->
                 </div>
-                <div class="horas">
+                <div class="horas col-12 col-md-5">
                     <div class="horasPAE">
                         <div class="Horas">Horas PAE:</div>
-                        <div class="PAE" id="HPaes">15</div>
+                        <div class="PAE" id="HPaes"></div>
                     </div>
                 </div>
             </div>

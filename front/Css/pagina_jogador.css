@@ -169,29 +169,25 @@ body {
         align-items: center;
     }
 
+    .time-informacao {
+        align-items: center;
+    }
+
     .configuracao-inicial {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-center;
         padding: 24px;
     }
 
     .circle {
-        width: 120px;
-        height: 120px;
-        font-size: 3rem;
-    }
-
-    .text-nome {
-        width: 100%;
+        width: clamp(110px, 12vw, 120px);
+        height: clamp(110px, 12vw, 120px);
+        font-size: clamp(2rem, 6vw, 4rem);
     }
 
     .nome {
         width: 100%;
         margin-bottom: 8px;
-    }
-
-    .botaoSalvar {
-        width: 100%;
     }
 
     .time-horas {
@@ -214,10 +210,7 @@ body {
 }
 
 @media (max-width: 576px) {
-
-    .configuracao-inicial {
-        flex-wrap: wrap;
-        align-items: center;
+    .time-informacao {
         justify-content: center;
     }
 
@@ -227,30 +220,46 @@ body {
         font-size: 2rem;
     }
 
+    .time-treino{
+        font-size: 0.8rem;
+    }
+}
+@media(max-width: 780px) {
+    .configuracao-inicial {
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .configuracao-nickname {
+        text-align: center;
+    }
+
     .text-nome {
         flex-direction: column;
     }
 
     .botaoSalvar {
-        width: 75%;
+        width: 85%;
         margin-bottom: 4px;
     }
 
-    .titulo {
-        font-size: 1.2rem;
+    .circle {
+        align-items: center;
+        margin: 0px 0px 10px 0px;
+    }
+    
+    .time-informacao {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
-    .Time {
-        font-size: 1rem;
-    }
-
-    .Horas {
-        font-size: 1rem;
-    }
-    .time-treino{
-        font-size: 0.6rem;
-    }
-    .proximo-jogos{
-        font-size: 0.6rem;
+    .time-treino {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1rem;
     }
 }
