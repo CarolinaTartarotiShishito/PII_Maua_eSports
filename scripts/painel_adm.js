@@ -401,3 +401,28 @@ function inicializarGerenciamentoJogos() {
         renderizarCardsUsuarios(); // Se existir container, é a página de jogos
     }
 }
+
+
+// Exemplo de lógica para mostrar a aba correta
+const botoesMenu = document.querySelectorAll('.botao-menu');
+const eventosContainer = document.getElementById('eventos-container');
+const jogosContainer = document.getElementById('jogos-container');
+const painelConteudo = document.getElementById('painel-conteudo');
+
+botoesMenu.forEach((btn, idx) => {
+  btn.addEventListener('click', function () {
+    eventosContainer.style.display = 'none';
+    jogosContainer.style.display = 'none';
+    painelConteudo.style.display = 'none';
+
+    if (btn.textContent.includes('Eventos')) {
+      eventosContainer.style.display = 'block';
+      carregarAvisosPainel();
+    } else if (btn.textContent.includes('Jogos')) {
+      jogosContainer.style.display = 'block';
+      // carregarJogosPainel();
+    } else {
+      painelConteudo.style.display = 'block';
+    }
+  });
+});
