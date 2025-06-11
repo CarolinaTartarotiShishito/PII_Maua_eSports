@@ -455,12 +455,13 @@ async function prepararAbaTreinos(idSeletor) {
             return diaB - diaA;
         });
     };
-    
+
     // Função para exibir treinos de um time
     const exibirTreinosDoTime = (time) => {
         const treinosOrdenados = ordenarTreinos(time.ScheduledTrainings);
         treinosOrdenados.forEach(treino => {
-            exibeTreino(treino, time, corpoTabela);
+            let treinoInfo = pegaInfosTreino(treino, time)
+            exibeTreino(treinoInfo, corpoTabela, true)
         });
     };
     
@@ -488,28 +489,18 @@ async function carregarTreinosDaEquipe(){
     const tabelaTreinos = document.querySelector('#lista-treinos');
     const corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
-    treinos = modalidade.ScheduledTrainings.sort((a, b) => {
+    let treinos = modalidade.ScheduledTrainings.sort((a, b) => {
         const diaA = parseInt(a.Start.split(' ')[5]);
         const diaB = parseInt(b.Start.split(' ')[5]);
         return diaB - diaA;
     });
     for (let treino of treinos){
-        exibeTreino(treino, modalidade, corpoTabela)
+        let treinoInfo = pegaInfosTreino(treino, modalidades)
+        exibeTreino(treinoInfo, corpoTabela, true)
     }
 }
 
-async function exibeTreino(treino, time, corpoTabela){
-    const diasDaSemana = {
-        0: "Domingo",
-        1: "Segunda-feira",
-        2: "Terça-feira",
-        3: "Quarta-feira",
-        4: "Quinta-feira",
-        5: "Sexta-feira",
-        6: "Sábado"
-    };
-    const [ , minInicio, horaInicio, , , diaSemana] = treino.Start.split(' ');
-    const [minFim, horaFim] = treino.End.split(' ').slice(1, 3);
+async function exibeTreino(treino, corpoTabela, editavel){
     let linha = corpoTabela.insertRow(0);
     linha.className = 'member-card';
     let celTime = linha.insertCell(0);
@@ -521,25 +512,51 @@ async function exibeTreino(treino, time, corpoTabela){
     let botaoApagar = document.createElement('button');
     let iEditar = document.createElement('i');
     let iApagar = document.createElement('i');
-    celTime.innerHTML = time.Name;
-    celDiaSem.innerHTML = diasDaSemana[diaSemana];
-    celHoraIni.innerHTML = `${horaInicio}:${minInicio}`;
-    celHoraFim.innerHTML = `${horaFim}:${minFim}`;
-    botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
-    iEditar.className = 'bi bi-pencil';
-    botaoEditar.setAttribute('data-bs-toggle', 'modal')
-    botaoEditar.setAttribute('data-bs-target', `#modalMembro`)
-    botaoEditar.onclick = () => modalEditarMembro(membro);
-    botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
-    botaoApagar.onclick = async () => {
-        await apagarHorario(time, treino);
-        await atualizarMembros();
-    };
+    celTime.innerHTML = treino.time;
+    celDiaSem.innerHTML = treino.diaSem;
+    celHoraIni.innerHTML = treino.horaIni;
+    celHoraFim.innerHTML = treino.horaFim;
+    if(editavel){
+        botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
+        iEditar.className = 'bi bi-pencil';
+        botaoEditar.setAttribute('data-bs-toggle', 'modal')
+        botaoEditar.setAttribute('data-bs-target', `#modalTreino`)
+        botaoEditar.onclick = () => modalEditarTreino(treino);
+        botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
+        botaoApagar.onclick = async () => {
+            await apagarHorario(time, treino);
+            await atualizarMembros();
+        };
+    }
     iApagar.className = 'bi bi-trash';
     botaoEditar.appendChild(iEditar);
     botaoApagar.appendChild(iApagar);
     celAcoes.appendChild(botaoEditar);
     celAcoes.appendChild(botaoApagar);
+}
+
+function pegaInfosTreino(treino, modalidade){
+    const diasDaSemana = {
+        0: "Domingo",
+        1: "Segunda-feira",
+        2: "Terça-feira",
+        3: "Quarta-feira",
+        4: "Quinta-feira",
+        5: "Sexta-feira",
+        6: "Sábado"
+    };
+    const [ , minInicio, horaInicio, , , diaSemana] = treino.Start.split(' ');
+    const [minFim, horaFim] = treino.End.split(' ').slice(1, 3);
+
+    const modelo = {
+        time: modalidade.Name,
+        diaSemNum: diaSemana,
+        diaSem: diasDaSemana[diaSemana],
+        horaIni: `${horaInicio}:${minInicio}`,
+        horaFim: `${horaFim}:${minFim}`
+    };
+
+    return modelo;
 }
 
 async function atualizarTreinos(modalidadeId, treinos){
@@ -548,6 +565,47 @@ async function atualizarTreinos(modalidadeId, treinos){
         _id: modalidadeId,
         ScheduledTrainings: scheduledTrainings
     };
+}
+
+// função para configurar o modal de adicionar treino novo
+function modalAdicionarTreino(){
+    limparModalTreino();
+    const divTitulo = document.querySelector('#modalTreinoLabel')
+    const btnSalvar = document.querySelector('#salvarMembro');
+    divTitulo.innerHTML = "Adicionar Membro";
+    btnSalvar.onclick = async () => {
+        await novoUsuario();
+        await atualizarMembros();
+    };
+}
+
+function modalEditarTreino(treino) {
+    const divTitulo = document.querySelector('#modalTreinoLabel');
+    const timeCampo = document.querySelector('#timesTreinoSelect');
+    const diaSemanaCampo = document.querySelector('#selecionarDia');
+    const horaIniCampo = document.querySelector('#primeiroHorario');
+    const horaFimCampo = document.querySelector('#segundoHorario');
+    const btnSalvar = document.querySelector('#salvarTreino');
+    divTitulo.innerHTML = "Editar treino"
+    timeCampo.value = treino.time;
+    diaSemanaCampo.value = treino.diaSemNum;
+    horaIniCampo.value = treino.horaIni;
+    horaFimCampo.value = treino.horaFim;
+    btnSalvar.onclick = async () => {
+        await editarUsuario();
+        await atualizarMembros();
+    };
+}
+
+function limparModalTreino(){
+    const timeCampo = document.querySelector('#timesTreinoSelect');
+    const diaSemanaCampo = document.querySelector('#selecionarDia');
+    const horaIniCampo = document.querySelector('#primeiroHorario');
+    const horaFimCampo = document.querySelector('#segundoHorario');
+    timeCampo.value = '';
+    diaSemanaCampo.value = '';
+    horaIniCampo.value = '';
+    horaFimCampo.value = '';
 }
 
 checkStreamerStatus();
