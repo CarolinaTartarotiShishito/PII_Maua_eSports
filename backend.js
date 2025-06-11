@@ -317,8 +317,9 @@ app.post('/editarUsuario', async (req, res) => {
     const dadosAtualizados = req.body;
     await User.updateOne({Email: dadosAtualizados.Email}, { $set: dadosAtualizados })
     res.status(201).json();
-  } catch (error) {
-        res.status(400).json({erro: error.message });
+  } 
+  catch (error) {
+    res.status(400).json({erro: error.message });
   }
 });
 

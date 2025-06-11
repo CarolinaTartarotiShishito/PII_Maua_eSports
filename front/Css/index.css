@@ -24,15 +24,7 @@ footer {
 
 .painelIndex {
     background-image: linear-gradient(to right, #5963A8, #2D2C43);
-    /* display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px; */
 }
-
-/* .conteudoPainel{
-    display: flex;
-} */
 
 .buttonInscricao{
     background-color: #322BFF;
@@ -111,7 +103,6 @@ footer {
         text-align: center;
         padding-left: 0;
         min-height: auto;
-        /* padding-left: 3rem; */
     }
     #imagensPainel {
         display: none;

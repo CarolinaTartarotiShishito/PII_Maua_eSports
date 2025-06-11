@@ -97,7 +97,36 @@ function pegarInfosModal(){
     }
 }
 
-// adicionaar usuários ao banco de dados
+function pegarNickname() {
+    const nickname = (document.querySelector('#nicknameInput')).value;
+    if(nickname) {
+        const modelo = {
+            Email: localStorage.getItem("email"),
+            Nickname: nickname
+        };
+        return modelo;
+    } else {
+        exibeAlerta(".alert-nickname", `Você deve inserir um nickname!`, ['show', 'alert-danger'], ['d-none'], 4000);
+    }
+}
+
+async function editarNickname() {
+    try {
+        const editarUsuarioEndpoint = "/editarUsuario";
+        const urlCompletaUsuarios = `${protocolo}${baseURL}${editarUsuarioEndpoint}`;
+        let modelo = pegarNickname();
+        await axios.post(urlCompletaUsuarios, modelo);
+        exibeAlerta(".alert-nickname", `Nickname alterado com sucesso!`, ['show', 'alert-success'], ['d-none'], 4000);
+        setTimeout(() => {
+            window.location.href = "pagina_jogador.html";
+        }, 1000);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+// adicionar usuários ao banco de dados
 async function novoUsuario() {
     try {
         const novoUsuarioEndpoint = "/usuarios";
@@ -129,7 +158,7 @@ async function editarUsuario() {
         const editarUsuarioEndpoint = "/editarUsuario";
         const urlCompletaUsuarios = `${protocolo}${baseURL}${editarUsuarioEndpoint}`;
         let modelo = pegarInfosModal();
-        await axios.post(urlCompletaUsuarios, modelo)
+        await axios.post(urlCompletaUsuarios, modelo);
     }
     catch (error) {
         console.log(error);
