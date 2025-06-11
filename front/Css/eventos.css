@@ -4,6 +4,7 @@ body {
   color: var(--cor-texto);
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
+  background: linear-gradient(to bottom, #20242f, #1a1d27);
 }
 
 h3 {
