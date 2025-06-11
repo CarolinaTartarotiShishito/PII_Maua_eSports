@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
             prepararAbaMembrosCap(); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "treinos") {
-            carregarTreinosDaEquipe() //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
+            carregarTreinosDaEquipe(true) //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
         }
     }
     

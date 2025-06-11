@@ -485,7 +485,7 @@ async function prepararAbaTreinos(idSeletor) {
     await aplicarFiltros();
 }
 
-async function carregarTreinosDaEquipe(){
+async function carregarTreinosDaEquipe(editavel){
     let time = (await buscarDadosUsuario()).Time;
     let modalidades = await pegarModalidades();
     let modalidade = modalidades.filter(modalidade => modalidade.Name === time)[0];
@@ -499,27 +499,33 @@ async function carregarTreinosDaEquipe(){
     });
     for (let treino of treinos){
         let treinoInfo = pegaInfosTreino(treino, modalidades)
-        exibeTreino(treinoInfo, corpoTabela, true)
+        treinoInfo.time = time;
+        console.log(treinoInfo)
+        exibeTreino(treinoInfo, corpoTabela, editavel)
     }
 }
 
 async function exibeTreino(treino, corpoTabela, editavel){
     let linha = corpoTabela.insertRow(0);
     linha.className = 'member-card';
-    let celTime = linha.insertCell(0);
-    let celDiaSem = linha.insertCell(1);
-    let celHoraIni = linha.insertCell(2);
-    let celHoraFim = linha.insertCell(3);
-    let celAcoes = linha.insertCell(4);
-    let botaoEditar = document.createElement('button');
-    let botaoApagar = document.createElement('button');
-    let iEditar = document.createElement('i');
-    let iApagar = document.createElement('i');
-    celTime.innerHTML = treino.time;
+    if(editavel){
+        let celTime = linha.insertCell(0);
+        celTime.innerHTML = treino.time;
+    }
+    let celDiaSem = linha.insertCell(editavel ? 1 : 0);
+    let celHoraIni = linha.insertCell(editavel ? 2 : 1);
+    let celHoraFim = linha.insertCell(editavel ? 3 : 2);
+    
     celDiaSem.innerHTML = treino.diaSem;
     celHoraIni.innerHTML = treino.horaIni;
     celHoraFim.innerHTML = treino.horaFim;
+
     if(editavel){
+        let celAcoes = linha.insertCell(4);
+        let botaoEditar = document.createElement('button');
+        let botaoApagar = document.createElement('button');
+        let iEditar = document.createElement('i');
+        let iApagar = document.createElement('i');
         botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
         iEditar.className = 'bi bi-pencil';
         botaoEditar.setAttribute('data-bs-toggle', 'modal')
@@ -530,12 +536,12 @@ async function exibeTreino(treino, corpoTabela, editavel){
             await apagarHorario(time, treino);
             await atualizarMembros();
         };
+        iApagar.className = 'bi bi-trash';
+        botaoEditar.appendChild(iEditar);
+        botaoApagar.appendChild(iApagar);
+        celAcoes.appendChild(botaoEditar);
+        celAcoes.appendChild(botaoApagar);
     }
-    iApagar.className = 'bi bi-trash';
-    botaoEditar.appendChild(iEditar);
-    botaoApagar.appendChild(iApagar);
-    celAcoes.appendChild(botaoEditar);
-    celAcoes.appendChild(botaoApagar);
 }
 
 function pegaInfosTreino(treino, modalidade){
