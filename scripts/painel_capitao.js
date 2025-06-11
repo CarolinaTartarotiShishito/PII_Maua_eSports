@@ -16,10 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function inicializarScriptEspecifico(nomeAba) {
         if (nomeAba == "membros") {
-            prepararAbaMembros(); // no arquivo frontend.js na pasta js
+            prepararAbaMembrosCap(); // no arquivo frontend.js na pasta js
         }
         if (nomeAba === "treinos") {
-            //carregarTreinosDaEquipe() //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
+            carregarTreinosDaEquipe() //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
         }
     }
     

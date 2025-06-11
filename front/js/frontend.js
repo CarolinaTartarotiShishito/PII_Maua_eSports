@@ -67,17 +67,6 @@ async function exibeTimes(idSeletor){
         opcao.value = time.Name;
         seletor.appendChild(opcao);
     };
-
-    if(idSeletor === "#filtro-times-select") {
-        seletor.addEventListener('change', async (event) => {
-            if(event.target.value == "Todos") {
-                await atualizarMembros();
-            }
-            else if (event.target.value){
-                filtrarMembros("Time", event.target.value);
-            }
-        });
-    };
 }
 
 function pegarInfosModal(){
@@ -147,27 +136,49 @@ async function editarUsuario() {
     }
 }
 
-// Prepara a página de membros
-async function prepararAbaMembros(idSeletor){
+// Prepara a página de membros da área do administrador
+async function prepararAbaMembros(idSeletor) {
     exibeTimes(idSeletor);
+    const tabelaMembros = document.querySelector('#lista-membros');
+    const corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    const todosMembros = await pegaMembros();
+    let membrosFiltrados = [...todosMembros];
+    const seletorCargo = document.querySelector("#filtro-cargos-select");
+    const seletorTime = document.querySelector(idSeletor);
+
+    async function aplicarFiltros() {
+        const cargoSelecionado = seletorCargo.value;
+        const timeSelecionado = seletorTime.value;
+        membrosFiltrados = [...todosMembros];
+        if (cargoSelecionado && cargoSelecionado !== "Todos") {
+            membrosFiltrados = membrosFiltrados.filter(membro => membro.Cargo === cargoSelecionado);
+        }
+        if (timeSelecionado && timeSelecionado !== "Todos") {
+            membrosFiltrados = membrosFiltrados.filter(membro => membro.Time === timeSelecionado);
+        }
+        corpoTabela.innerHTML = '';
+        for (const membro of membrosFiltrados) {
+            await exibeMembro(membro, corpoTabela);
+        }
+    }
+
+    await aplicarFiltros();
+    seletorCargo.addEventListener('change', aplicarFiltros);
+    seletorTime.addEventListener('change', aplicarFiltros);
+}
+
+// Prepara a página de membros
+async function prepararAbaMembrosCap(){
+    let time = (buscarDadosUsuario()).Time;
     let tabelaMembros = document.querySelector('#lista-membros');
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
     let membros = await pegaMembros();
+    membros = membros.filter(membro => membro.Time === time);
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
-    
-    const seletorCargo = document.querySelector("#filtro-cargos-select");
-    seletorCargo.addEventListener('change', async (event) => {
-        const valorSelecionado = event.target.value;
-        if (!valorSelecionado) return;
-        if (valorSelecionado === "Todos") {
-            await atualizarMembros();
-        } else {
-            await filtrarMembros("Cargo", valorSelecionado);
-        }
-    });
 }
 
 async function pegaMembros(){
@@ -196,6 +207,13 @@ async function exibeMembro(membro, corpoTabela){
     celTime.innerHTML = membro.Time;
     let horas = await calculoHoras(membro.IdDiscord);
     celHoras.innerHTML = horas || "";
+
+    if (membro.Cargo.includes("Administrador")){
+        celCargo.innerHTML = "Administrador";
+    } else{
+        celCargo.innerHTML = membro.Cargo;
+    }
+
     if(membro.Cargo != "Administrador Primário"){
         botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
         iEditar.className = 'bi bi-pencil';
@@ -212,24 +230,8 @@ async function exibeMembro(membro, corpoTabela){
         botaoApagar.appendChild(iApagar);
         celAcoes.appendChild(botaoEditar);
         celAcoes.appendChild(botaoApagar);
-        celCargo.innerHTML = membro.Cargo;
-    } else {
-        celCargo.innerHTML = "Administrador";
     }
 }
-
-async function filtrarMembros(tipo, filtro){
-    const buscaEndpoint = '/buscaEspecificaUsuario';
-    const urlCompleta = `${protocolo}${baseURL}${buscaEndpoint}`;
-    let tabelaMembros = document.querySelector('#lista-membros');
-    let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0]
-    corpoTabela.innerHTML = '';
-    let membros = (await axios.get(urlCompleta, { params: { Tipo: tipo, Filtro: filtro } })).data;
-    for(let membro of membros) {
-        await exibeMembro(membro, corpoTabela);
-    }
-}
-
 async function atualizarMembros() {
     let tabelaMembros = document.querySelector('#lista-membros');
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
@@ -238,6 +240,7 @@ async function atualizarMembros() {
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
+    return membros;
 }
 
 function modalAdicionarMembro(){
@@ -359,6 +362,100 @@ async function checkStreamerStatus() {
 function logout(){
     localStorage.clear();
     window.location.href = "index.html";
+}
+
+async function pegarModalidades() {
+    const modalidadesEndpoint = "/modalidades";
+    const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
+    const response = (await axios.get(urlCompleta)).data;
+    modalidades = Object.values(response);
+    return modalidades;
+}
+
+async function preprararAbaTreinos(){
+    let modalidades = await pegarModalidades();
+    modalidades.sort((a, b) => {
+        if (a.Name > b.Name) return -1; // 'Z' vem antes de 'A'
+        if (a.Name < b.Name) return 1;
+        return 0;
+    });
+    const tabelaTreinos = document.querySelector('#lista-treinos');
+    const corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    for(let time of modalidades) {
+        treinos = time.ScheduledTrainings.sort((a, b) => {
+            const diaA = parseInt(a.Start.split(' ')[5]);
+            const diaB = parseInt(b.Start.split(' ')[5]);
+            return diaB - diaA;
+        });
+        for (let treino of treinos){
+            exibeTreino(treino, time, corpoTabela)
+        }
+    }
+}
+
+async function carregarTreinosDaEquipe(){
+    let time = (await buscarDadosUsuario()).Time;
+    let modalidades = await pegarModalidades();
+    console.log(modalidades)
+    let modalidade = modalidades.filter(modalidade => modalidade.Name === time)[0];
+    console.log(modalidade)
+    const tabelaTreinos = document.querySelector('#lista-treinos');
+    const corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    treinos = modalidade.ScheduledTrainings.sort((a, b) => {
+        const diaA = parseInt(a.Start.split(' ')[5]);
+        const diaB = parseInt(b.Start.split(' ')[5]);
+        return diaB - diaA;
+    });
+    for (let treino of treinos){
+        exibeTreino(treino, modalidade, corpoTabela)
+    }
+}
+
+async function exibeTreino(treino, time, corpoTabela){
+    const diasDaSemana = {
+        0: "Domingo",
+        1: "Segunda-feira",
+        2: "Terça-feira",
+        3: "Quarta-feira",
+        4: "Quinta-feira",
+        5: "Sexta-feira",
+        6: "Sábado"
+    };
+    const [ , minInicio, horaInicio, , , diaSemana] = treino.Start.split(' ');
+    const [minFim, horaFim] = treino.End.split(' ').slice(1, 3);
+    let linha = corpoTabela.insertRow(0);
+    linha.className = 'member-card';
+    let celTime = linha.insertCell(0);
+    let celDiaSem = linha.insertCell(1);
+    let celHoraIni = linha.insertCell(2);
+    let celHoraFim = linha.insertCell(3);
+    let celAcoes = linha.insertCell(4);
+    let botaoEditar = document.createElement('button');
+    let botaoApagar = document.createElement('button');
+    let iEditar = document.createElement('i');
+    let iApagar = document.createElement('i');
+    celTime.innerHTML = time.Name;
+    celDiaSem.innerHTML = diasDaSemana[diaSemana];
+    celHoraIni.innerHTML = `${horaInicio}:${minInicio}`;
+    celHoraFim.innerHTML = `${horaFim}:${minFim}`;
+    botaoEditar.className = 'btn btn-sm btn-outline-light mx-auto';
+        iEditar.className = 'bi bi-pencil';
+        botaoEditar.setAttribute('data-bs-toggle', 'modal')
+        botaoEditar.setAttribute('data-bs-target', `#modalMembro`)
+        botaoEditar.onclick = () => modalEditarMembro(membro);
+        botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
+        botaoApagar.onclick = async () => {
+            await apagarUsuario(membro.NomeCompleto, membro.Email);
+            await atualizarMembros();
+        };
+        iApagar.className = 'bi bi-trash';
+        botaoEditar.appendChild(iEditar);
+        botaoApagar.appendChild(iApagar);
+        celAcoes.appendChild(botaoEditar);
+        celAcoes.appendChild(botaoApagar);
+
 }
 
 checkStreamerStatus();

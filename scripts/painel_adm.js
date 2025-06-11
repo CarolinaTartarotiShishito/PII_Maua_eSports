@@ -170,7 +170,7 @@ function inicializarGerenciamentoJogos() {
 
         const endpointJogos = "/jogos";
         const urlCompletaJogos = `${urlBase}${endpointJogos}`;
-        await axios.post(urlCompletaJogos, )
+        axios.post(urlCompletaJogos, )
         return true;
     }
 
