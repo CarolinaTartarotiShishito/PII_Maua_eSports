@@ -241,6 +241,7 @@ mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongod
 // Exemplo de rota para criar um usuário
 app.post('/usuarios', async (req, res) => {
     try {
+        console.log(req.body)
         const novoUsuario = new User(req.body);
         await novoUsuario.save();
         res.status(201).json(novoUsuario);

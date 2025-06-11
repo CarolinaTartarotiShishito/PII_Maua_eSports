@@ -136,7 +136,7 @@ async function novoUsuario() {
         exibeAlerta(".alert-membros", "Usuário adicionado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
     }
     catch (error) {
-        console.log(error);
+        exibeAlerta(".alert-membros", "Falha ao inserir novo usuário! Verifique se os dados que você inseriu não pertence a um usuário existente!", ['show', 'alert-danger'], ['d-none'], 4000);
     }
 }
 
@@ -209,7 +209,7 @@ async function prepararAbaMembrosCap(){
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
     let membros = await pegaMembros();
-    membros = membros.filter(membro => membro.Time === time);
+    membros = membros.filter(membro => membro.Time === "EA SPORTS FC™ 25");
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
@@ -278,6 +278,9 @@ async function atualizarMembros() {
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
     let membros = await pegaMembros();
+    if(!localStorage.getItem("cargo").includes("Administrador")){
+        membros = membros.filter(membro => membro.Time === "EA SPORTS FC™ 25");
+    }
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela, true);
     }
@@ -559,11 +562,11 @@ function pegaInfosTreino(treino, modalidade){
     return modelo;
 }
 
-async function atualizarTreinos(modalidadeId, treinos){
+async function salvarTreinosAPI(modalidadeId, treinos){
     
     const dados = {
         _id: modalidadeId,
-        ScheduledTrainings: scheduledTrainings
+        ScheduledTrainings: treinos
     };
 }
 
@@ -571,7 +574,7 @@ async function atualizarTreinos(modalidadeId, treinos){
 function modalAdicionarTreino(){
     limparModalTreino();
     const divTitulo = document.querySelector('#modalTreinoLabel')
-    const btnSalvar = document.querySelector('#salvarMembro');
+    const btnSalvar = document.querySelector('#salvarTreino');
     divTitulo.innerHTML = "Adicionar Membro";
     btnSalvar.onclick = async () => {
         await novoUsuario();
