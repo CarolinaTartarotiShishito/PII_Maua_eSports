@@ -21,4 +21,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     let horas = await calculoHoras(dados.IdDiscord);
     divHoras.innerHTML = horas || "Não há horas registradas";
     
+    // Carregar os horários de treino
+    carregarTreinosDaEquipe(false) 
 })
