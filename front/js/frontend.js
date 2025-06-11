@@ -99,10 +99,12 @@ function pegarInfosModal(){
             };
             return modelo;
         } else{
-            alert(`O e-mail deve pertencer ao domínio do Instituto Mauá de Tecnologia ("@maua.br)!`);
+            exibeAlerta(".alert-membros", `O e-mail deve pertencer ao domínio do Instituto Mauá de Tecnologia ("@maua.br)!`, 
+                ['show', 'alert-danger'], ['d-none'], 4000);
         }
     } else {
-        alert("Preencha todos os campos obrigatórios!");
+        exibeAlerta(".alert-membros", "Preencha todos os campos obrigatórios!", 
+                ['show', 'alert-danger'], ['d-none'], 4000);
     }
 }
 
@@ -113,6 +115,7 @@ async function novoUsuario() {
         const urlCompletaUsuarios = `${protocolo}${baseURL}${novoUsuarioEndpoint}`;
         let modelo = pegarInfosModal();
         await axios.post(urlCompletaUsuarios, modelo)
+        exibeAlerta(".alert-membros", "Usuário adicionado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
     }
     catch (error) {
         console.log(error);
@@ -177,6 +180,7 @@ async function pegaMembros(){
 // função para exibir um membro na aba_membros.html
 async function exibeMembro(membro, corpoTabela){
     let linha = corpoTabela.insertRow(0);
+    linha.className = 'member-card';
     let celCargo = linha.insertCell(0);
     let celEmail = linha.insertCell(1);
     let celNome = linha.insertCell(2);
@@ -237,6 +241,7 @@ async function atualizarMembros() {
 }
 
 function modalAdicionarMembro(){
+    limparModalMembro();
     const divTitulo = document.querySelector('#modalMembroLabel')
     const btnSalvar = document.querySelector('#salvarMembro');
     divTitulo.innerHTML = "Adicionar Membro";

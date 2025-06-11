@@ -5,20 +5,23 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 const mongoose = require('mongoose');
-const User = require('./models/user'); // Importe o model
 const fetch = require('node-fetch');
+const multer = require('multer');
+const jwt = require('jsonwebtoken');
 // caminho para a API oficial:
 // const urlAPI = 'https://API-Esports.lcstuber.net/';
 // caminho para a API de testes:
 const urlAPITeste = 'http://localhost:5000/';
 const modalidadesEndpoint = 'modality/';
-const treinosEndpoint = 'treinos';
+const treinosEndpoint = 'trains/';
 const access_token = 'frontendmauaesports';
-const jwt = require('jsonwebtoken');
+const User = require('./models/user');
+const Jogo = require('./models/jogo');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'front')));
+const upload = multer()
 
 let eventos = [];
 let jogos = [];
@@ -83,7 +86,7 @@ app.get('/modalidades', async (req, res) => {
 });
 
 app.get('/treinos', async (req, res) => {
-  const urlTreinos = `${urlAPITeste}trains/all`;
+  const urlTreinos = `${urlAPITeste}${treinosEndpoint}all`;
   const response = await fetch(urlTreinos, {
     method: 'GET',
     headers: {
@@ -315,6 +318,27 @@ app.post('/editarUsuario', async (req, res) => {
     res.status(201).json();
   } catch (error) {
         res.status(400).json({erro: error.message });
+  }
+});
+
+app.post('/jogos', async (req, res) => {
+  try {
+    const { nome, descricao, imagem } = req.body;
+
+    if (!nome || !descricao) {
+      return res.status(400).json({ error: 'Nome e descrição são obrigatórios!' });
+    }
+    const novoJogo = new Jogo({
+      nome,
+      descricao,
+      imagem: imagem || null
+    });
+
+    await novoJogo.save();
+
+    res.status(201).json({ message: 'Jogo salvo com sucesso!', jogo: novoJogo });
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao salvar jogo: ' + error.message });
   }
 });
 
