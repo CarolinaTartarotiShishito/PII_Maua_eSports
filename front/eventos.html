@@ -30,17 +30,19 @@
                 </div>
                 <div class="col-12 social-bar rounded-pill d-flex align-items-center px-3 py-2 mt-3 mt-md-0">
                     <strong class="me-3 text-white">Nossas redes</strong>
-                    <a href="https://www.instagram.com/esportsmaua?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><img src="imagens/InstaBlackIcon.png" alt="Instagram" class="imagemRede1"/></a>
-                    <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png" alt="Twitter"></a>
-                    <a href="https://discord.gg/Av5EA6QfdR"><img src="imagens/DiscordIcon.png" alt="Discord" class="imagemRede2"/></a>
-                    <a href="https://www.youtube.com/mauaesports"><img src="imagens/YoutubeBlackIcon.png" alt="YouTube" class="imagemRede1"/></a>
-                    <a href="https://twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png" alt="Twitch" class="imagemRede1"/></a>
-                    <a href="mailto:esports@maua.br"><img src="imagens/EmailIcon2.png" alt="Email" class="imagemRede2"/></a> 
+                    <div class="icones">
+                        <a href="https://www.instagram.com/esportsmaua?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><img src="imagens/InstaBlackIcon.png" alt="Instagram" class="imagemRede1"/></a>
+                        <a href="https://x.com/mauaesports?lang=en"><img src="imagens/TwitterBlackIcon.png" alt="Twitter"></a>
+                        <a href="https://discord.gg/Av5EA6QfdR"><img src="imagens/DiscordIcon.png" alt="Discord" class="imagemRede2"/></a>
+                        <a href="https://www.youtube.com/mauaesports"><img src="imagens/YoutubeBlackIcon.png" alt="YouTube" class="imagemRede1"/></a>
+                        <a href="https://twitch.tv/mauaesports"><img src="imagens/TwitchBlackIcon.png" alt="Twitch" class="imagemRede1"/></a>
+                        <a href="mailto:esports@maua.br"><img src="imagens/EmailIcon2.png" alt="Email" class="imagemRede2"/></a> 
+                    </div>
                 </div>
             </div>
 
             <h3 class="mt-4">Últimas publicações</h3>
-            <div class="instagram-posts d-flex gap-3 flex-wrap mt-2 mb-4">
+            <div id="instagram-posts" class="instagram-posts d-flex gap-3 flex-wrap mt-2 mb-4">
                 <div class="instagram-post skeleton"></div>
                 <div class="instagram-post skeleton"></div>
                 <div class="instagram-post skeleton"></div>
@@ -78,6 +80,30 @@
     <script src="/scripts/eventos.js"></script>
     <script src="/scripts/layout.js"></script>
     <script src="js/frontend.js"></script>
+    <script>
+      const API_URL = 'http://localhost:3000/avisos';
+      const listaAvisos = document.getElementById('listaAvisos');
+
+      // Função para carregar avisos
+      async function carregarAvisos() {
+        try {
+          const response = await fetch(API_URL);
+          const avisos = await response.json();
+          listaAvisos.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+          avisos.forEach(aviso => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `<strong>${aviso.nome}</strong>: ${aviso.descricao}`;
+            listaAvisos.appendChild(li);
+          });
+        } catch (error) {
+          console.error('Erro ao carregar avisos:', error);
+        }
+      }
+
+      // Carrega os avisos ao iniciar
+      carregarAvisos();
+    </script>
 </body>
 
 </html>

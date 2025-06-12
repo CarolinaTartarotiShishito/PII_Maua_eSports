@@ -90,6 +90,11 @@ h3 {
   animation: loading 1.2s infinite linear;
 }
 
+.icones{
+  display: flex;
+  gap: 10px;
+}
+
 @keyframes loading {
   to {
     background-position-x: -200%;
