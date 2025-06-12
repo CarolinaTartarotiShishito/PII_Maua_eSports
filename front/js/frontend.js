@@ -187,9 +187,16 @@ async function prepararAbaMembros(idSeletor) {
             membrosFiltrados = membrosFiltrados.filter(membro => membro.Time === timeSelecionado);
         }
         corpoTabela.innerHTML = '';
-        for (const membro of membrosFiltrados) {
-            await exibeMembro(membro, corpoTabela, localStorage.getItem("email"));
+        const div = document.querySelector("#jogadores-nao-encontrados");
+        if(membrosFiltrados.length === 0){
+            div.innerHTML = "Nenhum membro encontrado.";
+        } else{
+            for (const membro of membrosFiltrados) {
+                await exibeMembro(membro, corpoTabela, localStorage.getItem("email"));
+                div.innerHTML = "";
+            }    
         }
+        
     }
 
     await aplicarFiltros();
@@ -367,7 +374,7 @@ async function calculoHoras(idDiscord) {
         const treinosEndpoint = "/treinos";
         const urlCompletaTreinos = `${protocolo}${baseURL}${treinosEndpoint}`;
         let treinos = (await axios.get(urlCompletaTreinos)).data;
-        let totalHoras = 0;
+        let totalMinutos = 0; // Agora vamos trabalhar com minutos
         let usuarioEncontrado = false;
 
         treinos.forEach(treino => {
@@ -378,16 +385,22 @@ async function calculoHoras(idDiscord) {
                 entradaJogador.forEach(entrada => {
                     if(entrada.EntranceTimestamp > 0 && entrada.ExitTimestamp > 0){
                         let difMs = entrada.ExitTimestamp - entrada.EntranceTimestamp;
-                        let difHoras = difMs / (1000 * 60 * 60);
-                        totalHoras += difHoras;    
+                        let difMinutos = difMs / (1000 * 60); // Convertendo para minutos
+                        totalMinutos += difMinutos;    
                     }    
                 });    
-            };
+            }
         });
+
         if (!usuarioEncontrado) {
-            return 0;
-        };
-        return totalHoras;    
+            return "";
+        }
+        
+        // Formatando o resultado
+        const horas = Math.floor(totalMinutos / 60);
+        const minutos = Math.round(totalMinutos % 60);
+        
+        return `${horas}h e ${minutos}min`;    
     }
     catch (error) {
         console.log("Não foi possível obter a quantidade de horas do usuário");

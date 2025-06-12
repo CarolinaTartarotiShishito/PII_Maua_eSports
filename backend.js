@@ -18,6 +18,7 @@ const access_token = 'frontendmauaesports';
 const User = require('./models/user');
 const Jogo = require('./models/jogo');
 const Sobre = require('./models/sobre');
+const Aviso = require('./models/aviso');
 const { url } = require('inspector');
 
 // Middleware
@@ -41,54 +42,6 @@ const storage = multer.diskStorage({
 const upload = multer({ 
   storage: storage, // Usa o diskStorage configurado
   limits: { fileSize: 10 * 1024 * 1024 } 
-});
-
-let eventos = [];
-
-let avisos = [];
-
-// EVENTOS
-// Listar eventos
-app.get('/eventos', (req, res) => {
-  res.json(eventos);
-});
-
-// Adicionar evento
-app.post('/eventos', (req, res) => {
-  const { nome, descricao } = req.body;
-  if (nome && descricao) {
-    const novoEvento = { _id: Date.now().toString(), nome, descricao };
-    eventos.push(novoEvento);
-    res.status(201).json(novoEvento);
-  } else {
-    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
-  }
-});
-
-// Editar evento
-app.put('/eventos/:id', (req, res) => {
-  const { id } = req.params;
-  const { nome, descricao } = req.body;
-  const evento = eventos.find(ev => ev._id === id);
-  if (evento) {
-    evento.nome = nome;
-    evento.descricao = descricao;
-    res.json(evento);
-  } else {
-    res.status(404).json({ error: 'Evento não encontrado' });
-  }
-});
-
-// Excluir evento
-app.delete('/eventos/:id', (req, res) => {
-  const { id } = req.params;
-  const index = eventos.findIndex(ev => ev._id === id);
-  if (index !== -1) {
-    eventos.splice(index, 1);
-    res.json({ message: 'Evento excluído com sucesso' });
-  } else {
-    res.status(404).json({ error: 'Evento não encontrado' });
-  }
 });
 
 // Código para pegar as modalidades da API deles (usar de referência)
@@ -163,95 +116,42 @@ app.delete('/:id', (req, res) => {
 
 // AVISOS
 // Listar avisos
-app.get('/avisos', (req, res) => {
+app.get('/avisos', async (req, res) => {
+  let avisos = await Aviso.find();
   res.json(avisos);
 });
 
 // Adicionar aviso
-app.post('/avisos', (req, res) => {
-  const { nome, descricao } = req.body;
-  if (nome && descricao) {
-    const novoAviso = { _id: Date.now().toString(), nome, descricao };
-    avisos.push(novoAviso);
+app.post('/avisos', async (req, res) => {
+  try{
+    const novoAviso = new Aviso({ nome: req.body.nome, descricao: req.body.descricao});
+    novoAviso.save();
     res.status(201).json(novoAviso);
-  } else {
+  } catch (error) {
     res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
   }
 });
 
 // Editar aviso
-app.put('/avisos/:id', (req, res) => {
-  const { id } = req.params;
-  const { nome, descricao } = req.body;
-  const aviso = avisos.find(av => av._id === id);
-  if (aviso) {
-    aviso.nome = nome;
-    aviso.descricao = descricao;
-    res.json(aviso);
-  } else {
-    res.status(404).json({ error: 'Aviso não encontrado' });
+app.put('/avisos', async (req, res) => {
+  try {
+    const dadosAtualizados = req.body;
+    await Aviso.updateOne({ _id: req.body.id }, { $set: dadosAtualizados })
+    res.status(201).json();
+  }
+  catch (error) {
+    res.status(400).json({ erro: error.message });
   }
 });
 
 // Excluir aviso
-app.delete('/avisos/:id', (req, res) => {
-  const { id } = req.params;
-  const index = avisos.findIndex(av => av._id === id);
-  if (index !== -1) {
-    avisos.splice(index, 1);
-    res.json({ message: 'Aviso excluído com sucesso' });
-  } else {
-    res.status(404).json({ error: 'Aviso não encontrado' });
+app.delete('/avisos', async (req, res) => {
+  try {
+    await Aviso.deleteOne({ _id: req.body.email });
+    res.status(200).json();
+  } catch (err) {
+    console.error('Erro ao deletar aviso:', err);
   }
-});
-
-// Endpoint para jogadores por modalidade
-app.get('/jogadores-por-modalidade', (req, res) => {
-  const trainsPath = path.join(__dirname, 'defaultTrains.json');
-  const modalitiesPath = path.join(__dirname, 'defaultModalities.json');
-
-  // Lê ambos os arquivos
-  fs.readFile(trainsPath, 'utf8', (err, trainsData) => {
-    if (err) return res.status(500).json({ error: 'Erro ao ler defaultTrains.json' });
-    fs.readFile(modalitiesPath, 'utf8', (err2, modalitiesData) => {
-      if (err2) return res.status(500).json({ error: 'Erro ao ler defaultModalities.json' });
-
-      let trains = [];
-      let modalities = {};
-      try {
-        trains = JSON.parse(trainsData);
-        modalities = JSON.parse(modalitiesData);
-      } catch (e) {
-        return res.status(500).json({ error: 'Erro ao processar JSON' });
-      }
-
-      // Agrupa jogadores por modalidade
-      const resultado = {};
-      trains.forEach(train => {
-        const modalidadeId = train.ModalityId;
-        const modalidadeNome = modalities[modalidadeId]?.Name || modalidadeId;
-        if (!resultado[modalidadeId]) {
-          resultado[modalidadeId] = {
-            modalidadeId,
-            modalidadeNome,
-            jogadores: new Set()
-          };
-        }
-        train.AttendedPlayers.forEach(player => {
-          resultado[modalidadeId].jogadores.add(player.PlayerId);
-        });
-      });
-
-      // Converte Set para Array e prepara resposta
-      const resposta = Object.values(resultado).map(item => ({
-        modalidadeId: item.modalidadeId,
-        modalidadeNome: item.modalidadeNome,
-        jogadores: Array.from(item.jogadores)
-      }));
-
-      res.json(resposta);
-    });
-  });
 });
 
 // Conecte ao MongoDB
@@ -265,7 +165,6 @@ mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongod
 // Exemplo de rota para criar um usuário
 app.post('/usuarios', async (req, res) => {
   try {
-    console.log(req.body)
     const novoUsuario = new User(req.body);
     await novoUsuario.save();
     res.status(201).json(novoUsuario);
