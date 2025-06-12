@@ -124,29 +124,34 @@ footer {
 }
 
 /* Celulares e telas muito pequenas */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .card-custom {
-        flex-wrap: wrap;
-        flex-direction: column;
-        padding: 10px;
+        flex-direction: column !important; /* Empilha verticalmente */
+        padding: 15px !important;
+        
     }
 
-    .game-image-e,
+    .nome-do-jogo{
+        text-align: center;
+    }
+
+    .texo-explicativo{
+        text-align: center;
+    }
+    
+    .game-image-e, 
     .game-image-d {
-        width: 100%;
-        max-width: 240px;
-        margin: 15px auto;
+        order: 0 !important;
+        max-width: 100% !important;
+        margin: 0 auto 20px !important;
+        border-radius: 10px 10px 0 0 !important;
+    
     }
-
+    
     .Card-de-jogos-e,
     .Card-de-jogos-d {
-        margin: 1rem 0.5rem;
-        font-size: 14px;
-        /* Ajusta o tamanho da fonte */
-    }
-
-    .nome-do-jogo {
-        font-size: 18px;
-        /* Título menor para celular */
+        margin: 0 !important;
+        padding: 0 15px 15px !important;
+        width: 100% !important;
     }
 }
