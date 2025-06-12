@@ -51,23 +51,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!container) return;
 
     container.innerHTML = jogos.length === 0
-      ? '<p class="text-center">Nenhum jogo disponível</p>'
-      : jogos.map((jogo, index) => `
-          <div class="card card-custom my-4">
-            <div class="row g-0">
-              <div class="col-md-6 ${index % 2 === 0 ? 'order-md-2' : ''}">
-                <img src="${jogo.imagemUrl || 'imagens/placeholder.png'}" 
-                     class="img-fluid rounded-start" alt="${jogo.nome}">
-              </div>
-              <div class="col-md-6 d-flex align-items-center ${index % 2 === 0 ? 'order-md-1' : ''}">
-                <div class="card-body text-center p-4">
-                  <h3 class="card-title">${jogo.nome}</h3>
-                  <p class="card-text">${jogo.descricao}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        `).join('');
+            ? '<p class="text-center">Nenhum jogo disponível no momento.</p>'
+            : jogos.map((jogo, index) => {
+                const imagemUrl = jogo.imagemUrl || 'imagens/placeholder.png';
+                const isEven = index % 2 === 0;
+
+                return `
+                <div class="card card-custom d-flex flex-row justify-content-between">
+                    ${isEven ? `
+                        <img src="${jogo.imagemUrl}" class="game-image-e order-2 order-sm-1" alt="Card do jogo ${jogo.nome}">
+                        <div class="Card-de-jogos-e text-center text-sm-start order-1 order-sm-2">
+                            <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                            <p class="texo-explicativo">${jogo.descricao}</p>
+                        </div>
+                    ` : `
+                        <div class="Card-de-jogos-d text-center text-sm-end justify-content-start align-items-start order-1 order-sm-1">
+                            <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                            <p class="texo-explicativo">${jogo.descricao}</p>
+                        </div>
+                        <img src="${jogo.imagemUrl}" class="game-image-d order-2 order-sm-2" alt="Card do jogo ${jogo.nome}">
+                    `}
+                </div>`;
+            }).join('');
   }
 
   // Carrega e renderiza
