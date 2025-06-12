@@ -17,6 +17,7 @@ const treinosEndpoint = 'trains/';
 const access_token = 'frontendmauaesports';
 const User = require('./models/user');
 const Jogo = require('./models/jogo');
+const Sobre = require('./models/sobre');
 const { url } = require('inspector');
 
 app.use(cors());
@@ -402,6 +403,53 @@ app.patch('/treinos', async (req, res) => {
     console.error("Erro ao dar patch em modalidades: ", error);
   }
 })
+
+// Criar "sobre"
+app.post('/sobre', async (req, res) => {
+  try {
+    const sobre = new Sobre({ conteudo: req.body.conteudo });
+    await sobre.save();
+    res.status(201).json(sobre);
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
+
+// Editar "sobre"
+app.put('/sobre/:id', async (req, res) => {
+  try {
+    const sobre = await Sobre.findByIdAndUpdate(
+      req.params.id,
+      { conteudo: req.body.conteudo },
+      { new: true }
+    );
+    if (!sobre) return res.status(404).json({ erro: 'Sobre não encontrado' });
+    res.json(sobre);
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
+
+// Excluir "sobre"
+app.delete('/sobre/:id', async (req, res) => {
+  try {
+    const sobre = await Sobre.findByIdAndDelete(req.params.id);
+    if (!sobre) return res.status(404).json({ erro: 'Sobre não encontrado' });
+    res.json({ mensagem: 'Sobre excluído com sucesso' });
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
+
+// Buscar todos os "sobre"
+app.get('/sobre', async (req, res) => {
+  try {
+    const sobre = await Sobre.find();
+    res.json(sobre);
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
+});
 
 // Inicie o servidor
 app.listen(3000, () => {

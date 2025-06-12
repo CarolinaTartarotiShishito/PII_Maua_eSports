@@ -151,6 +151,19 @@
         </form>
         <ul id="lista-avisos" class="list-group"></ul>
       </div>
+      <!-- Container Sobre -->
+      <div id="sobre-container" style="display:none;">
+        <h3>Sobre</h3>
+        <form id="form-sobre" class="mb-3">
+          <input type="hidden" id="sobre-id">
+          <div class="mb-2">
+            <textarea id="sobre-conteudo" class="form-control" placeholder="Conteúdo do Sobre" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary" id="cancelar-edicao-sobre" style="display:none;">Cancelar</button>
+        </form>
+        <ul id="lista-sobre" class="list-group"></ul>
+      </div>
     </div>
 
     <!-- Rodapé (componente) -->
@@ -271,7 +284,111 @@
 
     // Carrega os avisos ao iniciar
     carregarAvisosPainel();
-  </script>
+</script>
+<script>
+  // CRUD Sobre
+const SOBRE_API_URL = 'http://localhost:3000/sobre';
+const listaSobre = document.getElementById('lista-sobre');
+const formSobre = document.getElementById('form-sobre');
+const sobreIdInput = document.getElementById('sobre-id');
+const sobreConteudoInput = document.getElementById('sobre-conteudo');
+const cancelarEdicaoSobreBtn = document.getElementById('cancelar-edicao-sobre');
+
+// Carregar "Sobre"
+async function carregarSobrePainel() {
+  try {
+    const response = await fetch(SOBRE_API_URL);
+    const sobreList = await response.json();
+    listaSobre.innerHTML = '';
+    sobreList.forEach(sobre => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.innerHTML = `
+        <span>${sobre.conteudo}</span>
+        <span>
+          <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoSobre('${sobre._id}', \`${sobre.conteudo.replace(/`/g, '\\`')}\`)">Editar</button>
+          <button class="btn btn-sm btn-danger" onclick="excluirSobre('${sobre._id}')">Excluir</button>
+        </span>
+      `;
+      listaSobre.appendChild(li);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar sobre:', error);
+  }
+}
+
+// Adicionar "Sobre"
+async function adicionarSobre(conteudo) {
+  try {
+    await fetch(SOBRE_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conteudo })
+    });
+    carregarSobrePainel();
+  } catch (error) {
+    console.error('Erro ao adicionar sobre:', error);
+  }
+}
+
+// Editar "Sobre"
+async function editarSobre(id, conteudo) {
+  try {
+    await fetch(`${SOBRE_API_URL}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ conteudo })
+    });
+    carregarSobrePainel();
+  } catch (error) {
+    console.error('Erro ao editar sobre:', error);
+  }
+}
+
+// Excluir "Sobre"
+async function excluirSobre(id) {
+  if (confirm('Tem certeza que deseja excluir este sobre?')) {
+    try {
+      await fetch(`${SOBRE_API_URL}/${id}`, { method: 'DELETE' });
+      carregarSobrePainel();
+    } catch (error) {
+      console.error('Erro ao excluir sobre:', error);
+    }
+  }
+}
+
+// Prepara o formulário para edição
+window.prepararEdicaoSobre = function (id, conteudo) {
+  sobreIdInput.value = id;
+  sobreConteudoInput.value = conteudo;
+  cancelarEdicaoSobreBtn.style.display = 'inline-block';
+};
+
+// Submissão do formulário (adiciona ou edita)
+formSobre.onsubmit = async function (e) {
+  e.preventDefault();
+  const id = sobreIdInput.value;
+  const conteudo = sobreConteudoInput.value;
+  if (id) {
+    await editarSobre(id, conteudo);
+  } else {
+    await adicionarSobre(conteudo);
+  }
+  formSobre.reset();
+  sobreIdInput.value = '';
+  cancelarEdicaoSobreBtn.style.display = 'none';
+};
+
+// Cancela a edição
+cancelarEdicaoSobreBtn.onclick = function () {
+  formSobre.reset();
+  sobreIdInput.value = '';
+  cancelarEdicaoSobreBtn.style.display = 'none';
+};
+
+// Carrega o "Sobre" ao iniciar
+carregarSobrePainel();
+</script>
 </body>
 
 </html>
