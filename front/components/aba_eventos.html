@@ -13,11 +13,49 @@
   <hr class="my-4" />
 
   <h5 class="fw-bold mb-2">Avisos</h5>
-  <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded">
+  <!-- <div class="d-flex justify-content-between align-items-center bg-dark text-white p-3 rounded">
     <span>Numero de avisos abertos: <span id="contador-avisos">0</span></span>
-    <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalMembro" onclick="modalAdicionarMembro()">
+    <button class="btn btn-primary rounded-3" id="btn-adicionar-aviso" data-bs-toggle="modal" data-bs-target="#modalCriaAviso">
     <i class="bi bi-plus"></i>
     Adicionar Aviso
   </button>
+  </div> -->
+
+  <!-- Modal para criação de Aviso -->
+  <div class="modal fade" id="modalCriaAviso" tabindex="-1" aria-labelledby="modalCriaAvisoLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content modal-escuro">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modalCriaAvisoLabel">Editar Aviso</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                      aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="evento-nome" class="form-label">Nome do Evento</label>
+                    <input type="text" id="textoNomeAviso" class="form-control" placeholder="Ex: Campeonato de LoL" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="evento-descricao" class="form-label">Descrição do Evento</label>
+                    <textarea id="textoDescricaoAviso" class="form-control" rows="3" placeholder="Descreva brevemente o evento, datas, etc." required></textarea>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-success" id="salvarAviso" data-bs-dismiss="modal" onclick="editarAviso()">Salvar</button>
+              </div>
+          </div>
+      </div>
   </div>
+
+  <!-- Caixa de descrição com texto editável -->
+  <div class="descricao-box p-4 rounded mb-5 mt-3">
+      <p id="aviso-nome"></p>
+      <p id="aviso-texto"></p>
+      <button class="btn-editar" id="btn-editar-aviso" aria-label="Editar texto" data-bs-toggle="modal" data-bs-target="#modalCriaAviso">
+          <i class="bi bi-pencil"></i>
+      </button>
+  </div>
+  <div class="alert d-none alert-dismissible fade alert-aviso mt-5"></div>
 </div>

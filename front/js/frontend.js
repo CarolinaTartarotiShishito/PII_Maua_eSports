@@ -734,19 +734,57 @@ async function exibeSobre(idSobre) {
         sobre.innerHTML = "Não existe nenhuma descrição de quem somos";
     }
 }
-// async function exibeTimes(idSeletor){
-//     const seletor = document.querySelector(idSeletor);
-//     const modalidadesEndpoint = '/modalidades';
-//     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
-//     const response = (await axios.get(urlCompleta)).data;
-//     let times = Object.values(response);
-//     for(let time of times){
-//         const opcao = document.createElement('option');
-//         opcao.innerHTML = time.Name;
-//         opcao.value = time.Name;
-//         seletor.appendChild(opcao);
-//     };
-// }
+// adicionar e exibir novo evento
+async function novoAviso() {
+    try {
+        const novoAvisoEndpoint = "/avisos";
+        const urlCompletaAviso = `${protocolo}${baseURL}${novoAvisoEndpoint}`;
+        const nomeAviso = (document.querySelector('#textoNomeAviso')).value;
+        const descricaoAviso = (document.querySelector('#textoDescricaoAviso')).value;
+        console.log(nomeAviso);
+        await axios.post(urlCompletaAviso, {nome: nomeAviso, descricao: descricaoAviso});
+        exibeAlerta(".alert-aviso", "Aviso adicionado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);     
+        await exibeAviso('#aviso-nome', '#aviso-texto');
+    }
+    catch (error) {
+        exibeAlerta(".alert-aviso", "Falha ao adicionar aviso! Verifique se os campos estão preenchidos!", ['show', 'alert-danger'], ['d-none'], 4000);
+    }
+}
+
+async function exibeAviso(idTitulo, idAviso) {
+    const avisoTitulo = (document.querySelector(idTitulo));
+    const aviso = (document.querySelector(idAviso));
+
+    const novoAvisoEndpoint = "/avisos";
+    const urlCompletaAviso = `${protocolo}${baseURL}${novoAvisoEndpoint}`;
+    const response = (await axios.get(urlCompletaAviso)).data;
+    const avisos = response[0];
+    console.log(avisos);
+
+    aviso.innerHTML = avisos.descricao;
+    avisoTitulo.innerHTML = avisos.nome;
+}
+
+async function editarAviso() {
+    try {
+        const novoAvisoEndpoint = "/editarAvisos";
+        const urlCompletaAviso = `${protocolo}${baseURL}${novoAvisoEndpoint}`;
+        const nomeAviso = (document.querySelector('#textoNomeAviso')).value;
+        const descricaoAviso = (document.querySelector('#textoDescricaoAviso')).value;
+        const modelo = {nome: nomeAviso, descricao: descricaoAviso};
+        console.log(modelo);
+        await axios.post(urlCompletaAviso, modelo);
+        exibeAlerta(".alert-quem-somos", "Texto atualizado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
+        await exibeAviso('#aviso-nome', '#aviso-texto');
+        setTimeout(() => {
+            window.location.href = "painel_adm.html";
+        }, 1500);
+    }
+    catch (error) {
+        exibeAlerta(".alert-quem-somos", "Falha ao atualizar texto!", ['show', 'alert-danger'], ['d-none'], 4000);
+    }
+    
+}
 
 checkStreamerStatus();
 setInterval(checkStreamerStatus, 60000);

@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (nomeAba === "treinos") {
             prepararAbaTreinos('#filtro-times-select') //Essa funcao seria uma funcao para puxar os treinos existentes da equipe
         }
+        if (nomeAba === "eventos") {
+            inicializarEventos();
+        }
     }
 
     // Carrega o conteúdo inicial
@@ -101,6 +104,32 @@ document.addEventListener('DOMContentLoaded', function () {
             modalRede.hide();
             mostrarNotificacao('Rede social atualizada com sucesso!');
         });
+    }
+
+    // === CÓDIGO ORIGINAL DA ABA EVENTOS ===
+    async function inicializarEventos() {
+        // Criando um aviso
+        const btnAdicionarAviso = document.getElementById('btn-adicionar-aviso');
+        const modalAdicionarAviso = new bootstrap.Modal(document.getElementById('modalCriaAviso'));
+        // const textoQuemSomos = document.getElementById('quem-somos-texto');
+        // const modalQuemSomos = new bootstrap.Modal(document.getElementById('modalEditarQuemSomos'));
+        // const textareaQuemSomos = document.getElementById('textoQuemSomos');
+        // const btnSalvarQuemSomos = document.getElementById('salvarQuemSomos');
+        await exibeAviso('#aviso-nome', '#aviso-texto');
+
+        if (btnAdicionarAviso) {
+            btnAdicionarAviso.addEventListener('click', function () {
+                modalAdicionarAviso.show();
+            });
+
+            // btnSalvarQuemSomos.addEventListener('click', async function () {
+            //     // textoQuemSomos.innerText = textareaQuemSomos.value;
+            //     await novoSobre(); //chama função do frontend.js
+            //     modalQuemSomos.hide();
+            //     // mostrarNotificacao('Texto atualizado com sucesso!');
+            // });
+        }
+        // await exibeSobre('#quem-somos-texto');
     }
 
     // === FUNÇÃO DE NOTIFICAÇÃO ===

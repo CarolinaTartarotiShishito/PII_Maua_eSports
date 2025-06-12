@@ -115,7 +115,33 @@ async function excluirEvento(id) {
 }
 
 // === Inicialização ao carregar a página ===
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async function() {
   carregarPostsInstagram();
-  carregarAvisosEventos()
+  // carregarAvisosEventos()
+  // await prepararAviso();
+  await exibeAviso('#aviso-nome', '#aviso-texto');
 });
+
+// async function criarAviso() { 
+//   const 
+//   const btnEditarQuemSomos = document.getElementById('btn-editar-quem-somos');
+//   const textoQuemSomos = document.getElementById('quem-somos-texto');
+//   const modalQuemSomos = new bootstrap.Modal(document.getElementById('modalEditarQuemSomos'));
+//   const textareaQuemSomos = document.getElementById('textoQuemSomos');
+//   const btnSalvarQuemSomos = document.getElementById('salvarQuemSomos');
+
+//   if (btnEditarQuemSomos) {
+//       btnEditarQuemSomos.addEventListener('click', function () {
+//           textareaQuemSomos.value = textoQuemSomos.innerText;
+//           modalQuemSomos.show();
+//       });
+
+//       btnSalvarQuemSomos.addEventListener('click', async function () {
+//           // textoQuemSomos.innerText = textareaQuemSomos.value;
+//           await novoSobre(); //chama função do frontend.js
+//           modalQuemSomos.hide();
+//           // mostrarNotificacao('Texto atualizado com sucesso!');
+//       });
+//   }
+//   await exibeSobre('#quem-somos-texto');
+// }

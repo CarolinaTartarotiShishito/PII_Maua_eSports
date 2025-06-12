@@ -119,22 +119,7 @@
         </form>
         <ul id="lista-avisos" class="list-group"></ul>
       </div>
-      <!-- Container de Jogos
-      <div id="jogos-container" style="display:none;">
-        <h3>Jogos</h3>
-        <form id="form-jogo" class="mb-3">
-          <input type="hidden" id="jogo-id">
-          <div class="mb-2">
-            <input type="text" id="jogo-nome" class="form-control" placeholder="Nome do jogo" required>
-          </div>
-          <div class="mb-2">
-            <input type="text" id="jogo-descricao" class="form-control" placeholder="Descrição" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-          <button type="button" class="btn btn-secondary" id="cancelar-edicao-jogo" style="display:none;">Cancelar</button>
-        </form>
-        <ul id="lista-jogos" class="list-group"></ul>
-      </div> -->
+      
       <!-- Container de Avisos -->
       <div id="avisos-container" style="display:none;">
         <h3>Avisos</h3>
@@ -190,67 +175,67 @@
     const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
 
     // Função para carregar avisos
-    async function carregarAvisosPainel() {
-      try {
-        const response = await fetch(API_URL);
-        const avisos = await response.json();
-        listaAvisos.innerHTML = '';
-        avisos.forEach(aviso => {
-          const li = document.createElement('li');
-          li.className = 'list-group-item d-flex justify-content-between align-items-center';
-          li.innerHTML = `
-            <span><strong>${aviso.nome}</strong> - ${aviso.descricao}</span>
-            <span>
-              <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoAviso('${aviso._id}', '${aviso.nome.replace(/'/g, "\\'")}', '${aviso.descricao.replace(/'/g, "\\'")}')">Editar</button>
-              <button class="btn btn-sm btn-danger" onclick="excluirAviso('${aviso._id}')">Excluir</button>
-            </span>
-          `;
-          listaAvisos.appendChild(li);
-        });
-      } catch (error) {
-        console.error('Erro ao carregar avisos:', error);
-      }
-    }
+    // async function carregarAvisosPainel() {
+    //   try {
+    //     const response = await fetch(API_URL);
+    //     const avisos = await response.json();
+    //     listaAvisos.innerHTML = '';
+    //     avisos.forEach(aviso => {
+    //       const li = document.createElement('li');
+    //       li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    //       li.innerHTML = `
+    //         <span><strong>${aviso.nome}</strong> - ${aviso.descricao}</span>
+    //         <span>
+    //           <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoAviso('${aviso._id}', '${aviso.nome.replace(/'/g, "\\'")}', '${aviso.descricao.replace(/'/g, "\\'")}')">Editar</button>
+    //           <button class="btn btn-sm btn-danger" onclick="excluirAviso('${aviso._id}')">Excluir</button>
+    //         </span>
+    //       `;
+    //       listaAvisos.appendChild(li);
+    //     });
+    //   } catch (error) {
+    //     console.error('Erro ao carregar avisos:', error);
+    //   }
+    // }
 
-    // Função para adicionar um aviso
-    async function adicionarAviso(nome, descricao) {
-      try {
-        await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome, descricao })
-        });
-        carregarAvisosPainel();
-      } catch (error) {
-        console.error('Erro ao adicionar aviso:', error);
-      }
-    }
+    // // Função para adicionar um aviso
+    // async function adicionarAviso(nome, descricao) {
+    //   try {
+    //     await fetch(API_URL, {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ nome, descricao })
+    //     });
+    //     carregarAvisosPainel();
+    //   } catch (error) {
+    //     console.error('Erro ao adicionar aviso:', error);
+    //   }
+    // }
 
-    // Função para editar um aviso
-    async function editarAviso(id, nome, descricao) {
-      try {
-        await fetch(`${API_URL}/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nome, descricao })
-        });
-        carregarAvisosPainel();
-      } catch (error) {
-        console.error('Erro ao editar aviso:', error);
-      }
-    }
+    // // Função para editar um aviso
+    // async function editarAviso(id, nome, descricao) {
+    //   try {
+    //     await fetch(`${API_URL}/${id}`, {
+    //       method: 'PUT',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ nome, descricao })
+    //     });
+    //     carregarAvisosPainel();
+    //   } catch (error) {
+    //     console.error('Erro ao editar aviso:', error);
+    //   }
+    // }
 
-    // Função para excluir um aviso
-    async function excluirAviso(id) {
-      if (confirm('Tem certeza que deseja excluir este aviso?')) {
-        try {
-          await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-          carregarAvisosPainel();
-        } catch (error) {
-          console.error('Erro ao excluir aviso:', error);
-        }
-      }
-    }
+    // // Função para excluir um aviso
+    // async function excluirAviso(id) {
+    //   if (confirm('Tem certeza que deseja excluir este aviso?')) {
+    //     try {
+    //       await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    //       carregarAvisosPainel();
+    //     } catch (error) {
+    //       console.error('Erro ao excluir aviso:', error);
+    //     }
+    //   }
+    // }
 
     // Prepara o formulário para edição
     window.prepararEdicaoAviso = function (id, nome, descricao) {
