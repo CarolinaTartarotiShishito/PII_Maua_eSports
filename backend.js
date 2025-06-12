@@ -351,7 +351,8 @@ app.post('/editarUsuario', async (req, res) => {
 // Rotas
 app.get('/jogos', async (req, res) => {
   try {
-    const jogos = await Jogo.find().sort({ criadoEm: -1 });
+    const jogos = await Jogo.find().sort({ nome: 1 });
+    console.log(jogos)
     res.json(jogos);
   } catch (err) {
     res.status(500).json({ message: err.message });

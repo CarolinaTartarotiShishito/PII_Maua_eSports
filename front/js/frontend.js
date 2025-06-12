@@ -208,11 +208,16 @@ async function prepararAbaMembrosCap(){
     let tabelaMembros = document.querySelector('#lista-membros');
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
-    let membros = await pegaMembros();
-    membros = membros.filter(membro => membro.Time === time);
+    let membros = await buscarJogadores(time);
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
+}
+
+async function buscarJogadores(time){
+    let membros = await pegaMembros();
+    membros = membros.filter(membro => membro.Time === time);
+    return membros
 }
 
 async function pegaMembros(){
@@ -734,19 +739,6 @@ async function exibeSobre(idSobre) {
         sobre.innerHTML = "Não existe nenhuma descrição de quem somos";
     }
 }
-// async function exibeTimes(idSeletor){
-//     const seletor = document.querySelector(idSeletor);
-//     const modalidadesEndpoint = '/modalidades';
-//     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
-//     const response = (await axios.get(urlCompleta)).data;
-//     let times = Object.values(response);
-//     for(let time of times){
-//         const opcao = document.createElement('option');
-//         opcao.innerHTML = time.Name;
-//         opcao.value = time.Name;
-//         seletor.appendChild(opcao);
-//     };
-// }
 
 checkStreamerStatus();
 setInterval(checkStreamerStatus, 60000);
