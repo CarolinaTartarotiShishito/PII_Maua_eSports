@@ -503,11 +503,14 @@ async function prepararAbaTreinos(idSeletor) {
 
 async function carregarTreinosDaEquipe(editavel) {
     let time = (await buscarDadosUsuario()).Time;
-    const select = document.querySelector("#timesTreinoSelect");
-    const option = document.createElement("option");
-    option.innerHTML = time;
-    option.value = time;
-    select.appendChild(option);
+
+    if(window.location.pathname == '/painel_capitao.html'){
+        const select = document.querySelector("#timesTreinoSelect");
+        const option = document.createElement("option");
+        option.innerHTML = time;
+        option.value = time;
+        select.appendChild(option);    
+    }
     
     let tabelaTreinos = document.querySelector('#lista-treinos');
     let corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
