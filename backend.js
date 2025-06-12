@@ -20,10 +20,22 @@ const Jogo = require('./models/jogo');
 const Sobre = require('./models/sobre');
 const { url } = require('inspector');
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'front')));
-const upload = multer()
+app.use('/uploads', express.static('uploads'));
+
+// Configuração do Multer para upload de imagens
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage });
 
 let eventos = [];
 let jogos = [];
@@ -141,41 +153,6 @@ app.delete('/:id', (req, res) => {
     res.json({ message: 'Evento excluído com sucesso' });
   } else {
     res.status(404).json({ error: 'Evento não encontrado' });
-  }
-});
-
-// JOGOS
-app.get('/jogos', (req, res) => res.json(jogos));
-app.post('/jogos', (req, res) => {
-  const { nome, descricao } = req.body;
-  if (nome && descricao) {
-    const novoJogo = { _id: Date.now().toString(), nome, descricao };
-    jogos.push(novoJogo);
-    res.status(201).json(novoJogo);
-  } else {
-    res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
-  }
-});
-app.put('/jogos/:id', (req, res) => {
-  const { id } = req.params;
-  const { nome, descricao } = req.body;
-  const jogo = jogos.find(j => j._id === id);
-  if (jogo) {
-    jogo.nome = nome;
-    jogo.descricao = descricao;
-    res.json(jogo);
-  } else {
-    res.status(404).json({ error: 'Jogo não encontrado' });
-  }
-});
-app.delete('/jogos/:id', (req, res) => {
-  const { id } = req.params;
-  const index = jogos.findIndex(j => j._id === id);
-  if (index !== -1) {
-    jogos.splice(index, 1);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ error: 'Jogo não encontrado' });
   }
 });
 
@@ -366,26 +343,67 @@ app.post('/editarUsuario', async (req, res) => {
   }
 });
 
-app.post('/jogos', async (req, res) => {
+// Rotas
+app.get('/jogos', async (req, res) => {
   try {
-    const { nome, descricao, imagem } = req.body;
-
-    if (!nome || !descricao) {
-      return res.status(400).json({ error: 'Nome e descrição são obrigatórios!' });
-    }
-    const novoJogo = new Jogo({
-      nome,
-      descricao,
-      imagem: imagem || null
-    });
-
-    await novoJogo.save();
-
-    res.status(201).json({ message: 'Jogo salvo com sucesso!', jogo: novoJogo });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao salvar jogo: ' + error.message });
+    const jogos = await Jogo.find().sort({ criadoEm: -1 });
+    res.json(jogos);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
+
+app.post('/jogos', async (req, res) => {
+  const jogo = new Jogo({
+    nome: req.body.nome,
+    descricao: req.body.descricao,
+    imagemUrl: req.body.imagemUrl
+  });
+
+  try {
+    const novoJogo = await jogo.save();
+    res.status(201).json(novoJogo);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.patch('/jogos/:id', async (req, res) => {
+  try {
+    const jogo = await Jogo.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    res.json(jogo);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.delete('/jogos/:id', async (req, res) => {
+  try {
+    await Jogo.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Jogo deletado com sucesso' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Rota para upload de imagens
+app.post('/upload', upload.single('imagem'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo enviado' });
+    }
+    
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json({ url: imageUrl });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 app.patch('/treinos', async (req, res) => {
   try {
