@@ -154,7 +154,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 .botao-time.selecionado {
-    background: #f18f1e; /* destaque para botão selecionado */
+    background: #322BFF; /* destaque para botão selecionado */
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);

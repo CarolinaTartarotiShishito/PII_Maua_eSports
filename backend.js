@@ -118,6 +118,8 @@ app.delete('/:id', (req, res) => {
 // Listar avisos
 app.get('/avisos', async (req, res) => {
   let avisos = await Aviso.find();
+app.get('/avisos', async (req, res) => {
+  let avisos = await Aviso.find();
   res.json(avisos);
 });
 
@@ -128,6 +130,7 @@ app.post('/avisos', async (req, res) => {
     novoAviso.save();
     console.log(novoAviso);
     res.status(201).json(novoAviso);
+  } catch (error) {
   } catch (error) {
     res.status(400).json({ error: 'Nome e descrição são obrigatórios' });
   }

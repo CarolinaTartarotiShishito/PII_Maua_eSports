@@ -1,61 +1,68 @@
-const modalidades = {
-  "Counter Strike 2": [
-    { "id": "641246ec14a24f13c339bb1f", "time": "A" },
-    { "id": "641902c127cd51b2d0f2bd92", "time": "B" }
-  ],
-  "FIFA 25": [{ "id": "64408e2748ac52dbe2d7af62", "time": "A" }],
-  "Rocket League": [{ "id": "63641abd9328c1ab1e364c86", "time": "A" }],
-  "League of Legends": [
-    { "id": "6418aa5f9dec6ec29dc77be9", "time": "A" },
-    { "id": "64e16a08639c17d83824cfa8", "time": "B" }
-  ],
-  "TFT": [
-    { "id": "642cc2bf81b714e8f342ccfa", "time": "A" },
-    { "id": "64f62ee5257dd75e74425e0c", "time": "B" }
-  ],
-  "Rainbow Six": [
-    { "id": "6429eebd5ee71b5d45436aa3", "time": "A" },
-    { "id": "642b6ac5bc274fddaadf57e3", "time": "Academy" }
-  ],
-  "valorant": [
-    { "id": "6360944b04a823de3a359357", "time": "Feminina" },
-    { "id": "64124b4c14a24f13c339bb20", "time": "Misto Blue" },
-    { "id": "64124b9114a24f13c339bb21", "time": "Misto Black" }
-  ]
-};
-
 document.addEventListener("DOMContentLoaded", async function() {
-  fetch("http://localhost:5000/trains/all")
-    .then((res) => res.json())
-    .then((trains) => {
-      // renderModalidades(trains);
-    });
   const modalidades = await pegarModalidades();
-  // let modalidade = modalidades.filter(modalidade => modalidade.Name === time)[0];
-  console.log(modalidades);
-  renderModalidades(modalidades);
+  const jogos = await descobrirJogoPeloNomeDoTime(modalidades);
+  console.log(jogos)
+  renderJogos(jogos);
   // prepararAbaMembros('#modalidades-container');
 });
 
-async function pegarModalidades() {
-    const modalidadesEndpoint = "/modalidades";
-    const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
-    const response = (await axios.get(urlCompleta)).data;
-    modalidades = Object.values(response);
-    return modalidades;
+async function descobrirJogoPeloNomeDoTime(modalidades) {
+  let jogosOficiais = await carregarJogosJogadores();
+  const resultado = {};
+  
+  for (let jogo of jogosOficiais) {
+    resultado[jogo.nome] = new Set();
+  }
+  for (let modalidade of modalidades) {
+    const nomeTime = modalidade.Name.toLowerCase();
+    for (let jogo of jogosOficiais) {
+      const nomeJogo = jogo.nome.toLowerCase();
+      
+      if (nomeTime.includes(nomeJogo)) {
+        resultado[jogo.nome].add(modalidade.Name);
+      }
+    }
+  }
+  const resultadoFinal = {};
+  for (let jogo in resultado) {
+    resultadoFinal[jogo] = Array.from(resultado[jogo]);
+  }
+  
+  return resultadoFinal;
 }
 
-function renderModalidades(modalidades) {
+// Função para carregar jogos do servidor
+async function carregarJogosJogadores() {
+  try {
+      const response = await axios.get(`http://localhost:3000/jogos`);
+      jogos = response.data;
+      return jogos;
+  } catch (error) {
+      console.error('Erro ao carregar jogos:', error);
+      alert('Erro ao carregar jogos do servidor!');
+      return [];
+  }
+}
+
+// async function pegarModalidades() {
+//     const modalidadesEndpoint = "/modalidades";
+//     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
+//     const response = (await axios.get(urlCompleta)).data;
+//     modalidades = Object.values(response);
+//     return modalidades;
+// }
+
+function renderJogos(jogos) {
   const container = document.getElementById("modalidades-container");
   container.innerHTML = "";
 
-  for (const nomeJogo in modalidades) {
+  for (const nomeJogo in jogos) {
     const nomeJogoDiv = document.createElement("div");
     nomeJogoDiv.className = "nome-jogo mt-5 mb-2";
     nomeJogoDiv.innerHTML = `<h3 class="nome-do-jogo"><b>${nomeJogo}</b></h3>`;
     container.appendChild(nomeJogoDiv);
 
-    const times = modalidades[nomeJogo];
+    const times = jogos[nomeJogo];
 
     const botoesWrapper = document.createElement("div");
     botoesWrapper.className = "botoes-times mb-3";
@@ -68,39 +75,31 @@ function renderModalidades(modalidades) {
     times.forEach((time, index) => {
       const botao = document.createElement("button");
       botao.className = "botao-time btn btn-outline-primary me-2 mb-2";
-      botao.textContent = `Equipe ${time.time}`;
+      botao.textContent = `Equipe ${time}`;
 
-      botao.onclick = () => {
+      botao.onclick = async () => {
         botoesWrapper.querySelectorAll(".botao-time").forEach(btn => {
           btn.classList.remove("selecionado");
         });
         botao.classList.add("selecionado");
         cardsWrapper.innerHTML = "";
 
-        const treinosDoTime = trains.filter((t) => t.ModalityId == time.id);
-        const jogadores = [];
-
-        treinosDoTime.forEach((treino) => {
-          (treino.AttendedPlayers || []).forEach((player) => {
-            if (!jogadores.find((j) => j.PlayerId == player.PlayerId)) {
-              jogadores.push(player);
-            }
-          });
-        });
+        const jogadores = await buscarJogadores(time);
+        console.log(jogadores)
 
         if (jogadores.length === 0) {
           cardsWrapper.innerHTML = "<p>Nenhum jogador encontrado.</p>";
         } else {
           jogadores.forEach((jogador) => {
-            const iniciais = jogador.PlayerId.slice(-2).toUpperCase();
+            const iniciais = getIniciais(jogador.NomeCompleto);
             const card = document.createElement("div");
             card.className = "card-container";
             card.innerHTML = `
               <div class="titulo">Jogador</div>
               <div class="circle">${iniciais}</div>
               <div class="info-box">
-                <div class="nome">ID: ${jogador.PlayerId}</div>
-                <div class="funcao">Função desconhecida</div>
+                <div class="nome">Nickname: ${jogador.Nickname}</div>
+                <div class="funcao">Função: ${jogador.Cargo}</div>
               </div>
             `;
             cardsWrapper.appendChild(card);
@@ -257,23 +256,3 @@ function renderModalidades(modalidades) {
 //     }
 // }
 
-function descobrirJogoPeloNomeDoTime(nomeDoTime) {
-  const JOGOS_OFICIAIS = carregarJogosJogadores();
-  const nomeTimeMinusculo = nomeDoTime.toLowerCase();
-  const jogoEncontrado = JOGOS_OFICIAIS.find(jogo => 
-    nomeTimeMinusculo.includes(jogo.toLowerCase())
-  );
-  return jogoEncontrado || null;
-}
-// Função para carregar jogos do servidor
-  async function carregarJogosJogadores() {
-    try {
-        const response = await axios.get(`${urlBase}/jogos`);
-        jogos = response.data;
-        return jogos;
-    } catch (error) {
-        console.error('Erro ao carregar jogos:', error);
-        alert('Erro ao carregar jogos do servidor!');
-        return [];
-    }
-  }

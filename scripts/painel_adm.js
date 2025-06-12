@@ -335,9 +335,13 @@ function inicializarGerenciamentoJogos() {
                 const isEven = index % 2 === 0;
 
                 return `
-        <div class="card card-custom d-flex flex-row justify-content-between">
+
+    <div class="container-fluid">
+        <div class="row"            
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card card-custom text-center p-3 mb-4">
             ${isEven ? `
-                <img src="${imagemUrl}" class="game-image-e order-2 order-sm-1" alt="${jogo.nome}">
+                <img src="${imagemUrl}" class="game-image-e order-2 order-sm-1 img-fluid" alt="${jogo.nome}">
                 <div class="Card-de-jogos-e text-center text-sm-start order-1 order-sm-2">
                     <h3 class="nome-do-jogo">${jogo.nome}</h3>
                     <p class="texo-explicativo">${jogo.descricao}</p>
@@ -347,9 +351,13 @@ function inicializarGerenciamentoJogos() {
                     <h3 class="nome-do-jogo">${jogo.nome}</h3>
                     <p class="texo-explicativo">${jogo.descricao}</p>
                 </div>
-                <img src="${imagemUrl}" class="game-image-d order-2 order-sm-2" alt="${jogo.nome}">
+                <img src="${imagemUrl}" class="game-image-d order-2 order-sm-2 img-fluid" alt="${jogo.nome}">
             `}
-        </div>`;
+                </div>
+            </div>
+        </div>
+    </div>
+        `;
             }).join('');
     }
 

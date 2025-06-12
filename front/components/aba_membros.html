@@ -24,6 +24,8 @@
     </div>
   </div>
 
+  <p class="text-warning text-opacity-75 mb-3">Os membros cujo campo de horas está vazio não foram encontrados na API.</p>
+
   <table class="table table-dark table-bordered table-sm table-striped" id="lista-membros">
     <thead>
       <tr>
@@ -38,6 +40,10 @@
     <tbody>
     </tbody>
   </table>
+  <div class="justify-content-center align-items-center">
+    <p id="jogadores-nao-encontrados"></p>  
+  </div>
+  
   <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalMembro" onclick="modalAdicionarMembro()">
     <i class="bi bi-plus"></i>
     Adicionar Membro
