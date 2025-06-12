@@ -151,200 +151,205 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     window.addEventListener('resize', ajustarIconeToggle);
-    
+
 });
 
 function inicializarGerenciamentoJogos() {
-    // Variáveis privadas
-    let jogos = JSON.parse(localStorage.getItem('jogos')) || [];
-    const urlBase = 'http://localhost:3000'
+    const urlBase = 'http://localhost:3000';
+    let jogos = [];
 
-    // Funções internas (compartilhadas)
-    function salvarJogo(nome, descricao, imagem) {
+    // Função para carregar jogos do servidor
+    async function carregarJogos() {
+        try {
+            const response = await axios.get(`${urlBase}/jogos`);
+            jogos = response.data;
+            return jogos;
+        } catch (error) {
+            console.error('Erro ao carregar jogos:', error);
+            alert('Erro ao carregar jogos do servidor!');
+            return [];
+        }
+    }
+
+    // Salvar jogo no MongoDB
+    async function salvarJogo(nome, descricao, imagemUrl) {
         if (!nome || !descricao) {
             alert('Nome e descrição são obrigatórios!');
             return false;
         }
 
         const novoJogo = {
-            nome: nome,
-            descricao: descricao,
-            imagem: imagem || null
+            nome,
+            descricao,
+            imagemUrl: imagemUrl || null
         };
 
-        const endpointJogos = "/jogos";
-        const urlCompletaJogos = `${urlBase}${endpointJogos}`;
-        axios.post(urlCompletaJogos, )
-        return true;
-    }
-
-    function excluirJogo(id) {
-        const index = jogos.findIndex(jogo => jogo.id === id);
-        if (index !== -1) {
-            jogos.splice(index, 1);
-            salvarNoLocalStorage();
+        try {
+            await axios.post(`${urlBase}/jogos`, novoJogo);
             return true;
+        } catch (error) {
+            console.error('Erro ao salvar jogo:', error);
+            alert('Erro ao salvar jogo no servidor!');
+            return false;
         }
-        return false;
     }
 
-    function editarJogo(id, novoNome, novaDescricao, novaImagem) {
-        const jogo = jogos.find(jogo => jogo.id === id);
-        if (jogo) {
-            if (novoNome !== undefined) jogo.nome = novoNome;
-            if (novaDescricao !== undefined) jogo.descricao = novaDescricao;
-            if (novaImagem !== undefined) jogo.imagem = novaImagem;
-            salvarNoLocalStorage();
+    // Excluir jogo
+    async function excluirJogo(id) {
+        try {
+            await axios.delete(`${urlBase}/jogos/${id}`);
             return true;
+        } catch (error) {
+            console.error('Erro ao excluir jogo:', error);
+            alert('Erro ao excluir jogo do servidor!');
+            return false;
         }
-        return false;
     }
 
-    function carregarImagemComoBase64(arquivo, callback) {
-        if (!arquivo) {
-            callback(null);
-            return;
+    // Editar jogo
+    async function editarJogo(id, novoNome, novaDescricao, novaImagemUrl) {
+        const dadosAtualizados = {
+            nome: novoNome,
+            descricao: novaDescricao
+        };
+
+        if (novaImagemUrl) {
+            dadosAtualizados.imagemUrl = novaImagemUrl;
         }
-        const leitor = new FileReader();
-        leitor.onload = (e) => callback(e.target.result);
-        leitor.readAsDataURL(arquivo);
+
+        try {
+            await axios.patch(`${urlBase}/jogos/${id}`, dadosAtualizados);
+            return true;
+        } catch (error) {
+            console.error('Erro ao editar jogo:', error);
+            alert('Erro ao atualizar jogo no servidor!');
+            return false;
+        }
     }
 
-    function salvarNoLocalStorage() {
-        localStorage.setItem('jogos', JSON.stringify(jogos));
+    // Upload de imagem (separado do salvamento do jogo)
+    async function uploadImagem(arquivo) {
+        if (!arquivo) return null;
+
+        const formData = new FormData();
+        formData.append('imagem', arquivo);
+
+        try {
+            const response = await axios.post(`${urlBase}/upload`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data.url; // URL da imagem no servidor
+        } catch (error) {
+            console.error('Erro no upload de imagem:', error);
+            alert('Erro ao fazer upload da imagem!');
+            return null;
+        }
     }
 
-    // Renderização para ADMIN (tabela)
-    function renderizarTabelaAdmin() {
+    // Renderização ADMIN (tabela)
+    async function renderizarTabelaAdmin() {
+        await carregarJogos();
         const tbody = document.getElementById('jogos-tbody');
         if (!tbody) return;
 
         tbody.innerHTML = jogos.map(jogo => `
-        <tr data-id="${jogo.id}">
+        <tr data-id="${jogo._id}">
             <td>${jogo.nome}</td>
             <td>${jogo.descricao}</td>
             <td>
-                <!-- Botão Editar com ID único (prefixo + id do jogo) -->
-                <button 
-                    id="btn-editar-${jogo.id}" 
-                    class="btn btn-sm btn-outline-light mx-auto editar" 
-                    data-id="${jogo.id}"
-                >
+                <button class="btn btn-sm btn-outline-light mx-auto editar" data-id="${jogo._id}">
                     <i class="bi bi-pencil"></i>
                 </button>
-
-                <!-- Botão Excluir com ID único -->
-                <button 
-                    id="btn-excluir-${jogo.id}" 
-                    class="btn btn-sm btn-outline-danger mx-auto excluir" 
-                    data-id="${jogo.id}"
-                >
+                <button class="btn btn-sm btn-outline-danger mx-auto excluir" data-id="${jogo._id}">
                     <i class="bi bi-trash"></i>
                 </button>
             </td>
-        </tr>
-        `).join('');
+        </tr>`).join('');
 
-        configurarEventosAdmin(); // Reconfigura os eventos
+        configurarEventosAdmin();
     }
 
-    // Renderização para USUÁRIOS (cards)
-    function renderizarCardsUsuarios() {
+    // Renderização USUÁRIOS (cards)
+    async function renderizarCardsUsuarios() {
+        await carregarJogos();
         const container = document.getElementById('jogos-container');
+        if (!container) return;
 
-        if (!container) {
-            console.error('Container #jogos-container não encontrado!');
-            return;
-        }
+        container.innerHTML = jogos.length === 0
+            ? '<p class="text-center">Nenhum jogo disponível no momento.</p>'
+            : jogos.map((jogo, index) => {
+                const imagemUrl = jogo.imagemUrl || 'imagens/placeholder.png';
+                const isEven = index % 2 === 0;
 
-        // Garanta que jogos é um array
-        jogos = Array.isArray(jogos) ? jogos : [];
-
-        if (jogos.length === 0) {
-            container.innerHTML = '<p class="text-center">Nenhum jogo disponível no momento.</p>';
-            return;
-        }
-
-        container.innerHTML = jogos.map((jogo, index) => {
-            const isEven = index % 2 === 0;
-            // Use imagem padrão se não houver imagem
-            const imagemUrl = jogo.imagem || 'imagens/placeholder.png';
-
-            return `
-        <div class="card card-custom d-flex flex-row flex-wrap justify-content-between align-items-center my-4">
-            ${isEven ? `
-            <div class="col-12 col-md-6 order-2 order-md-1 p-3">
-                <h3 class="nome-do-jogo text-center text-md-end">${jogo.nome}</h3>
-                <p class="texo-explicativo text-center text-md-end">${jogo.descricao}</p>
-            </div>
-            <div class="col-12 col-md-6 order-1 order-md-2">
-                <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-            </div>
-            ` : `
-            <div class="col-12 col-md-6 order-1 order-md-1">
-                <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-            </div>
-            <div class="col-12 col-md-6 order-2 order-md-2 p-3">
-                <h3 class="nome-do-jogo text-center text-md-start">${jogo.nome}</h3>
-                <p class="texo-explicativo text-center text-md-start">${jogo.descricao}</p>
-            </div>
-            `}
-        </div>`;
-        }).join('');
+                return `
+                <div class="card card-custom d-flex flex-row flex-wrap justify-content-between align-items-center my-4">
+                    ${isEven ? `
+                    <div class="col-12 col-md-6 order-2 order-md-1 p-3">
+                        <h3 class="nome-do-jogo text-center text-md-end">${jogo.nome}</h3>
+                        <p class="texo-explicativo text-center text-md-end">${jogo.descricao}</p>
+                    </div>
+                    <div class="col-12 col-md-6 order-1 order-md-2">
+                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
+                    </div>
+                    ` : `
+                    <div class="col-12 col-md-6 order-1 order-md-1">
+                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
+                    </div>
+                    <div class="col-12 col-md-6 order-2 order-md-2 p-3">
+                        <h3 class="nome-do-jogo text-center text-md-start">${jogo.nome}</h3>
+                        <p class="texo-explicativo text-center text-md-start">${jogo.descricao}</p>
+                    </div>
+                    `}
+                </div>`;
+            }).join('');
     }
 
-    // Chame a função quando o DOM estiver pronto
-
-    renderizarCardsUsuarios();
-
-
-    // Configura eventos do admin
+    // Configurar eventos ADMIN
     function configurarEventosAdmin() {
-
-        // Excluir jogo (usa classe .excluir)
+        // Excluir jogo
         document.querySelectorAll('.excluir').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = parseInt(e.currentTarget.dataset.id); // currentTarget é mais seguro que target
+            btn.addEventListener('click', async (e) => {
+                const id = e.currentTarget.dataset.id;
                 if (confirm('Tem certeza que deseja excluir este jogo?')) {
-                    if (excluirJogo(id)) {
-                        renderizarTabelaAdmin();
-                        renderizarCardsUsuarios();
+                    if (await excluirJogo(id)) {
+                        await renderizarTabelaAdmin();
+                        await renderizarCardsUsuarios();
                     }
                 }
             });
         });
 
-        // Editar jogo (usa classe .editar)
+        // Editar jogo
         document.querySelectorAll('.editar').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.currentTarget.dataset.id);
-                const jogo = jogos.find(j => j.id === id);
+                const id = e.currentTarget.dataset.id;
+                const jogo = jogos.find(j => j._id === id);
                 if (jogo) preencherFormularioEdicao(jogo);
             });
         });
     }
 
     function preencherFormularioEdicao(jogo) {
-        // Preenche os campos (agora com os IDs corretos) aleluia
         document.getElementById('editar-nome').value = jogo.nome || '';
         document.getElementById('editar-descricao').value = jogo.descricao || '';
-        document.getElementById('jogoId').value = jogo.id || '';
+        document.getElementById('jogoId').value = jogo._id || '';
 
-        // Atualiza preview da imagem
+        const preview = document.getElementById('imagemPreview');
         if (jogo.imagemUrl) {
-            const preview = document.getElementById('imagemPreview');
             preview.src = jogo.imagemUrl;
             preview.classList.remove('d-none');
+        } else {
+            preview.classList.add('d-none');
         }
 
-        // Mostra o modal
-        const modal = new bootstrap.Modal(document.getElementById('modalEditarJogo'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('modalEditarJogo')).show();
     }
 
-    // Evento para salvar novo jogo (com validação)
-    document.getElementById('salvarJogo')?.addEventListener('click', () => {
-        const nome = document.getElementById('nome-jogo').value; // ID deve existir
+    // Evento para salvar novo jogo
+    document.getElementById('salvarJogo')?.addEventListener('click', async () => {
+        const nome = document.getElementById('nome-jogo').value;
         const descricao = document.getElementById('descricao-jogo').value;
         const imagemInput = document.getElementById('imagem-jogo');
 
@@ -353,55 +358,52 @@ function inicializarGerenciamentoJogos() {
             return;
         }
 
-        carregarImagemComoBase64(imagemInput.files[0], (imagemBase64) => {
-            if (salvarJogo(nome, descricao, imagemBase64)) {
-                alert('Jogo salvo!');
-                document.getElementById('nome-jogo').value = '';
-                document.getElementById('descricao-jogo').value = '';
-                imagemInput.value = '';
-                renderizarTabelaAdmin();
-                renderizarCardsUsuarios();
-            }
-        });
+        // Upload de imagem separado
+        const imagemUrl = imagemInput.files[0]
+            ? await uploadImagem(imagemInput.files[0])
+            : null;
+
+        if (await salvarJogo(nome, descricao, imagemUrl)) {
+            alert('Jogo salvo!');
+            document.getElementById('nome-jogo').value = '';
+            document.getElementById('descricao-jogo').value = '';
+            imagemInput.value = '';
+
+            // Atualiza as views
+            if (document.getElementById('jogos-tbody')) await renderizarTabelaAdmin();
+            if (document.getElementById('jogos-container')) await renderizarCardsUsuarios();
+        }
     });
 
     // Evento para salvar edição
-    document.getElementById('btn-salvar-edicao')?.addEventListener('click', () => {
-        const id = parseInt(document.getElementById('jogoId').value); // Agora usando jogoId
+    document.getElementById('btn-salvar-edicao')?.addEventListener('click', async () => {
+        const id = document.getElementById('jogoId').value;
         const novoNome = document.getElementById('editar-nome').value;
         const novaDescricao = document.getElementById('editar-descricao').value;
         const novaImagemInput = document.getElementById('editar-imagem');
 
-        // Se não foi selecionada nova imagem, passa null
-        if (!novaImagemInput.files[0]) {
-            if (editarJogo(id, novoNome, novaDescricao, null)) {
-                alert('Jogo atualizado com sucesso!');
-                bootstrap.Modal.getInstance(document.getElementById('modalEditarJogo')).hide();
-                renderizarTabelaAdmin();
-                renderizarCardsUsuarios();
-            }
-            return;
+        // Upload da nova imagem se existir
+        const novaImagemUrl = novaImagemInput.files[0]
+            ? await uploadImagem(novaImagemInput.files[0])
+            : null;
+
+        if (await editarJogo(id, novoNome, novaDescricao, novaImagemUrl)) {
+            alert('Jogo atualizado!');
+            bootstrap.Modal.getInstance(document.getElementById('modalEditarJogo')).hide();
+
+            // Atualiza as views
+            if (document.getElementById('jogos-tbody')) await renderizarTabelaAdmin();
+            if (document.getElementById('jogos-container')) await renderizarCardsUsuarios();
         }
-
-        // Se tem nova imagem, converte para base64
-        carregarImagemComoBase64(novaImagemInput.files[0], (novaImagemBase64) => {
-            if (editarJogo(id, novoNome, novaDescricao, novaImagemBase64)) {
-                alert('Jogo atualizado com sucesso!');
-                bootstrap.Modal.getInstance(document.getElementById('modalEditarJogo')).hide();
-                renderizarTabelaAdmin();
-                renderizarCardsUsuarios();
-            }
-        });
     });
-    // Inicialização automática das views corretas
-    if (document.getElementById('jogos-tbody')) {
-        renderizarTabelaAdmin(); // Se existir tabela, é o admin
-    }
-    if (document.getElementById('jogos-container')) {
-        renderizarCardsUsuarios(); // Se existir container, é a página de jogos
-    }
-}
 
+    // Inicialização automática
+    (async () => {
+        await carregarJogos();
+        if (document.getElementById('jogos-tbody')) await renderizarTabelaAdmin();
+        if (document.getElementById('jogos-container')) await renderizarCardsUsuarios();
+    })();
+}
 
 // Exemplo de lógica para mostrar a aba correta
 const botoesMenu = document.querySelectorAll('.botao-menu');
@@ -410,19 +412,19 @@ const jogosContainer = document.getElementById('jogos-container');
 const painelConteudo = document.getElementById('painel-conteudo');
 
 botoesMenu.forEach((btn, idx) => {
-  btn.addEventListener('click', function () {
-    eventosContainer.style.display = 'none';
-    jogosContainer.style.display = 'none';
-    painelConteudo.style.display = 'none';
+    btn.addEventListener('click', function () {
+        eventosContainer.style.display = 'none';
+        jogosContainer.style.display = 'none';
+        painelConteudo.style.display = 'none';
 
-    if (btn.textContent.includes('Eventos')) {
-      eventosContainer.style.display = 'block';
-      carregarAvisosPainel();
-    } else if (btn.textContent.includes('Jogos')) {
-      jogosContainer.style.display = 'block';
-      // carregarJogosPainel();
-    } else {
-      painelConteudo.style.display = 'block';
-    }
-  });
+        if (btn.textContent.includes('Eventos')) {
+            eventosContainer.style.display = 'block';
+            carregarAvisosPainel();
+        } else if (btn.textContent.includes('Jogos')) {
+            jogosContainer.style.display = 'block';
+            // carregarJogosPainel();
+        } else {
+            painelConteudo.style.display = 'block';
+        }
+    });
 });
