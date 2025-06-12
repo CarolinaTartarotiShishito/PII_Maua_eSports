@@ -349,7 +349,7 @@ app.patch('/treinos', async (req, res) => {
   try {
     const dados = req.body;
     const urlCompleta = `${urlAPITeste}${modalidadesEndpoint}`
-    const response = await fetch(urlCompleta, {
+    await fetch(urlCompleta, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -357,6 +357,7 @@ app.patch('/treinos', async (req, res) => {
       },
       body: JSON.stringify(dados)
     });
+    res.status(201).json()
   } catch (error) {
     console.error("Erro ao dar patch em modalidades: ", error);
   }

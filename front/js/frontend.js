@@ -209,7 +209,7 @@ async function prepararAbaMembrosCap(){
     let corpoTabela = tabelaMembros.getElementsByTagName('tbody')[0];
     corpoTabela.innerHTML = '';
     let membros = await pegaMembros();
-    membros = membros.filter(membro => membro.Time === "EA SPORTS FC™ 25");
+    membros = membros.filter(membro => membro.Time === time);
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela);
     }
@@ -279,12 +279,12 @@ async function atualizarMembros() {
     corpoTabela.innerHTML = '';
     let membros = await pegaMembros();
     if(!localStorage.getItem("cargo").includes("Administrador")){
-        membros = membros.filter(membro => membro.Time === "EA SPORTS FC™ 25");
+        time = (await buscarDadosUsuario()).Time;
+        membros = membros.filter(membro => membro.Time === time);
     }
     for(let membro of membros) {
         await exibeMembro(membro, corpoTabela, true);
     }
-    return membros;
 }
 
 // função para verificar quem pode modificar cada membro
@@ -438,71 +438,79 @@ async function pegarModalidades() {
 }
 
 async function prepararAbaTreinos(idSeletor) {
-    const seletorTime = document.querySelector(idSeletor);
     exibeTimes(idSeletor);
-    exibeTimes("#timesTreinoSelect")
-    
-    // Carrega e ordena modalidades (Z-A)
-    const modalidades = (await pegarModalidades()).sort((a, b) => 
-        b.Name.localeCompare(a.Name)
-    );
+    exibeTimes("#timesTreinoSelect");
     
     const tabelaTreinos = document.querySelector('#lista-treinos');
     const corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
     
-    // Função para ordenar treinos por dia da semana (descendente)
-    const ordenarTreinos = (treinos) => {
-        return [...treinos].sort((a, b) => {
-            const diaB = parseInt(b.Start.split(' ')[5]);
-            const diaA = parseInt(a.Start.split(' ')[5]);
-            return diaB - diaA;
+    const seletorTime = document.querySelector(idSeletor);
+    const todasModalidades = (await pegarModalidades()).sort((a, b) => 
+        b.Name.localeCompare(a.Name)
+    );
+    let modalidadesFiltradas = [...todasModalidades];
+
+    const exibirTreinos = (modalidades) => {
+        corpoTabela.innerHTML = '';
+        
+        modalidades.forEach(modalidade => {
+            const treinosOrdenados = [...(modalidade.ScheduledTrainings || [])]
+                .sort((a, b) => {
+                    const diaB = parseInt(b.Start.split(' ')[5]);
+                    const diaA = parseInt(a.Start.split(' ')[5]);
+                    return diaB - diaA;
+                });
+            
+            treinosOrdenados.forEach(treino => {
+                const treinoInfo = pegaInfosTreino(treino, modalidade);
+                exibeTreino(treinoInfo, corpoTabela, true);
+            });
         });
     };
 
-    // Função para exibir treinos de um time
-    const exibirTreinosDoTime = (time) => {
-        const treinosOrdenados = ordenarTreinos(time.ScheduledTrainings);
-        treinosOrdenados.forEach(treino => {
-            let treinoInfo = pegaInfosTreino(treino, time)
-            exibeTreino(treinoInfo, corpoTabela, true)
-        });
-    };
-    
-    // Função principal de filtragem
-    aplicarFiltros = () => {
-        corpoTabela.innerHTML = '';
+    async function aplicarFiltros() {
         const timeSelecionado = seletorTime.value;
         
-        const timesParaExibir = timeSelecionado && timeSelecionado !== "Todos"
-            ? modalidades.filter(time => time.Name === timeSelecionado)
-            : modalidades;
-            
-        timesParaExibir.forEach(exibirTreinosDoTime);
-    };
-    
-    // Configura evento e exibe inicialmente
+        modalidadesFiltradas = timeSelecionado && timeSelecionado !== "Todos"
+            ? todasModalidades.filter(time => time.Name === timeSelecionado)
+            : [...todasModalidades];
+        
+        exibirTreinos(modalidadesFiltradas);
+    }
+
     seletorTime.addEventListener('change', aplicarFiltros);
     await aplicarFiltros();
 }
 
-async function carregarTreinosDaEquipe(editavel){
-    let time = (await buscarDadosUsuario()).Time;
+async function carregarTreinosDaEquipe(editavel) {
+    // let time = (await buscarDadosUsuario()).Time;
+    let time = 'EA SPORTS FC™ 25';
+    const select = document.querySelector("#timesTreinoSelect");
+    const option = document.createElement("option");
+    option.innerHTML = time;
+    option.value = time;
+    select.appendChild(option);
+    
+    let tabelaTreinos = document.querySelector('#lista-treinos');
+    let corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+    
     let modalidades = await pegarModalidades();
     let modalidade = modalidades.filter(modalidade => modalidade.Name === time)[0];
-    const tabelaTreinos = document.querySelector('#lista-treinos');
-    const corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
-    corpoTabela.innerHTML = '';
-    let treinos = modalidade.ScheduledTrainings.sort((a, b) => {
-        const diaA = parseInt(a.Start.split(' ')[5]);
-        const diaB = parseInt(b.Start.split(' ')[5]);
-        return diaB - diaA;
-    });
-    for (let treino of treinos){
-        let treinoInfo = pegaInfosTreino(treino, modalidades)
-        treinoInfo.time = time;
-        console.log(treinoInfo)
-        exibeTreino(treinoInfo, corpoTabela, editavel)
+    
+    if (!modalidade || !modalidade.ScheduledTrainings) {
+        console.log("Nenhum treino encontrado para a equipe");
+        return;
     }
+    
+    modalidade.ScheduledTrainings
+        .sort((a, b) => parseInt(b.Start.split(' ')[5]) - parseInt(a.Start.split(' ')[5]))
+        .forEach(treino => {
+            let treinoInfo = pegaInfosTreino(treino, modalidades);
+            treinoInfo.time = time;
+            exibeTreino(treinoInfo, corpoTabela, editavel);
+        });
 }
 
 async function exibeTreino(treino, corpoTabela, editavel){
@@ -530,11 +538,11 @@ async function exibeTreino(treino, corpoTabela, editavel){
         iEditar.className = 'bi bi-pencil';
         botaoEditar.setAttribute('data-bs-toggle', 'modal')
         botaoEditar.setAttribute('data-bs-target', `#modalTreino`)
-        botaoEditar.onclick = () => modalEditarTreino(treino);
+        botaoEditar.onclick = () => {modalEditarTreino(treino)};
         botaoApagar.className = 'btn btn-sm btn-outline-danger mx-auto';
         botaoApagar.onclick = async () => {
-            await apagarHorario(time, treino);
-            await atualizarMembros();
+            let modalidade = (await pegarModalidades()).filter(modalidade => modalidade.Name === treino.time)[0];
+            await apagarTreino(treino, modalidade);
         };
         iApagar.className = 'bi bi-trash';
         botaoEditar.appendChild(iEditar);
@@ -562,18 +570,44 @@ function pegaInfosTreino(treino, modalidade){
         diaSemNum: diaSemana,
         diaSem: diasDaSemana[diaSemana],
         horaIni: `${horaInicio}:${minInicio}`,
-        horaFim: `${horaFim}:${minFim}`
+        horaFim: `${horaFim}:${minFim}`,
+        comeco: treino.Start,
+        fim: treino.End
     };
 
     return modelo;
 }
 
+async function adicionarTreino(treino, modalidade){
+    let treinosAtualizados = [...modalidade.ScheduledTrainings, treino.Treino];
+    let id = modalidade._id;
+    await salvarTreinosAPI(id, treinosAtualizados);
+}
+
+async function editarTreino(treino, modalidade, indice){
+    modalidade.ScheduledTrainings[indice] = treino.Treino;
+    let treinosAtualizados = modalidade.ScheduledTrainings;
+    let id = modalidade._id;
+    await salvarTreinosAPI(id, treinosAtualizados);
+}
+
+async function apagarTreino(treino, modalidade){
+    let indice = modalidade.ScheduledTrainings.findIndex(t => t.Start == treino.comeco && t.End == treino.fim);
+    modalidade.ScheduledTrainings.splice(indice, 1);
+    let treinosAtualizados = modalidade.ScheduledTrainings;
+    let id = modalidade._id;
+    await salvarTreinosAPI(id, treinosAtualizados);
+}
+
 async function salvarTreinosAPI(modalidadeId, treinos){
-    
     const dados = {
         _id: modalidadeId,
         ScheduledTrainings: treinos
     };
+    const salvarTreinosEndpoint = '/treinos';
+    const urlCompleta = `${protocolo}${baseURL}${salvarTreinosEndpoint}`;
+    await axios.patch(urlCompleta, dados);
+    await atualizarTreinos();
 }
 
 // função para configurar o modal de adicionar treino novo
@@ -583,12 +617,14 @@ function modalAdicionarTreino(){
     const btnSalvar = document.querySelector('#salvarTreino');
     divTitulo.innerHTML = "Adicionar Membro";
     btnSalvar.onclick = async () => {
-        await novoUsuario();
-        await atualizarMembros();
+        treino = pegarInfosModalTreino();
+        modalidade = (await pegarModalidades()).filter(modalidade => modalidade.Name === treino.Time);
+        await adicionarTreino(treino, modalidade[0]);
     };
 }
 
-function modalEditarTreino(treino) {
+function modalEditarTreino(treinoAntigo) {
+    console.log(treinoAntigo)
     const divTitulo = document.querySelector('#modalTreinoLabel');
     const timeCampo = document.querySelector('#timesTreinoSelect');
     const diaSemanaCampo = document.querySelector('#selecionarDia');
@@ -596,13 +632,15 @@ function modalEditarTreino(treino) {
     const horaFimCampo = document.querySelector('#segundoHorario');
     const btnSalvar = document.querySelector('#salvarTreino');
     divTitulo.innerHTML = "Editar treino"
-    timeCampo.value = treino.time;
-    diaSemanaCampo.value = treino.diaSemNum;
-    horaIniCampo.value = treino.horaIni;
-    horaFimCampo.value = treino.horaFim;
+    timeCampo.value = treinoAntigo.time;
+    diaSemanaCampo.value = treinoAntigo.diaSemNum;
+    horaIniCampo.value = treinoAntigo.horaIni;
+    horaFimCampo.value = treinoAntigo.horaFim;
     btnSalvar.onclick = async () => {
-        await editarUsuario();
-        await atualizarMembros();
+        let treino = pegarInfosModalTreino();
+        let modalidade = (await pegarModalidades()).filter(modalidade => modalidade.Name === treino.Time)[0];
+        let indice = modalidade.ScheduledTrainings.findIndex(t => t.Start == treinoAntigo.comeco && t.End == treinoAntigo.fim);
+        await editarTreino(treino, modalidade, indice);
     };
 }
 
@@ -615,6 +653,54 @@ function limparModalTreino(){
     diaSemanaCampo.value = '';
     horaIniCampo.value = '';
     horaFimCampo.value = '';
+}
+
+function pegarInfosModalTreino(){
+    const time = (document.querySelector('#timesTreinoSelect')).value;
+    const diaSemana = (document.querySelector('#selecionarDia')).value;
+    const horarioIni = (document.querySelector('#primeiroHorario')).value;
+    const horarioFim = (document.querySelector('#segundoHorario')).value;
+    const [horasIni, minIni] = horarioIni.split(':');
+    const [horasFim, minFim] = horarioFim.split(':');
+
+    const modelo = {
+        Time: time,
+        Treino: {
+            Start: `0 ${minIni} ${horasIni} * * ${diaSemana}`, 
+            End: `0 ${minFim} ${horasFim} * * ${diaSemana}`
+        }
+    }
+
+    return modelo;
+}
+
+// função para atualizar a tabela de treinos com os dados do banco de dados
+async function atualizarTreinos() {
+    let tabelaTreinos = document.querySelector('#lista-treinos');
+    let corpoTabela = tabelaTreinos.getElementsByTagName('tbody')[0];
+    corpoTabela.innerHTML = '';
+
+    let modalidades = await pegarModalidades();
+
+    if(!localStorage.getItem("cargo").includes("Administrador")) {
+        time = (await buscarDadosUsuario()).Time;
+        modalidades = modalidades.filter(modalidade => modalidade.Name === time);
+    }
+    
+    for(let modalidade of modalidades){
+        let treinos = modalidade.ScheduledTrainings;
+        
+        treinos.sort((a, b) => {
+            const diaA = parseInt(a.Start.split(' ')[5]);
+            const diaB = parseInt(b.Start.split(' ')[5]);
+            return diaB - diaA;
+        });
+        
+        for(let treino of treinos) {
+            let treinoInfo = pegaInfosTreino(treino, modalidade);
+            exibeTreino(treinoInfo, corpoTabela, true);
+        }    
+    }
 }
 
 checkStreamerStatus();
