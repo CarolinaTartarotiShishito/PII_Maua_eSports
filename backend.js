@@ -22,24 +22,29 @@ const { url } = require('inspector');
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+
+app.use('/imagens', express.static(path.join(__dirname, 'imagens')));
+app.use(express.json({ limit: '10mb' })); // Para JSON
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // Para formulários
 
 // Configuração do Multer para upload de imagens
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, 'imagens/');
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
-const upload = multer({ storage });
+// Se estiver usando multer:
+const upload = multer({ 
+  storage: storage, // Usa o diskStorage configurado
+  limits: { fileSize: 10 * 1024 * 1024 } 
+});
 
 let eventos = [];
-let jogos = [];
-let membros = [];
+
 let avisos = [];
 
 // EVENTOS
@@ -254,47 +259,47 @@ mongoose.connect('mongodb+srv://esportsuser:esportspass123@cluster0.imjcz.mongod
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB conectado!'))
-.catch(err => console.error('Erro ao conectar ao MongoDB:', err));
+  .then(() => console.log('MongoDB conectado!'))
+  .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
 // Exemplo de rota para criar um usuário
 app.post('/usuarios', async (req, res) => {
-    try {
-        console.log(req.body)
-        const novoUsuario = new User(req.body);
-        await novoUsuario.save();
-        res.status(201).json(novoUsuario);
-    } catch (error) {
-        res.status(400).json({erro: error.message });
-    }
+  try {
+    console.log(req.body)
+    const novoUsuario = new User(req.body);
+    await novoUsuario.save();
+    res.status(201).json(novoUsuario);
+  } catch (error) {
+    res.status(400).json({ erro: error.message });
+  }
 });
 
 // Código para buscar usuários no banco de dados
 app.get('/usuarios', async (req, res) => {
-    const usuarios = await User.find().sort({
-      Cargo: -1, // desendente (Z-A)
-      NomeCompleto: -1 // desendente (Z-A)
-    });
-    res.json(usuarios)
+  const usuarios = await User.find().sort({
+    Cargo: -1, // desendente (Z-A)
+    NomeCompleto: -1 // desendente (Z-A)
+  });
+  res.json(usuarios)
 });
 
 // Verifica se o usuário com o email passado está cadastrado no banco de dados
 app.post('/buscaUsuario', async (req, res) => {
-    const email = req.body.email;
+  const email = req.body.email;
 
-    const usuarioExiste = await User.findOne({ Email: email });
+  const usuarioExiste = await User.findOne({ Email: email });
 
-    if (!usuarioExiste) {
-        return res.status(401).json({ mensagem: "Usuário não está cadastrado!" });
-    }
+  if (!usuarioExiste) {
+    return res.status(401).json({ mensagem: "Usuário não está cadastrado!" });
+  }
 
-    const token = jwt.sign (
-        {Email: email},
-        "id-secreto",
-        {expiresIn: "1h"}
-    )
+  const token = jwt.sign(
+    { Email: email },
+    "id-secreto",
+    { expiresIn: "1h" }
+  )
 
-    res.status(200).json({cargo: usuarioExiste.Cargo, token: token});
+  res.status(200).json({ cargo: usuarioExiste.Cargo, token: token });
 });
 
 app.post('/deletaUsuarios', async (req, res) => {
@@ -307,7 +312,7 @@ app.post('/deletaUsuarios', async (req, res) => {
 });
 
 app.get('/buscaEspecificaUsuario', async (req, res) => {
-  try{
+  try {
     const tipo = req.query.Tipo;
     const filtro = req.query.Filtro
     let usuarios = await User.find({ [tipo]: filtro }).sort({
@@ -316,14 +321,14 @@ app.get('/buscaEspecificaUsuario', async (req, res) => {
     });
 
     res.json(usuarios);
-    
+
   } catch (error) {
     console.error('Erro ao buscar usuários: ', error);
   }
 });
 
 app.get('/dadosUsuario', async (req, res) => {
-  try{
+  try {
     let dados = await User.findOne({ Email: req.query.email });
 
     res.json(dados);
@@ -335,11 +340,11 @@ app.get('/dadosUsuario', async (req, res) => {
 app.post('/editarUsuario', async (req, res) => {
   try {
     const dadosAtualizados = req.body;
-    await User.updateOne({Email: dadosAtualizados.Email}, { $set: dadosAtualizados })
+    await User.updateOne({ Email: dadosAtualizados.Email }, { $set: dadosAtualizados })
     res.status(201).json();
-  } 
+  }
   catch (error) {
-    res.status(400).json({erro: error.message });
+    res.status(400).json({ erro: error.message });
   }
 });
 
@@ -354,14 +359,16 @@ app.get('/jogos', async (req, res) => {
 });
 
 app.post('/jogos', async (req, res) => {
+  console.log('Body recebido:', req.body); // Debug importante
   const jogo = new Jogo({
     nome: req.body.nome,
     descricao: req.body.descricao,
     imagemUrl: req.body.imagemUrl
   });
-
+  console.log(jogo);
   try {
     const novoJogo = await jogo.save();
+    console.log(novoJogo);
     res.status(201).json(novoJogo);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -391,25 +398,34 @@ app.delete('/jogos/:id', async (req, res) => {
 });
 
 // Rota para upload de imagens
-app.post('/upload', upload.single('imagem'), async (req, res) => {
+app.post('/api/upload', upload.single('imagem'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'Nenhum arquivo enviado' });
+      return res.status(400).json({
+        success: false,
+        message: 'Nenhum arquivo recebido'
+      });
     }
-    
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    res.json({ url: imageUrl });
+
+    const imageUrl = `/imagens/${req.file.filename}`;
+    res.json({
+      success: true,
+      url: imageUrl
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('Erro no upload:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Erro no servidor ao processar upload'
+    });
   }
 });
-
 
 app.patch('/treinos', async (req, res) => {
   try {
     const dados = req.body;
     const urlCompleta = `${urlAPITeste}${modalidadesEndpoint}`
-    const response = await fetch(urlCompleta, {
+    await fetch(urlCompleta, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -417,6 +433,7 @@ app.patch('/treinos', async (req, res) => {
       },
       body: JSON.stringify(dados)
     });
+    res.status(201).json()
   } catch (error) {
     console.error("Erro ao dar patch em modalidades: ", error);
   }
@@ -478,5 +495,5 @@ app.get('/usuarios', async (req, res) => {
 
 // Inicie o servidor
 app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+  console.log('Servidor rodando na porta 3000');
 });

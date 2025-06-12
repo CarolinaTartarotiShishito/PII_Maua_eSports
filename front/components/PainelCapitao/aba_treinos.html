@@ -17,4 +17,55 @@
       </tbody>
     </table>
   </div>
+
+  <button class="btn btn-primary rounded-3" id="btn-adicionar-membro" data-bs-toggle="modal" data-bs-target="#modalTreino" onclick="modalAdicionarTreino()">
+    <i class="bi bi-plus"></i>
+    Adicionar Treino
+  </button>
+
+  <div class="alert d-none alert-dismissible fade alert-membros mt-5"></div>
+
+  <div class="modal fade" id="modalTreino" tabindex="-1" aria-labelledby="modalTreinoLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-escuro">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTreinoLabel">Adicionar Treino</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <label for="timesTreinoSelect" class="my-3">Time:</label>
+                <select class="form-select bg-dark text-white" id="timesTreinoSelect">
+                    <option selected value="" disabled>Selecione um Time</option>
+                </select>
+                <label for="selecionarDia" class="my-3">Dia da semana:</label>
+                <select id="selecionarDia" class="form-select bg-dark text-white" aria-label="Default select example">
+                    <option selected value="" disabled>Dias da semana</option>
+                    <option value="0">Domingo</option>
+                    <option value="1">Segunda-feira</option>
+                    <option value="2">Terça-feira</option>
+                    <option value="3">Quarta-feira</option>
+                    <option value="4">Quinta-feira</option>
+                    <option value="5">Sexta-feira</option>
+                    <option value="6">Sábado</option>
+                </select>
+                <div>
+                    <label class="my-3" for="primeiroHorario">Horário Inicial:</label>
+                    <div></div>
+                    <input type="time" id="primeiroHorario" name="primeiroHorario"/>
+                </div>
+
+                <div>
+                    <label class="my-3" for="segundoHorario">Horário final:</label>
+                    <div></div>
+                    <input type="time" id="segundoHorario" name="segundoHorario"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="limparModalTreino()">Cancelar</button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="salvarTreino">Salvar</button>
+            </div>
+        </div>
+    </div>
 </div>
