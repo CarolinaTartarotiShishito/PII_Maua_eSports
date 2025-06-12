@@ -440,23 +440,23 @@ app.patch('/treinos', async (req, res) => {
 })
 
 // Criar "sobre"
-app.post('/sobre', async (req, res) => {
-  try {
-    const sobre = new Sobre({ conteudo: req.body.conteudo });
-    await sobre.save();
-    res.status(201).json(sobre);
-  } catch (error) {
-    res.status(400).json({ erro: error.message });
-  }
-});
+// app.post('/sobre', async (req, res) => {
+//   try {
+//     const sobre = new Sobre({ conteudo: req.body.conteudo });
+//     await sobre.save();
+//     res.status(201).json(sobre);
+//   } catch (error) {
+//     res.status(400).json({ erro: error.message });
+//   }
+// });
 
 // Editar "sobre"
-app.put('/sobre/:id', async (req, res) => {
+app.post('/editarSobre', async (req, res) => {
   try {
-    const sobre = await Sobre.findByIdAndUpdate(
-      req.params.id,
-      { conteudo: req.body.conteudo },
-      { new: true }
+    const idSobre = "684a51b88d6f37edece66eb8";
+    const sobre = await Sobre.updateOne(
+      {_id: idSobre},
+      { conteudo: req.body.conteudo }
     );
     if (!sobre) return res.status(404).json({ erro: 'Sobre não encontrado' });
     res.json(sobre);
@@ -466,24 +466,31 @@ app.put('/sobre/:id', async (req, res) => {
 });
 
 // Excluir "sobre"
-app.delete('/sobre/:id', async (req, res) => {
-  try {
-    const sobre = await Sobre.findByIdAndDelete(req.params.id);
-    if (!sobre) return res.status(404).json({ erro: 'Sobre não encontrado' });
-    res.json({ mensagem: 'Sobre excluído com sucesso' });
-  } catch (error) {
-    res.status(400).json({ erro: error.message });
-  }
-});
+// app.delete('/sobre/:id', async (req, res) => {
+//   try {
+//     const sobre = await Sobre.findByIdAndDelete(req.params.id);
+//     if (!sobre) return res.status(404).json({ erro: 'Sobre não encontrado' });
+//     res.json({ mensagem: 'Sobre excluído com sucesso' });
+//   } catch (error) {
+//     res.status(400).json({ erro: error.message });
+//   }
+// });
 
 // Buscar todos os "sobre"
-app.get('/sobre', async (req, res) => {
+app.get('/exibeSobre', async (req, res) => {
   try {
     const sobre = await Sobre.find();
     res.json(sobre);
   } catch (error) {
     res.status(400).json({ erro: error.message });
   }
+});
+app.get('/usuarios', async (req, res) => {
+    const usuarios = await User.find().sort({
+      Cargo: -1, // desendente (Z-A)
+      NomeCompleto: -1 // desendente (Z-A)
+    });
+    res.json(usuarios)
 });
 
 // Inicie o servidor

@@ -287,108 +287,108 @@
     carregarAvisosPainel();
 </script>
 <script>
-  // CRUD Sobre
-const SOBRE_API_URL = 'http://localhost:3000/sobre';
-const listaSobre = document.getElementById('lista-sobre');
-const formSobre = document.getElementById('form-sobre');
-const sobreIdInput = document.getElementById('sobre-id');
-const sobreConteudoInput = document.getElementById('sobre-conteudo');
-const cancelarEdicaoSobreBtn = document.getElementById('cancelar-edicao-sobre');
+//   // CRUD Sobre
+// const SOBRE_API_URL = 'http://localhost:3000/sobre';
+// const listaSobre = document.getElementById('lista-sobre');
+// const formSobre = document.getElementById('form-sobre');
+// const sobreIdInput = document.getElementById('sobre-id');
+// const sobreConteudoInput = document.getElementById('sobre-conteudo');
+// const cancelarEdicaoSobreBtn = document.getElementById('cancelar-edicao-sobre');
 
-// Carregar "Sobre"
-async function carregarSobrePainel() {
-  try {
-    const response = await fetch(SOBRE_API_URL);
-    const sobreList = await response.json();
-    listaSobre.innerHTML = '';
-    sobreList.forEach(sobre => {
-      const li = document.createElement('li');
-      li.className = 'list-group-item d-flex justify-content-between align-items-center';
-      li.innerHTML = `
-        <span>${sobre.conteudo}</span>
-        <span>
-          <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoSobre('${sobre._id}', \`${sobre.conteudo.replace(/`/g, '\\`')}\`)">Editar</button>
-          <button class="btn btn-sm btn-danger" onclick="excluirSobre('${sobre._id}')">Excluir</button>
-        </span>
-      `;
-      listaSobre.appendChild(li);
-    });
-  } catch (error) {
-    console.error('Erro ao carregar sobre:', error);
-  }
-}
+// // Carregar "Sobre"
+// async function carregarSobrePainel() {
+//   try {
+//     const response = await fetch(SOBRE_API_URL);
+//     const sobreList = await response.json();
+//     listaSobre.innerHTML = '';
+//     sobreList.forEach(sobre => {
+//       const li = document.createElement('li');
+//       li.className = 'list-group-item d-flex justify-content-between align-items-center';
+//       li.innerHTML = `
+//         <span>${sobre.conteudo}</span>
+//         <span>
+//           <button class="btn btn-sm btn-warning me-2" onclick="prepararEdicaoSobre('${sobre._id}', \`${sobre.conteudo.replace(/`/g, '\\`')}\`)">Editar</button>
+//           <button class="btn btn-sm btn-danger" onclick="excluirSobre('${sobre._id}')">Excluir</button>
+//         </span>
+//       `;
+//       listaSobre.appendChild(li);
+//     });
+//   } catch (error) {
+//     console.error('Erro ao carregar sobre:', error);
+//   }
+// }
 
-// Adicionar "Sobre"
-async function adicionarSobre(conteudo) {
-  try {
-    await fetch(SOBRE_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conteudo })
-    });
-    carregarSobrePainel();
-  } catch (error) {
-    console.error('Erro ao adicionar sobre:', error);
-  }
-}
+// // Adicionar "Sobre"
+// async function adicionarSobre(conteudo) {
+//   try {
+//     await fetch(SOBRE_API_URL, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ conteudo })
+//     });
+//     carregarSobrePainel();
+//   } catch (error) {
+//     console.error('Erro ao adicionar sobre:', error);
+//   }
+// }
 
-// Editar "Sobre"
-async function editarSobre(id, conteudo) {
-  try {
-    await fetch(`${SOBRE_API_URL}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conteudo })
-    });
-    carregarSobrePainel();
-  } catch (error) {
-    console.error('Erro ao editar sobre:', error);
-  }
-}
+// // Editar "Sobre"
+// async function editarSobre(id, conteudo) {
+//   try {
+//     await fetch(`${SOBRE_API_URL}/${id}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ conteudo })
+//     });
+//     carregarSobrePainel();
+//   } catch (error) {
+//     console.error('Erro ao editar sobre:', error);
+//   }
+// }
 
-// Excluir "Sobre"
-async function excluirSobre(id) {
-  if (confirm('Tem certeza que deseja excluir este sobre?')) {
-    try {
-      await fetch(`${SOBRE_API_URL}/${id}`, { method: 'DELETE' });
-      carregarSobrePainel();
-    } catch (error) {
-      console.error('Erro ao excluir sobre:', error);
-    }
-  }
-}
+// // Excluir "Sobre"
+// async function excluirSobre(id) {
+//   if (confirm('Tem certeza que deseja excluir este sobre?')) {
+//     try {
+//       await fetch(`${SOBRE_API_URL}/${id}`, { method: 'DELETE' });
+//       carregarSobrePainel();
+//     } catch (error) {
+//       console.error('Erro ao excluir sobre:', error);
+//     }
+//   }
+// }
 
-// Prepara o formulário para edição
-window.prepararEdicaoSobre = function (id, conteudo) {
-  sobreIdInput.value = id;
-  sobreConteudoInput.value = conteudo;
-  cancelarEdicaoSobreBtn.style.display = 'inline-block';
-};
+// // Prepara o formulário para edição
+// window.prepararEdicaoSobre = function (id, conteudo) {
+//   sobreIdInput.value = id;
+//   sobreConteudoInput.value = conteudo;
+//   cancelarEdicaoSobreBtn.style.display = 'inline-block';
+// };
 
-// Submissão do formulário (adiciona ou edita)
-formSobre.onsubmit = async function (e) {
-  e.preventDefault();
-  const id = sobreIdInput.value;
-  const conteudo = sobreConteudoInput.value;
-  if (id) {
-    await editarSobre(id, conteudo);
-  } else {
-    await adicionarSobre(conteudo);
-  }
-  formSobre.reset();
-  sobreIdInput.value = '';
-  cancelarEdicaoSobreBtn.style.display = 'none';
-};
+// // Submissão do formulário (adiciona ou edita)
+// formSobre.onsubmit = async function (e) {
+//   e.preventDefault();
+//   const id = sobreIdInput.value;
+//   const conteudo = sobreConteudoInput.value;
+//   if (id) {
+//     await editarSobre(id, conteudo);
+//   } else {
+//     await adicionarSobre(conteudo);
+//   }
+//   formSobre.reset();
+//   sobreIdInput.value = '';
+//   cancelarEdicaoSobreBtn.style.display = 'none';
+// };
 
-// Cancela a edição
-cancelarEdicaoSobreBtn.onclick = function () {
-  formSobre.reset();
-  sobreIdInput.value = '';
-  cancelarEdicaoSobreBtn.style.display = 'none';
-};
+// // Cancela a edição
+// cancelarEdicaoSobreBtn.onclick = function () {
+//   formSobre.reset();
+//   sobreIdInput.value = '';
+//   cancelarEdicaoSobreBtn.style.display = 'none';
+// };
 
-// Carrega o "Sobre" ao iniciar
-carregarSobrePainel();
+// // Carrega o "Sobre" ao iniciar
+// carregarSobrePainel();
 </script>
 </body>
 

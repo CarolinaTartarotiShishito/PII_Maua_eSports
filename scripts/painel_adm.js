@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // === CÓDIGO ORIGINAL DA ABA INÍCIO ADAPTADO ===
-    function inicializarInicio() {
+    async function inicializarInicio() {
         const btnEditarQuemSomos = document.getElementById('btn-editar-quem-somos');
         const textoQuemSomos = document.getElementById('quem-somos-texto');
         const modalQuemSomos = new bootstrap.Modal(document.getElementById('modalEditarQuemSomos'));
@@ -63,12 +63,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalQuemSomos.show();
             });
 
-            btnSalvarQuemSomos.addEventListener('click', function () {
-                textoQuemSomos.innerText = textareaQuemSomos.value;
+            btnSalvarQuemSomos.addEventListener('click', async function () {
+                // textoQuemSomos.innerText = textareaQuemSomos.value;
+                await novoSobre(); //chama função do frontend.js
                 modalQuemSomos.hide();
-                mostrarNotificacao('Texto atualizado com sucesso!');
+                // mostrarNotificacao('Texto atualizado com sucesso!');
             });
         }
+        await exibeSobre('#quem-somos-texto');
 
         const botoesEditarRede = document.querySelectorAll('.btn-editar[data-rede]');
         const modalRede = new bootstrap.Modal(document.getElementById('modalEditarRede'));
