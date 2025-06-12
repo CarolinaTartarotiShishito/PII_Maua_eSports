@@ -617,5 +617,51 @@ function limparModalTreino(){
     horaFimCampo.value = '';
 }
 
+// adicionar e exibir novo texto "Sobre nós" ao banco de dados
+async function novoSobre() {
+    try {
+        const novoSobreNosEndpoint = "/editarSobre";
+        const urlCompletaSobreNos = `${protocolo}${baseURL}${novoSobreNosEndpoint}`;
+        const sobreNos = (document.querySelector('#textoQuemSomos')).value;
+        console.log(sobreNos);
+        await axios.post(urlCompletaSobreNos, {conteudo: sobreNos})
+        exibeAlerta(".alert-quem-somos", "Texto atualizado com sucesso!", ['show', 'alert-success'], ['d-none'], 4000);
+        await exibeSobre('#quem-somos-texto');
+    }
+    catch (error) {
+        exibeAlerta(".alert-quem-somos", "Falha ao atualizar texto!", ['show', 'alert-danger'], ['d-none'], 4000);
+    }
+}
+
+async function exibeSobre(idSobre) {
+    const sobre = (document.querySelector(idSobre));
+
+    const exibeSobreNosEndpoint = "/exibeSobre";
+    const urlCompletaSobreNos = `${protocolo}${baseURL}${exibeSobreNosEndpoint}`;
+    const response = (await axios.get(urlCompletaSobreNos)).data;
+    const sobreNos = response[0];
+    console.log(sobreNos);
+
+    if(sobreNos) {
+        sobre.innerHTML = sobreNos.conteudo;
+    }
+    else {
+        sobre.innerHTML = "Não existe nenhuma descrição de quem somos";
+    }
+}
+// async function exibeTimes(idSeletor){
+//     const seletor = document.querySelector(idSeletor);
+//     const modalidadesEndpoint = '/modalidades';
+//     const urlCompleta = `${protocolo}${baseURL}${modalidadesEndpoint}`;
+//     const response = (await axios.get(urlCompleta)).data;
+//     let times = Object.values(response);
+//     for(let time of times){
+//         const opcao = document.createElement('option');
+//         opcao.innerHTML = time.Name;
+//         opcao.value = time.Name;
+//         seletor.appendChild(opcao);
+//     };
+// }
+
 checkStreamerStatus();
 setInterval(checkStreamerStatus, 60000);

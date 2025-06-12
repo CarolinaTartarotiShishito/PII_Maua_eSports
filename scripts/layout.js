@@ -9,7 +9,7 @@ async function incluirHTML(id, arquivo) {
       aplicarNavbarAtiva();
     }
   } catch (erro) {
-    console.warn(`❌ Não foi possível carregar ${arquivo}:`, erro);
+    console.warn(`Não foi possível carregar ${arquivo}:`, erro);
   }
 }
 
