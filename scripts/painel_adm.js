@@ -229,21 +229,41 @@ function inicializarGerenciamentoJogos() {
 
     // Upload de imagem (separado do salvamento do jogo)
     async function uploadImagem(arquivo) {
-        if (!arquivo) return null;
+        if (!arquivo) {
+            console.error('Nenhum arquivo fornecido');
+            return null;
+        }
+
+        // Validação mais compatível
+        if (!(arquivo instanceof File || arquivo instanceof Blob || typeof arquivo === 'object')) {
+            console.error('Tipo de arquivo inválido:', arquivo);
+            return null;
+        }
 
         const formData = new FormData();
-        formData.append('imagem', arquivo);
+        formData.append('imagem', arquivo, arquivo.name || 'upload.jpg');
 
         try {
-            const response = await axios.post(`${urlBase}/upload`, formData, {
+            const response = await axios.post(`${urlBase}/api/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                timeout: 30000
             });
-            return response.data.url; // URL da imagem no servidor
+
+            if (!response.data.success) {
+                throw new Error(response.data.message || 'Upload falhou');
+            }
+
+            return response.data.url;
         } catch (error) {
-            console.error('Erro no upload de imagem:', error);
-            alert('Erro ao fazer upload da imagem!');
+            console.error('Erro completo:', {
+                message: error.message,
+                response: error.response?.data,
+                request: error.request
+            });
+
+            alert(`Erro no upload: ${error.response?.data?.message || error.message}`);
             return null;
         }
     }
@@ -284,25 +304,21 @@ function inicializarGerenciamentoJogos() {
                 const isEven = index % 2 === 0;
 
                 return `
-                <div class="card card-custom d-flex flex-row flex-wrap justify-content-between align-items-center my-4">
-                    ${isEven ? `
-                    <div class="col-12 col-md-6 order-2 order-md-1 p-3">
-                        <h3 class="nome-do-jogo text-center text-md-end">${jogo.nome}</h3>
-                        <p class="texo-explicativo text-center text-md-end">${jogo.descricao}</p>
-                    </div>
-                    <div class="col-12 col-md-6 order-1 order-md-2">
-                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-                    </div>
-                    ` : `
-                    <div class="col-12 col-md-6 order-1 order-md-1">
-                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-                    </div>
-                    <div class="col-12 col-md-6 order-2 order-md-2 p-3">
-                        <h3 class="nome-do-jogo text-center text-md-start">${jogo.nome}</h3>
-                        <p class="texo-explicativo text-center text-md-start">${jogo.descricao}</p>
-                    </div>
-                    `}
-                </div>`;
+        <div class="card card-custom d-flex flex-row justify-content-between">
+            ${isEven ? `
+                <img src="${imagemUrl}" class="game-image-e order-2 order-sm-1" alt="${jogo.nome}">
+                <div class="Card-de-jogos-e text-center text-sm-start order-1 order-sm-2">
+                    <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                    <p class="texo-explicativo">${jogo.descricao}</p>
+                </div>
+            ` : `
+                <div class="Card-de-jogos-d text-center text-sm-end justify-content-center align-items-center order-1 order-sm-1">
+                    <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                    <p class="texo-explicativo">${jogo.descricao}</p>
+                </div>
+                <img src="${imagemUrl}" class="game-image-d order-2 order-sm-2" alt="${jogo.nome}">
+            `}
+        </div>`;
             }).join('');
     }
 

@@ -12,12 +12,19 @@ const jogoSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Descrição é obrigatória'],
     trim: true,
-    maxlength: [300, 'Descrição não pode exceder 300 caracteres']
+    maxlength: [1000, 'Descrição não pode exceder 1000 caracteres']
   },
   imagemUrl: {
     type: String,
     default: 'imagens/placeholder.png',
-    trim: true
+    trim: true,
+    validate: {
+      validator: function(v) {
+        // Validação simples de URL ou caminho de arquivo
+        return /^(https?:\/\/[^\s]+)|(\.?\/?[a-z0-9_\-./]+\.(jpg|jpeg|png|gif))$/i.test(v);
+      },
+      message: props => `${props.value} não é uma URL de imagem válida!`
+    }
   },
   criadoEm: {
     type: Date,
@@ -59,23 +66,19 @@ async function renderizarCardsUsuarios() {
       const isEven = index % 2 === 0;
 
       return `
-                <div class="card card-custom d-flex flex-row flex-wrap justify-content-between align-items-center my-4">
+                <div class="card card-custom d-flex flex-row justify-content-between">
                     ${isEven ? `
-                    <div class="col-12 col-md-6 order-2 order-md-1 p-3">
-                        <h3 class="nome-do-jogo text-center text-md-end">${jogo.nome}</h3>
-                        <p class="texo-explicativo text-center text-md-end">${jogo.descricao}</p>
-                    </div>
-                    <div class="col-12 col-md-6 order-1 order-md-2">
-                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-                    </div>
+                        <img src="${jogo.imagemUrl}" class="game-image-e order-2 order-sm-1" alt="Card do jogo ${jogo.nome}">
+                        <div class="Card-de-jogos-e text-center text-sm-start order-1 order-sm-2">
+                            <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                            <p class="texo-explicativo">${jogo.descricao}</p>
+                        </div>
                     ` : `
-                    <div class="col-12 col-md-6 order-1 order-md-1">
-                        <img src="${imagemUrl}" class="img-fluid rounded shadow" alt="${jogo.nome}">
-                    </div>
-                    <div class="col-12 col-md-6 order-2 order-md-2 p-3">
-                        <h3 class="nome-do-jogo text-center text-md-start">${jogo.nome}</h3>
-                        <p class="texo-explicativo text-center text-md-start">${jogo.descricao}</p>
-                    </div>
+                        <div class="Card-de-jogos-d text-center text-sm-end justify-content-start align-items-start order-1 order-sm-1">
+                            <h3 class="nome-do-jogo">${jogo.nome}</h3>
+                            <p class="texo-explicativo">${jogo.descricao}</p>
+                        </div>
+                        <img src="${jogo.imagemUrl}" class="game-image-d order-2 order-sm-2" alt="Card do jogo ${jogo.nome}">
                     `}
                 </div>`;
     }).join('');
